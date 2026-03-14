@@ -2,28 +2,13 @@
 
 Statický web připravený pro **GitHub Pages**.
 
-## Automatické nasazení (doporučeno)
-Repo obsahuje workflow `.github/workflows/deploy-pages.yml`, který po pushi automaticky nasadí web na GitHub Pages.
-
-### Jednorázové nastavení na GitHubu
-1. Otevřete repozitář na GitHubu.
-2. Jděte do **Settings → Pages**.
-3. V části **Build and deployment** nastavte **Source: GitHub Actions**.
-4. Pushněte změny do větve `main` (nebo větve, kterou workflow sleduje).
-
-## Publikace přes branch (alternativa)
-Pokud nechcete GitHub Actions:
-1. Otevřete **Settings → Pages**.
-2. V **Build and deployment** zvolte:
+## Publikace na GitHub Pages
+1. Nahrajte projekt do repozitáře na GitHub.
+2. Otevřete **Settings → Pages**.
+3. V části **Build and deployment** zvolte:
    - Source: **Deploy from a branch**
-   - Branch: `main` (nebo aktuální větev) / root
-
-## Když se změny nepropisují (nejčastější důvody)
-- Nebyl proveden `git push` na GitHub (změna je jen lokálně).
-- V Pages je špatně nastavený Source (branch vs GitHub Actions).
-- Probíhá deploy a je potřeba 1–3 minuty počkat.
-- Prohlížeč drží cache (zkuste tvrdý refresh `Ctrl+F5` / `Cmd+Shift+R`).
-- Chyba ve workflow běhu (zkontrolujte záložku **Actions**).
+   - Branch: **main** (nebo aktuální větev) / root
+4. Uložte a počkejte na publikaci.
 
 ## Úprava loga
 - Logo je načtené ze souboru `logo2.svg` v kořeni projektu.
