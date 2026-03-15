@@ -1,0 +1,31 @@
+name: QA Kontrolor Webových Odkazů
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 8 * * 1' # Spustit každé pondělí ráno v 8:00
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stáhnout kód repozitáře
+        uses: actions/checkout@v4
+
+      - name: Kontrola odkazů pomocí Lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress './**/*.html'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Vytvořit Issue pokud jsou najity mrtvé odkazy
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Agent QA: 🚨 Nalezeny rozbité odkazy na webu"
+          content-filepath: ./lychee/out.md
+          labels: report, automated issue
