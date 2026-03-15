@@ -1,0 +1,32 @@
+name: AI Copywriter pro Blog
+
+on:
+  workflow_dispatch: # Povolí spustit akci manuálně tlačítkem z GitHub UI
+  schedule:
+    - cron: '0 9 * * 5' # Můžeš odkomentovat pro běh každý pátek ráno v 9:00
+
+jobs:
+  generate-post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Stáhnutí repozitáře
+        uses: actions/checkout@v4
+
+      - name: Nastavení Node.js prostředí
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Spuštění AI Autora (generování článku)
+        run: node scripts/generate_post.js
+        # env:
+        #   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Uložení článku a publikace
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[Agent] 📝 Vydán nový AI článek na blogu"
+          file_pattern: "blog/* assets/blog.json"
