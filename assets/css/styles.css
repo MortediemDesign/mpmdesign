@@ -87,6 +87,7 @@ nav a.active { color: var(--accent); font-weight: 700; }
 }
 
 .card {
+  position: relative;
   background: var(--panel);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 14px;
