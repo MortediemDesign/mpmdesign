@@ -5,11 +5,8 @@ on:
     branches:
       - main
       - master
+      - work
   workflow_dispatch:
-
-env:
-  # Opt in now to the post-Node20 runtime for JavaScript actions.
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read
