@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "jak-vznika-cnc-zakazka",
+    "title": "Jak vzniká CNC zakázka krok za krokem",
+    "date": "2026-03-01",
+    "excerpt": "Od podkladů přes materiál až po finální obrábění. Praktický pohled do výroby.",
+    "content": "Každá CNC zakázka začíná podklady: výkres, model nebo aspoň přesná představa o rozměrech. Poté vybírám vhodný materiál, navrhnu postup obrábění a připravím program. Po testovacím průchodu následuje finální výroba a kontrola rozměrů."
+  },
+  {
+    "slug": "3d-tisk-kdy-se-vyplati",
+    "title": "Kdy se vyplatí 3D tisk a kdy CNC",
+    "date": "2026-02-18",
+    "excerpt": "Rychlé porovnání technologií pro prototypy i funkční díly.",
+    "content": "3D tisk je ideální na prototypy, složité tvary a menší série. CNC je naopak perfektní tam, kde je potřeba vysoká přesnost, pevnost materiálu a kvalitní povrch. V praxi se často obě technologie doplňují."
+  },
+  {
+    "slug": "laser-gravirovani-a-samolepky",
+    "title": "Laserové gravírování a samolepky pro značku",
+    "date": "2026-01-30",
+    "excerpt": "Jak sjednotit vizuální styl výrobků pomocí gravírování a samolepek.",
+    "content": "Laserové gravírování dodá produktům profesionální podpis a samolepky umožní rychlé značení balení i dílů. Doporučuji držet jednotnou barevnost, čitelné logo a technické popisky s vysokým kontrastem."
+  }
+]
