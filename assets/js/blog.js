@@ -1,51 +1,27 @@
 (async function loadBlog() {
-  const list = document.getElementById('blogList');
-  const detail = document.getElementById('blogDetail');
-  if (!list || !detail) return;
+  const grid = document.getElementById('blogGrid');
+  if (!grid) return;
 
   try {
-    const response = await fetch('assets/blog/posts.json');
-    if (!response.ok) throw new Error('Posts not found');
-    const posts = await response.json();
+    const response = await fetch('assets/blog.json');
+    if (!response.ok) throw new Error('Blog data nelze načíst');
 
-    if (!Array.isArray(posts) || !posts.length) {
-      list.innerHTML = '<p>Blog zatím neobsahuje žádné články.</p>';
-      detail.innerHTML = '';
+    const items = await response.json();
+    if (!Array.isArray(items) || !items.length) {
+      grid.innerHTML = '<p>Zatím zde nejsou žádné články.</p>';
       return;
     }
 
-    list.innerHTML = posts.map((post, index) => `
-      <article class="card blog-card ${index === 0 ? 'active' : ''}" data-slug="${post.slug}">
-        <small>${new Date(post.date).toLocaleDateString('cs-CZ')}</small>
-        <h3>${post.title}</h3>
-        <p>${post.excerpt}</p>
-        <span class="accent">Číst článek</span>
+    grid.innerHTML = items.map((item) => `
+      <article class="card">
+        ${item.image ? `<img src="assets/images/blog/${item.image}" alt="${item.title}" style="max-width: 100%; border-radius: 8px;">` : ''}
+        <h3 style="margin-top: 1rem;">${item.title}</h3>
+        <p style="font-size: 0.9em; color: #666;">${item.date}</p>
+        <p>${item.summary}</p>
+        <a href="blog/${item.slug}.html" class="cta" style="padding: 0.5rem 1rem; font-size: 0.9em;">Číst více</a>
       </article>
     `).join('');
-
-    const renderDetail = (post) => {
-      detail.innerHTML = `
-        <article class="card blog-detail reveal">
-          <small>${new Date(post.date).toLocaleDateString('cs-CZ')}</small>
-          <h2>${post.title}</h2>
-          <p>${post.content}</p>
-        </article>
-      `;
-    };
-
-    renderDetail(posts[0]);
-
-    list.querySelectorAll('.blog-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        const selected = posts.find((p) => p.slug === card.dataset.slug);
-        if (!selected) return;
-        list.querySelectorAll('.blog-card').forEach((c) => c.classList.remove('active'));
-        card.classList.add('active');
-        renderDetail(selected);
-      });
-    });
-  } catch {
-    list.innerHTML = '<p>Nepodařilo se načíst blogové články. Zkontrolujte soubor assets/blog/posts.json.</p>';
-    detail.innerHTML = '';
+  } catch (error) {
+    grid.innerHTML = '<p>Rozhraní blogu se v tuto chvíli načítá.</p>';
   }
 })();

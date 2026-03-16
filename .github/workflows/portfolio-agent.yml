@@ -1,0 +1,30 @@
+name: Agent pro aktualizaci Portfolia
+
+on:
+  push:
+    paths:
+      - 'assets/images/portfolio/**/*.{jpg,jpeg,png,gif,webp,svg}' # Spustí se jen při změně nebo přidání obrázků
+
+jobs:
+  update-portfolio:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Povolení actionu zapisovat změny (commitovat)
+
+    steps:
+      - name: Stáhnutí repozitáře
+        uses: actions/checkout@v4
+
+      - name: Nastavení Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Spuštění agenta (skript pro manifest)
+        run: node scripts/update_portfolio.js
+
+      - name: Odeslání změn (`manifest.json`)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[Agent] Automatická aktualizace portfolia (manifest.json)"
+          file_pattern: "assets/images/portfolio/manifest.json"
