@@ -17,14 +17,15 @@
     const initialCategory = params.get('category') || 'all';
 
     if (filtersContainer) {
-      const categories = ['all', ...new Set(items.map(item => item.category || 'ostatni'))];
+      let categories = ['all', ...new Set(items.map(item => item.category || 'ostatni'))];
+      categories = categories.filter(cat => cat !== 'ostatni');
+      
       const categoryNames = {
         'all': 'Vše',
         'cnc': 'CNC Obrábění',
         '3d-tisk': '3D Tisk',
         'laser': 'Laserové Gravírování',
-        'polepy': 'Výroba Polepů',
-        'ostatni': 'Ostatní'
+        'polepy': 'Výroba Polepů'
       };
 
       filtersContainer.innerHTML = categories.map(cat => `
@@ -32,6 +33,23 @@
           ${categoryNames[cat] || cat.toUpperCase()}
         </button>
       `).join('');
+
+      if (!window.lightboxInitialized) {
+        window.lightboxInitialized = true;
+        document.addEventListener('click', function(e) {
+          if(e.target.tagName === 'IMG' && e.target.closest('figure')) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            if (lightbox && lightboxImg) {
+              lightbox.style.display = 'flex';
+              lightboxImg.src = e.target.src;
+            }
+          }
+          if(e.target.classList.contains('lightbox-close') || e.target.id === 'lightbox') {
+            document.getElementById('lightbox').style.display = 'none';
+          }
+        });
+      }
 
       filtersContainer.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
