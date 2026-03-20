@@ -92,6 +92,34 @@ nav a.active { color: var(--accent); font-weight: 700; }
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 14px;
   padding: 1.1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.card .hover-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card:hover .hover-bg {
+  opacity: 0.25;
+  transform: scale(1.05);
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .cta {
@@ -113,6 +141,37 @@ footer {
   border-top: 1px solid rgba(255,255,255,0.2);
   padding: 1.2rem 0;
   font-size: 0.95rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
+
+.social-links svg {
+  width: 20px;
+  height: 20px;
 }
 
 .gallery {
