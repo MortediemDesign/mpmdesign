@@ -3,7 +3,8 @@ name: Agent pro aktualizaci Portfolia
 on:
   push:
     paths:
-      - 'assets/images/portfolio/**/*.{jpg,jpeg,png,gif,webp,svg}' # Spustí se jen při změně nebo přidání obrázků
+      - 'assets/images/portfolio/**'
+  workflow_dispatch:
 
 jobs:
   update-portfolio:

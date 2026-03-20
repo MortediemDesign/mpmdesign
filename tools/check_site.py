@@ -19,7 +19,8 @@ def check_files_exist() -> None:
         for href in re.findall(r'href="([^"]+)"', text):
             if href.startswith(('http', '#', 'mailto:', 'tel:')):
                 continue
-            if not Path(href).exists():
+            base_href = href.split('?')[0].split('#')[0]
+            if not Path(base_href).exists():
                 raise SystemExit(f'{page}: missing href target {href}')
         for src in re.findall(r'src="([^"]+)"', text):
             if src.startswith('http'):
