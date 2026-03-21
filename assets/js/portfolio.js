@@ -69,10 +69,6 @@
       grid.innerHTML = filtered.map((item) => `
         <figure>
           <img src="assets/images/portfolio/${item.file}" alt="${item.alt}">
-          <figcaption>
-            <strong>${item.title}</strong><br>
-            <span>${item.description}</span>
-          </figcaption>
         </figure>
       `).join('');
     }
