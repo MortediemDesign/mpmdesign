@@ -138,6 +138,7 @@ nav a.active { color: var(--accent); font-weight: 700; }
 
 .cta:hover { 
   background: var(--accent); 
+  color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(255, 128, 0, 0.4);
 }
