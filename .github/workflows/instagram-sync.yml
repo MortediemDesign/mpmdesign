@@ -1,0 +1,35 @@
+name: Instagram Auto-Sync
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Spouští se samo každý den automaticky ve 03:00 ráno
+  workflow_dispatch: # Umožní i ruční kliknutí z panelu GitHub Actions
+
+jobs:
+  sync_and_publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Vytažení kódu webu z gitu
+        uses: actions/checkout@v4
+
+      - name: Instalace Node.js prostředí
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Synchronizace z Instagramu a uložení nových fotek
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/sync_instagram.js
+
+      - name: Probuzení Portfolio Agenta (vygenerování manifestu)
+        run: node scripts/update_portfolio.js
+
+      - name: Odeslání všech inovací na webový prostor (Push)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🤖 Auto-Sync: Byly staženy a napojeny nové fotky z Instagramu"
+          file_pattern: 'assets/images/portfolio/**'
