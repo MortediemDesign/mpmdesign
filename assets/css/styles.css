@@ -130,6 +130,9 @@ nav a.active { color: var(--accent); font-weight: 700; }
   border: 2px solid var(--accent);
   color: var(--text);
   font-weight: 700;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
