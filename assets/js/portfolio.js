@@ -25,7 +25,8 @@
         'cnc': 'CNC Obrábění',
         '3d-tisk': '3D Tisk',
         'laser': 'Laserové Gravírování',
-        'polepy': 'Výroba Polepů'
+        'polepy': 'Výroba Polepů',
+        'grafika': 'Grafické Práce'
       };
 
       filtersContainer.innerHTML = categories.map(cat => `
