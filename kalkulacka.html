@@ -6,212 +6,47 @@
   <title>Interní kalkulačka | MPMDESIGN</title>
   <link rel="stylesheet" href="assets/css/styles.css">
   <style>
-    /* Styling for calculations dashboard */
-    .calc-layout {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 2rem;
-      margin-top: 2rem;
-      min-height: 600px;
-    }
-    @media (max-width: 768px) {
-      .calc-layout { grid-template-columns: 1fr; }
-    }
-    .sidebar {
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      height: fit-content;
-    }
-    .sidebar-btn {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      text-align: left;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-    .sidebar-btn:hover, .sidebar-btn.active {
-      background: var(--accent);
-      color: #fff;
-    }
-    .calc-card {
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      padding: 2rem;
-    }
-    .calc-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 2rem;
-    }
-    @media (max-width: 900px) {
-      .calc-grid { grid-template-columns: 1fr; }
-    }
-    .out-card {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      padding: 1.5rem;
-      height: fit-content;
-      position: sticky;
-      top: 90px;
-    }
-    .result-price {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--accent);
-      margin: 0.5rem 0;
-      text-shadow: 0 0 10px rgba(255, 128, 0, 0.3);
-    }
-    .breakdown-bar {
-      display: flex;
-      height: 18px;
-      border-radius: 6px;
-      overflow: hidden;
-      margin: 1.2rem 0;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .bar-seg {
-      height: 100%;
-      transition: width 0.3s ease;
-    }
-    .seg-mat { background: #3b82f6; }
-    .seg-mach { background: #c084fc; }
-    .seg-work { background: #fac815; }
-    .seg-margin { background: #10b981; }
-    .legend {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem 1rem;
-      font-size: 0.85rem;
-      margin: 1rem 0;
-    }
-    .leg-item { display: flex; align-items: center; gap: 0.4rem; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .auth-card {
-      max-width: 400px;
-      margin: 5rem auto;
-      padding: 2.5rem;
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      text-align: center;
-    }
-    .auth-card input {
-      width: 100%;
-      padding: 0.8rem;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      text-align: center;
-      font-size: 1.1rem;
-      margin: 1.2rem 0;
-    }
-    .auth-card input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .hist-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    .hist-table th, .hist-table td {
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 0.8rem;
-      text-align: left;
-    }
-    .hist-table th { font-weight: 700; color: var(--accent); }
-    .btn-action {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text);
-      padding: 0.3rem 0.6rem;
-      border-radius: 5px;
-      margin-right: 0.3rem;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .btn-action:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-    .settings-section {
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .settings-section:last-child { border: none; }
-    .setting-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.8rem;
-    }
-    .setting-list {
-      max-height: 200px;
-      overflow-y: auto;
-      background: rgba(0,0,0,0.2);
-      border-radius: 6px;
-      padding: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 0.5rem;
-    }
-    .setting-list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.3rem 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .setting-list-item button {
-      background: transparent;
-      border: none;
-      color: #ef4444;
-      cursor: pointer;
-    }
-    .notif {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--accent);
-      color: #fff;
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-    .notif.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .calc-layout{display:grid;grid-template-columns:230px 1fr;gap:2rem;margin-top:2rem;min-height:550px;}
+    @media(max-width:768px){.calc-layout{grid-template-columns:1fr;}}
+    .sidebar{background:var(--panel);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:1rem;display:flex;flex-direction:column;gap:0.4rem;height:fit-content;}
+    .sidebar-btn{background:transparent;border:none;color:var(--text);text-align:left;padding:0.7rem 0.9rem;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:0.7rem;}
+    .sidebar-btn:hover,.sidebar-btn.active{background:var(--accent);color:#fff;}
+    .calc-card{background:var(--panel);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:1.8rem;}
+    .calc-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:1.5rem;}
+    @media(max-width:900px){.calc-grid{grid-template-columns:1fr;}}
+    .out-card{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.3rem;height:fit-content;position:sticky;top:90px;}
+    .result-price{font-size:2rem;font-weight:800;color:var(--accent);margin:0.4rem 0;text-shadow:0 0 8px rgba(255,128,0,0.25);}
+    .breakdown-bar{display:flex;height:14px;border-radius:5px;overflow:hidden;margin:1rem 0;border:1px solid rgba(255,255,255,0.1);}
+    .bar-seg{height:100%;transition:width 0.25s;}
+    .seg-mat{background:#3b82f6;}
+    .seg-mach{background:#c084fc;}
+    .seg-work{background:#fac815;}
+    .seg-ship{background:#f97316;}
+    .seg-margin{background:#10b981;}
+    .legend{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.8rem;margin:0.8rem 0;}
+    .leg-item{display:flex;align-items:center;gap:0.3rem;}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+    .auth-card{max-width:380px;margin:5rem auto;padding:2rem;background:var(--panel);border:1px solid rgba(255,255,255,0.15);border-radius:14px;text-align:center;}
+    .auth-card input{width:100%;padding:0.7rem;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.3);color:#fff;text-align:center;font-size:1.1rem;margin:1rem 0;}
+    .auth-card input:focus{outline:none;border-color:var(--accent);}
+    .hist-table{width:100%;border-collapse:collapse;margin-top:0.8rem;}
+    .hist-table th,.hist-table td{border-bottom:1px solid rgba(255,255,255,0.1);padding:0.7rem;text-align:left;}
+    .hist-table th{font-weight:700;color:var(--accent);font-size:0.9rem;}
+    .btn-action{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:0.3rem 0.5rem;border-radius:5px;margin-right:0.2rem;cursor:pointer;font-size:0.8rem;}
+    .btn-action:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .settings-section{border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:1.2rem;margin-bottom:1.2rem;}
+    .setting-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:0.7rem;}
+    .setting-list{max-height:160px;overflow-y:auto;background:rgba(0,0,0,0.2);border-radius:6px;padding:0.4rem;border:1px solid rgba(255,255,255,0.1);}
+    .setting-list-item{display:flex;justify-content:space-between;align-items:center;padding:0.25rem 0.4rem;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;}
+    .setting-list-item button{background:transparent;border:none;color:#ef4444;cursor:pointer;}
+    .notif{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#fff;padding:0.7rem 1.3rem;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:1000;}
+    .notif.show{transform:translateY(0);opacity:1;}
   </style>
 </head>
 <body>
   <header>
     <div class="container nav-wrap">
-      <a class="brand" href="index.html">
-        <img src="logo2.svg" alt="Logo firmy">
-        <span>MPMDESIGN</span>
-      </a>
+      <a class="brand" href="index.html"><img src="logo2.svg" alt="MPMDESIGN"><span>MPMDESIGN</span></a>
       <nav>
         <ul>
           <li><a href="index.html">Domů</a></li>
@@ -227,364 +62,216 @@
   </header>
 
   <main class="container">
-    <!-- notification toast -->
-    <div id="toast-notif" class="notif">Akce úspěšná</div>
+    <div id="toast-notif" class="notif">Uloženo</div>
 
-    <!-- Login Area -->
     <div id="auth-container">
       <div class="auth-card">
         <h2>Účetnictví & Kalkulačky</h2>
         <p>Pro vstup zadejte přístupové heslo</p>
         <input type="password" id="calc-pass-input" placeholder="Heslo...">
         <button class="cta" onclick="tryLogin()" style="width:100%;">Vstoupit</button>
-        <p id="auth-error" style="color: #ef4444; display: none; margin-top: 1rem;"></p>
+        <p id="auth-error" style="color:#ef4444;display:none;margin-top:1rem;"></p>
       </div>
     </div>
 
-    <!-- Dashboard Area (Hidden by Default) -->
-    <div id="dashboard-container" style="display: none;">
+    <div id="dashboard-container" style="display:none;">
       <div class="calc-layout">
-        <!-- Sidebar Navigation -->
         <aside class="sidebar">
-          <button class="sidebar-btn active" onclick="switchTab('tab-tisk')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            3D Tisk
-          </button>
-          <button class="sidebar-btn" onclick="switchTab('tab-folie')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
-            Stikery/Fólie
-          </button>
-          <button class="sidebar-btn" onclick="switchTab('tab-laser')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M7 7l10 10M7 17L17 7"/></svg>
-            Laser / Gravír
-          </button>
-          <button class="sidebar-btn" onclick="switchTab('tab-history')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Historie
-          </button>
-          <button class="sidebar-btn" onclick="switchTab('tab-settings')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            Nastavení
-          </button>
-          <button class="sidebar-btn" onclick="logout()" style="margin-top: auto; color: #ff6b6b;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-            Odhlásit se
-          </button>
+          <button class="sidebar-btn active" id="btn-tisk" onclick="switchTab('tab-tisk')">3D Tisk</button>
+          <button class="sidebar-btn" id="btn-folie" onclick="switchTab('tab-folie')">Stikery/Fólie</button>
+          <button class="sidebar-btn" id="btn-laser" onclick="switchTab('tab-laser')">Laser / Gravír</button>
+          <button class="sidebar-btn" id="btn-history" onclick="switchTab('tab-history')">Historie</button>
+          <button class="sidebar-btn" id="btn-settings" onclick="switchTab('tab-settings')">Nastavení</button>
+          <button class="sidebar-btn" onclick="logout()" style="margin-top:auto;color:#ff6b6b;">Odhlásit se</button>
         </aside>
 
-        <!-- Calculators Content Panel -->
         <div class="calculator-content">
-          
-          <!-- TAB: 3D Tisk -->
+          <!-- 3D TISK -->
           <div id="tab-tisk" class="t-panel">
             <div class="calc-card">
               <h2>Kalkulačka 3D tisku</h2>
               <div class="calc-grid">
                 <div class="contact-form">
+                  <div class="form-group"><label>Název projektu / dílu</label><input type="text" id="3d-name" value="3D díl na zakázku"></div>
+                  <div class="form-group"><label>Materiál filamentu</label><select id="3d-material" onchange="calculate3d()"></select></div>
+                  <div class="form-group"><label>Hmotnost (gramy)</label><input type="number" id="3d-weight" value="100" min="1" oninput="calculate3d()"></div>
                   <div class="form-group">
-                    <label for="3d-name">Název projektu / dílu</label>
-                    <input type="text" id="3d-name" value="3D díl na zakázku" placeholder="Např. Kryt motoru">
+                    <label>Doba tisku</label>
+                    <div style="display:flex;gap:0.5rem;"><input type="number" id="3d-hours" value="4" oninput="calculate3d()"><input type="number" id="3d-mins" value="30" oninput="calculate3d()"></div>
                   </div>
-                  <div class="form-group">
-                    <label for="3d-material">Materiál filamentu</label>
-                    <select id="3d-material" onchange="calculate3d()"></select>
-                  </div>
-                  <div class="form-group">
-                    <label for="3d-weight">Hmotnost výtisku (gramy - včetně podpor)</label>
-                    <input type="number" id="3d-weight" value="100" min="1" oninput="calculate3d()">
-                  </div>
-                  <div class="form-group">
-                    <label>Doba tisku (strojový čas)</label>
-                    <div style="display:flex; gap:0.5rem;">
-                      <input type="number" id="3d-hours" value="4" min="0" placeholder="Hodiny" oninput="calculate3d()" style="width:50%;">
-                      <input type="number" id="3d-mins" value="30" min="0" max="59" placeholder="Minuty" oninput="calculate3d()" style="width:50%;">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="3d-printer">Typ tiskárny / opotřebení</label>
-                    <select id="3d-printer" onchange="calculate3d()"></select>
-                  </div>
-                  <div class="form-group">
-                    <label for="3d-prep">Příprava / Post-processing (minuty ruční práce)</label>
-                    <input type="number" id="3d-prep" value="15" min="0" oninput="calculate3d()">
-                  </div>
-                  <div class="form-group">
-                    <label for="3d-margin">Finální marže (%)</label>
-                    <input type="number" id="3d-margin" value="30" min="0" oninput="calculate3d()">
-                  </div>
+                  <div class="form-group"><label>Typ tiskárny</label><select id="3d-printer" onchange="calculate3d()"></select></div>
+                  <div class="form-group"><label>Práce (minuty)</label><input type="number" id="3d-prep" value="15" oninput="calculate3d()"></div>
+                  <div class="form-group"><label>Doprava / Poštovné</label><select id="3d-shipping" onchange="toggleShipping('3d')"></select><input type="number" id="3d-ship-cust" value="0" style="display:none;margin-top:0.4rem;" oninput="calculate3d()" placeholder="Kč"></div>
+                  <div class="form-group"><label>Marže (%)</label><input type="number" id="3d-margin" value="30" oninput="calculate3d()"></div>
                 </div>
-                <!-- Výstupy 3D tisku -->
                 <div class="out-card">
                   <h3>Cenová kalkulace</h3>
                   <div class="result-price" id="3d-res-total">0 Kč</div>
-                  
                   <div class="breakdown-bar">
                     <div id="3d-bar-mat" class="bar-seg seg-mat"></div>
                     <div id="3d-bar-mach" class="bar-seg seg-mach"></div>
                     <div id="3d-bar-work" class="bar-seg seg-work"></div>
+                    <div id="3d-bar-ship" class="bar-seg seg-ship"></div>
                     <div id="3d-bar-margin" class="bar-seg seg-margin"></div>
                   </div>
-
                   <div class="legend">
-                    <div class="leg-item"><span class="dot seg-mat"></span>Materiál: <span id="3d-res-mat">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-mat"></span>Mat: <span id="3d-res-mat">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-mach"></span>Stroj: <span id="3d-res-mach">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-work"></span>Práce: <span id="3d-res-work">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-ship"></span>Doprava: <span id="3d-res-ship">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-margin"></span>Marže: <span id="3d-res-margin">0 Kč</span></div>
                   </div>
-                  
-                  <button class="cta" onclick="saveToHistory('3D Tisk', '3d-name', '3d-res-total')" style="width:100%; margin-top:1rem;">Uložit do historie</button>
-                  <button class="btn-action" onclick="copySummaryText('3d')" style="width:100%; margin-top:0.5rem; text-align:center;">Kopírovat shrnutí pro klienta</button>
+                  <button class="cta" onclick="saveToHistory('3D Tisk', '3d')" style="width:100%;margin-top:1rem;">Uložit do historie</button>
+                  <div style="display:flex;gap:0.4rem;margin-top:0.4rem;">
+                    <button class="btn-action" onclick="copySummaryText('3d')" style="flex:1;">Zkopírovat text</button>
+                    <button class="btn-action" style="flex:1;background:var(--accent);color:#fff;" onclick="printPDF('3d')">Generovat PDF</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- TAB: Fólie / Samolepky -->
+          <!-- POLEPY -->
           <div id="tab-folie" class="t-panel" style="display:none;">
             <div class="calc-card">
               <h2>Kalkulačka samolepek a fólií</h2>
               <div class="calc-grid">
                 <div class="contact-form">
-                  <div class="form-group">
-                    <label for="fol-name">Název projektu / položky</label>
-                    <input type="text" id="fol-name" value="Samolepka na míru" placeholder="Např. Polep zadního skla">
+                  <div class="form-group"><label>Název projektu / položky</label><input type="text" id="fol-name" value="Samolepka na míru"></div>
+                  <div class="form-group"><label>Typ fólie</label><select id="fol-material" onchange="calculateFolie()"></select></div>
+                  <div style="display:flex;gap:0.5rem;">
+                    <div class="form-group" style="width:50%;"><label>Šířka (cm)</label><input type="number" id="fol-width" value="50" oninput="calculateFolie()"></div>
+                    <div class="form-group" style="width:50%;"><label>Výška (cm)</label><input type="number" id="fol-height" value="30" oninput="calculateFolie()"></div>
                   </div>
-                  <div class="form-group">
-                    <label for="fol-material">Typ fólie / materiálu</label>
-                    <select id="fol-material" onchange="calculateFolie()"></select>
-                  </div>
-                  <div style="display:flex; gap:0.5rem;">
-                    <div class="form-group" style="width:50%;">
-                      <label for="fol-width">Šířka (cm)</label>
-                      <input type="number" id="fol-width" value="50" min="0.1" step="0.1" oninput="calculateFolie()">
-                    </div>
-                    <div class="form-group" style="width:50%;">
-                      <label for="fol-height">Výška (cm)</label>
-                      <input type="number" id="fol-height" value="30" min="0.1" step="0.1" oninput="calculateFolie()">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="fol-count">Počet kusů (ks)</label>
-                    <input type="number" id="fol-count" value="10" min="1" oninput="calculateFolie()">
-                  </div>
-                  <div class="form-group">
-                    <label for="fol-waste">Ztrátovost / prořez (%)</label>
-                    <input type="number" id="fol-waste" value="15" min="0" oninput="calculateFolie()">
-                  </div>
-                  <div class="form-group">
-                    <label for="fol-prep">Čas separace / lepení (minuty ruční práce)</label>
-                    <input type="number" id="fol-prep" value="20" min="0" oninput="calculateFolie()">
-                  </div>
-                  <div class="form-group">
-                    <label for="fol-design">Grafická příprava (jednorázový poplatek v Kč)</label>
-                    <input type="number" id="fol-design" value="150" min="0" oninput="calculateFolie()">
-                  </div>
-                  <div class="form-group">
-                    <label for="fol-margin">Finální marže (%)</label>
-                    <input type="number" id="fol-margin" value="30" min="0" oninput="calculateFolie()">
-                  </div>
+                  <div class="form-group"><label>Počet (ks)</label><input type="number" id="fol-count" value="10" oninput="calculateFolie()"></div>
+                  <div class="form-group"><label>Prořez / ztrátovost (%)</label><input type="number" id="fol-waste" value="15" oninput="calculateFolie()"></div>
+                  <div class="form-group"><label>Čas práce (minuty)</label><input type="number" id="fol-prep" value="20" oninput="calculateFolie()"></div>
+                  <div class="form-group"><label>Grafická příprava (Kč)</label><input type="number" id="fol-design" value="150" oninput="calculateFolie()"></div>
+                  <div class="form-group"><label>Doprava / Poštovné</label><select id="fol-shipping" onchange="toggleShipping('fol')"></select><input type="number" id="fol-ship-cust" value="0" style="display:none;margin-top:0.4rem;" oninput="calculateFolie()" placeholder="Kč"></div>
+                  <div class="form-group"><label>Marže (%)</label><input type="number" id="fol-margin" value="30" oninput="calculateFolie()"></div>
                 </div>
-                <!-- Výstupy fólií -->
                 <div class="out-card">
                   <h3>Cenová kalkulace</h3>
                   <div class="result-price" id="fol-res-total">0 Kč</div>
-                  <div style="font-size:0.95rem; margin-bottom: 1rem; opacity:0.8;">
-                    Cena za 1 ks: <strong id="fol-res-per-piece">0 Kč</strong>
-                  </div>
-                  
+                  <div style="font-size:0.9rem;margin-bottom:0.8rem;opacity:0.8;">Kus: <strong id="fol-res-per-piece">0 Kč</strong> | Plocha: <strong id="fol-res-area">0 m²</strong></div>
                   <div class="breakdown-bar">
                     <div id="fol-bar-mat" class="bar-seg seg-mat"></div>
-                    <div id="fol-bar-mach" class="bar-seg seg-mach" style="display:none;"></div>
                     <div id="fol-bar-work" class="bar-seg seg-work"></div>
+                    <div id="fol-bar-ship" class="bar-seg seg-ship"></div>
                     <div id="fol-bar-margin" class="bar-seg seg-margin"></div>
                   </div>
-
                   <div class="legend">
-                    <div class="leg-item"><span class="dot seg-mat"></span>Materiál: <span id="fol-res-mat">0 Kč</span></div>
-                    <div class="leg-item"><span class="dot seg-work"></span>Práce & Grafika: <span id="fol-res-work">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-mat"></span>Fólie: <span id="fol-res-mat">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-work"></span>Práce: <span id="fol-res-work">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-ship"></span>Doprava: <span id="fol-res-ship">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-margin"></span>Marže: <span id="fol-res-margin">0 Kč</span></div>
-                    <div class="leg-item">Plocha celkem: <strong id="fol-res-area">0 m²</strong></div>
                   </div>
-                  
-                  <button class="cta" onclick="saveToHistory('Polepy', 'fol-name', 'fol-res-total')" style="width:100%; margin-top:1rem;">Uložit do historie</button>
-                  <button class="btn-action" onclick="copySummaryText('folie')" style="width:100%; margin-top:0.5rem; text-align:center;">Kopírovat shrnutí pro klienta</button>
+                  <button class="cta" onclick="saveToHistory('Polepy', 'fol')" style="width:100%;margin-top:1rem;">Uložit do historie</button>
+                  <div style="display:flex;gap:0.4rem;margin-top:0.4rem;">
+                    <button class="btn-action" onclick="copySummaryText('folie')" style="flex:1;">Zkopírovat text</button>
+                    <button class="btn-action" style="flex:1;background:var(--accent);color:#fff;" onclick="printPDF('fol')">Generovat PDF</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- TAB: Laser / Gravírování -->
+          <!-- LASER -->
           <div id="tab-laser" class="t-panel" style="display:none;">
             <div class="calc-card">
               <h2>Kalkulačka laseru a gravírování</h2>
               <div class="calc-grid">
                 <div class="contact-form">
-                  <div class="form-group">
-                    <label for="las-name">Název projektu / položky</label>
-                    <input type="text" id="las-name" value="Gravírovaný dárek" placeholder="Např. Dřevěná cedule s logem">
-                  </div>
-                  <div class="form-group">
-                    <label for="las-material">Materiál / polotovar</label>
-                    <select id="las-material" onchange="calculateLaser()"></select>
-                  </div>
-                  <div class="form-group">
-                    <label for="las-count">Počet kusů (ks)</label>
-                    <input type="number" id="las-count" value="5" min="1" oninput="calculateLaser()">
-                  </div>
-                  <div class="form-group">
-                    <label for="las-time">Doba pálení na 1 kus (minuty)</label>
-                    <input type="number" id="las-time" value="8" min="0.1" step="0.1" oninput="calculateLaser()">
-                  </div>
-                  <div class="form-group">
-                    <label for="las-prep">Ruční práce (příprava, čištění, broušení) na 1 kus (minuty)</label>
-                    <input type="number" id="las-prep" value="5" min="0" oninput="calculateLaser()">
-                  </div>
-                  <div class="form-group">
-                    <label for="las-setup">Jednorázová příprava grafiky celkem (Kč)</label>
-                    <input type="number" id="las-setup" value="100" min="0" oninput="calculateLaser()">
-                  </div>
-                  <div class="form-group">
-                    <label for="las-margin">Finální marže (%)</label>
-                    <input type="number" id="las-margin" value="30" min="0" oninput="calculateLaser()">
-                  </div>
+                  <div class="form-group"><label>Název projektu / položky</label><input type="text" id="las-name" value="Gravírovaný dárek"></div>
+                  <div class="form-group"><label>Materiál / Překližka</label><select id="las-material" onchange="calculateLaser()"></select></div>
+                  <div class="form-group"><label>Množství (ks)</label><input type="number" id="las-count" value="5" oninput="calculateLaser()"></div>
+                  <div class="form-group"><label>Doba pálení na 1ks (minuty)</label><input type="number" id="las-time" value="8" oninput="calculateLaser()"></div>
+                  <div class="form-group"><label>Začištění na 1ks (minuty)</label><input type="number" id="las-prep" value="5" oninput="calculateLaser()"></div>
+                  <div class="form-group"><label>Jednorázové nastavení tisku (Kč)</label><input type="number" id="las-setup" value="100" oninput="calculateLaser()"></div>
+                  <div class="form-group"><label>Doprava / Poštovné</label><select id="las-shipping" onchange="toggleShipping('las')"></select><input type="number" id="las-ship-cust" value="0" style="display:none;margin-top:0.4rem;" oninput="calculateLaser()" placeholder="Kč"></div>
+                  <div class="form-group"><label>Marže (%)</label><input type="number" id="las-margin" value="30" oninput="calculateLaser()"></div>
                 </div>
-                <!-- Výstupy Laseru -->
                 <div class="out-card">
                   <h3>Cenová kalkulace</h3>
                   <div class="result-price" id="las-res-total">0 Kč</div>
-                  <div style="font-size:0.95rem; margin-bottom: 1rem; opacity:0.8;">
-                    Cena za 1 ks: <strong id="las-res-per-piece">0 Kč</strong>
-                  </div>
-                  
+                  <div style="font-size:0.9rem;margin-bottom:0.8rem;opacity:0.8;">Kus: <strong id="las-res-per-piece">0 Kč</strong></div>
                   <div class="breakdown-bar">
                     <div id="las-bar-mat" class="bar-seg seg-mat"></div>
                     <div id="las-bar-mach" class="bar-seg seg-mach"></div>
                     <div id="las-bar-work" class="bar-seg seg-work"></div>
+                    <div id="las-bar-ship" class="bar-seg seg-ship"></div>
                     <div id="las-bar-margin" class="bar-seg seg-margin"></div>
                   </div>
-
                   <div class="legend">
-                    <div class="leg-item"><span class="dot seg-mat"></span>Materiál: <span id="las-res-mat">0 Kč</span></div>
-                    <div class="leg-item"><span class="dot seg-mach"></span>Laser: <span id="las-res-mach">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-mat"></span>Mat: <span id="las-res-mat">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-mach"></span>Stroj: <span id="las-res-mach">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-work"></span>Práce: <span id="las-res-work">0 Kč</span></div>
+                    <div class="leg-item"><span class="dot seg-ship"></span>Doprava: <span id="las-res-ship">0 Kč</span></div>
                     <div class="leg-item"><span class="dot seg-margin"></span>Marže: <span id="las-res-margin">0 Kč</span></div>
                   </div>
-                  
-                  <button class="cta" onclick="saveToHistory('Laser', 'las-name', 'las-res-total')" style="width:100%; margin-top:1rem;">Uložit do historie</button>
-                  <button class="btn-action" onclick="copySummaryText('las')" style="width:100%; margin-top:0.5rem; text-align:center;">Kopírovat shrnutí pro klienta</button>
+                  <button class="cta" onclick="saveToHistory('Laser', 'las')" style="width:100%;margin-top:1rem;">Uložit do historie</button>
+                  <div style="display:flex;gap:0.4rem;margin-top:0.4rem;">
+                    <button class="btn-action" onclick="copySummaryText('las')" style="flex:1;">Zkopírovat text</button>
+                    <button class="btn-action" style="flex:1;background:var(--accent);color:#fff;" onclick="printPDF('las')">Generovat PDF</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- TAB: Historie výpočtů -->
+          <!-- HISTORIE -->
           <div id="tab-history" class="t-panel" style="display:none;">
             <div class="calc-card">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
                 <h2>Historie kalkulací</h2>
-                <button class="btn-action" onclick="clearHistory()" style="color:#ff6b6b;">Smazat celou historii</button>
+                <button class="btn-action" onclick="clearHistory()" style="color:#ff6b6b;">Vymazat vše</button>
               </div>
               <div style="overflow-x:auto;">
                 <table class="hist-table">
                   <thead>
-                    <tr>
-                      <th>Datum</th>
-                      <th>Kategorie</th>
-                      <th>Název položky</th>
-                      <th>Cena</th>
-                      <th>Akce</th>
-                    </tr>
+                    <tr><th>Kategorie</th><th>Název</th><th>Cena</th><th>Datum</th><th>Akce</th></tr>
                   </thead>
-                  <tbody id="history-rows">
-                    <tr><td colspan="5" style="text-align:center;">Žádná uložená data.</td></tr>
-                  </tbody>
+                  <tbody id="history-rows"></tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- TAB: Nastavení sazeb a materiálů -->
+          <!-- NASTAVENÍ -->
           <div id="tab-settings" class="t-panel" style="display:none;">
             <div class="calc-card">
-              <h2>Globální nastavení & Sazby</h2>
-              <p style="opacity:0.8; font-size:0.9rem; margin-bottom:1.5rem;">Všechny provedené změny se okamžitě ukládají ve vašem prohlížeči.</p>
-
-              <!-- Pracovní sazba -->
+              <h2>Nastavení & Sazby</h2>
               <div class="settings-section">
-                <h3>Sazba práce a přihlašovací heslo</h3>
-                <div class="setting-row">
-                  <label for="set-work-rate">Základní hodinová sazba práce (Kč/hod)</label>
-                  <input type="number" id="set-work-rate" min="0" style="padding:0.4rem; width:100px;" onchange="updateGlobalSetting('workHourlyRate', this.value)">
-                </div>
-                <div class="setting-row">
-                  <label for="set-margin-default">Výchozí marže (%)</label>
-                  <input type="number" id="set-margin-default" min="0" style="padding:0.4rem; width:100px;" onchange="updateGlobalSetting('defaultMarkup', this.value)">
-                </div>
-                <div class="setting-row">
-                  <label for="set-new-pass">Nové přístupové heslo</label>
-                  <div style="display:flex; gap:0.5rem;">
-                    <input type="password" id="set-new-pass" placeholder="Heslo..." style="padding:0.4rem;">
-                    <button class="btn-action" onclick="changePassword()">Uložit heslo</button>
-                  </div>
-                </div>
+                <h3>Všeobecné sazby & Heslo</h3>
+                <div class="setting-row"><label>Sazba práce (Kč/hod)</label><input type="number" id="set-work-rate" onchange="updateSetting('workHourlyRate', this.value)"></div>
+                <div class="setting-row"><label>Výchozí marže (%)</label><input type="number" id="set-margin-default" onchange="updateSetting('defaultMarkup', this.value)"></div>
+                <div class="setting-row"><label>Nové heslo</label><div style="display:flex;gap:0.3rem;"><input type="password" id="set-new-pass"><button class="btn-action" onclick="changePassword()">Uložit</button></div></div>
               </div>
-
-              <!-- 3D Tisk materiály -->
               <div class="settings-section">
-                <h3>3D Tisk - Typy filamentů (Kč/kg)</h3>
-                <div class="setting-list" id="set-list-3d-mat"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                  <input type="text" id="add-3d-name" placeholder="Název filamentu" style="padding:0.4rem; width:60%">
-                  <input type="number" id="add-3d-price" placeholder="Cena Kč/kg" style="padding:0.4rem; width:30%">
-                  <button class="btn-action" onclick="addItem3dMaterial()">Přidat</button>
-                </div>
+                <h3>3D Tisk - Filamenty (Kč/kg)</h3><div class="setting-list" id="set-list-3d-mat"></div>
+                <div style="display:flex;gap:0.4rem;margin-top:0.4rem;"><input type="text" id="add-3d-name" placeholder="Název" style="width:60%"><input type="number" id="add-3d-price" placeholder="Kč/kg" style="width:30%"><button class="btn-action" onclick="add3DMat()">Přidat</button></div>
               </div>
-
-              <!-- 3D Tisk tiskárny -->
               <div class="settings-section">
-                <h3>3D Tisk - Tiskárny opotřebení (Kč/hod)</h3>
-                <div class="setting-list" id="set-list-3d-printers"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                  <input type="text" id="add-printer-name" placeholder="Název tiskárny" style="padding:0.4rem; width:60%">
-                  <input type="number" id="add-printer-price" placeholder="Opotřebení Kč/hod" style="padding:0.4rem; width:30%">
-                  <button class="btn-action" onclick="addPrinter()">Přidat</button>
-                </div>
+                <h3>3D Tisk - Tiskárny (Kč/hod)</h3><div class="setting-list" id="set-list-3d-printers"></div>
+                <div style="display:flex;gap:0.4rem;margin-top:0.4rem;"><input type="text" id="add-printer-name" placeholder="Název" style="width:60%"><input type="number" id="add-printer-price" placeholder="Kč/hod" style="width:30%"><button class="btn-action" onclick="addPrinter()">Přidat</button></div>
               </div>
-
-              <!-- Samolepky / Polepy materiály -->
               <div class="settings-section">
-                <h3>Polepy - Typy fólií (Kč/m²)</h3>
-                <div class="setting-list" id="set-list-foil-mat"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                  <input type="text" id="add-foil-name" placeholder="Název fólie" style="padding:0.4rem; width:60%">
-                  <input type="number" id="add-foil-price" placeholder="Cena Kč/m²" style="padding:0.4rem; width:30%">
-                  <button class="btn-action" onclick="addFoilMaterial()">Přidat</button>
-                </div>
+                <h3>Fólie (Kč/m²)</h3><div class="setting-list" id="set-list-foil-mat"></div>
+                <div style="display:flex;gap:0.4rem;margin-top:0.4rem;"><input type="text" id="add-foil-name" placeholder="Název" style="width:60%"><input type="number" id="add-foil-price" placeholder="Kč/m²" style="width:30%"><button class="btn-action" onclick="addFoilMat()">Přidat</button></div>
               </div>
-
-              <!-- Laser materiály -->
               <div class="settings-section">
-                <h3>Laser - Hodinová sazba stroje & Materiály</h3>
-                <div class="setting-row">
-                  <label for="set-laser-rate">Sazba za běh laseru (Kč/minuta)</label>
-                  <input type="number" id="set-laser-rate" min="0" step="0.1" style="padding:0.4rem; width:100px;" onchange="updateGlobalSetting('laserRatePerMin', this.value)">
-                </div>
-                <div class="setting-list" id="set-list-laser-mat" style="margin-top:1rem;"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                  <input type="text" id="add-lasmat-name" placeholder="Název materiálu/polotovaru" style="padding:0.4rem; width:60%">
-                  <input type="number" id="add-lasmat-price" placeholder="Cena za ks" style="padding:0.4rem; width:30%">
-                  <button class="btn-action" onclick="addLaserMaterial()">Přidat</button>
-                </div>
+                <h3>Laser (Kč/ks a minutová sazba)</h3>
+                <div class="setting-row"><label>Minuta laseru (Kč/min)</label><input type="number" id="set-laser-rate" onchange="updateSetting('laserRatePerMin', this.value)"></div>
+                <div class="setting-list" id="set-list-laser-mat"></div>
+                <div style="display:flex;gap:0.4rem;margin-top:0.4rem;"><input type="text" id="add-lasmat-name" placeholder="Polotovar" style="width:60%"><input type="number" id="add-lasmat-price" placeholder="Kč/ks" style="width:30%"><button class="btn-action" onclick="addLaserMat()">Přidat</button></div>
               </div>
-
-              <!-- Reset nastavení -->
               <div class="settings-section">
-                <button class="btn-action" onclick="resetSettingsToDefault()" style="color: #fca5a5;">Obnovit výchozí nastavení od výrobce</button>
+                <h3>Zásilkovna / Dopravné (Kč)</h3><div class="setting-list" id="set-list-shipping"></div>
+                <div style="display:flex;gap:0.4rem;margin-top:0.4rem;"><input type="text" id="add-ship-name" placeholder="Dopravce" style="width:60%"><input type="number" id="add-ship-price" placeholder="Cena" style="width:30%"><button class="btn-action" onclick="addShipOption()">Přidat</button></div>
               </div>
-
+              <button class="btn-action" onclick="resetSettings()" style="color:#fca5a5;width:100%;margin-top:1rem;">Zresetovat na tovární hodnoty</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -592,541 +279,559 @@
 
   <footer>
     <div class="container footer-content">
-      <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy | <a href="kalkulacka.html" style="opacity: 0.8; font-weight: bold; color: var(--accent);">🔐 Interní sekce</a></div>
-      <div class="social-links">
-        <a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a>
-      </div>
+      <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy | <a href="kalkulacka.html" style="opacity:0.6;font-size:0.9em;">🔐 Interní sekce</a></div>
+      <div class="social-links"><a href="https://instagram.com/mpmdesign.cz" target="_blank">Instagram</a><a href="https://www.facebook.com/share/1AsAUKm6Nn" target="_blank">Facebook</a></div>
     </div>
   </footer>
 
   <script>
-    // Security & Hashing utilities
-    function hash(str) {
-      let h = 0;
-      for (let i = 0; i < str.length; i++) {
-        h = (h << 5) - h + str.charCodeAt(i);
-        h |= 0;
-      }
-      return h.toString(36);
-    }
+    function hash(s){let h=0;for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;}return h.toString(36);}
+    const DEFAULT_PASS=hash('mpm2026');
 
-    const DEFAULT_PASS_HASH = hash('mpm2026');
-
-    // Data structure
-    const defaultSettings = {
-      workHourlyRate: 350,
-      defaultMarkup: 30,
-      laserRatePerMin: 6,
-      materials3d: [
-        { id: 'pla', name: 'PLA filament', pricePerKg: 550 },
-        { id: 'petg', name: 'PETG filament', pricePerKg: 600 },
-        { id: 'asa', name: 'ASA filament (UV odolný)', pricePerKg: 750 },
-        { id: 'tpu', name: 'TPU flexibilní', pricePerKg: 950 },
-        { id: 'nylon', name: 'Nylon pevnostní', pricePerKg: 1400 }
-      ],
-      printers3d: [
-        { id: 'stand', name: 'Bambu Lab P1S/X1C', pricePerHour: 30 },
-        { id: 'velka', name: 'Velká 3D tiskárna', pricePerHour: 55 }
-      ],
-      materialsFoil: [
-        { id: 'monomer', name: 'Monomer lesk/mat (krátkodobá)', pricePerM2: 250 },
-        { id: 'polymer', name: 'Polymer lesk/mat (střednědobá)', pricePerM2: 450 },
-        { id: 'lit', name: 'Litá fólie (Premium Carwrap)', pricePerM2: 950 },
-        { id: 'trans', name: 'Přenosová fólie', pricePerM2: 120 },
-        { id: 'mag', name: 'Magnetická fólie', pricePerM2: 800 }
-      ],
-      materialsLaser: [
-        { id: 'custom', name: 'Dodaný kus zákazníkem', price: 0 },
-        { id: 'topol3', name: 'Překližka topol 3mm (A4)', price: 45 },
-        { id: 'topol4', name: 'Překližka topol 4mm (A3)', price: 95 },
-        { id: 'plexisklo3', name: 'Akryl plexi 3mm (A4)', price: 130 }
-      ],
-      passwordHash: null
+    const defaultSettings={
+      workHourlyRate:350,defaultMarkup:30,laserRatePerMin:6,
+      materials3d:[{id:'pla',name:'PLA filament',pricePerKg:550},{id:'petg',name:'PETG filament',pricePerKg:600},{id:'asa',name:'ASA UV',pricePerKg:750}],
+      printers3d:[{id:'stand',name:'Bambu Lab P1S/X1C',pricePerHour:30},{id:'big',name:'Velká 3D tiskárna',pricePerHour:55}],
+      materialsFoil:[{id:'monomer',name:'Monomer (lesk/mat)',pricePerM2:250},{id:'polymer',name:'Polymer (střední)',pricePerM2:450},{id:'car',name:'Lité auto-fólie',pricePerM2:950}],
+      materialsLaser:[{id:'custom',name:'Vlastní dodaný materiál',price:0},{id:'ply3',name:'Překližka 3mm A4',price:45},{id:'plexi3',name:'Plexi 3mm A4',price:130}],
+      shippingOptions:[{id:'osobni',name:'Osobní převzetí',price:0},{id:'zasilkovna_pob',name:'Zásilkovna (výdejní místo)',price:85},{id:'zasilkovna_dom',name:'Zásilkovna (na adresu)',price:120},{id:'posta',name:'Balík do ruky (ČP)',price:110},{id:'custom',name:'Vlastní doprava',price:0}],
+      passwordHash:null
     };
 
-    let settings = {};
-    let historyList = [];
+    let settings={};
+    let historyList=[];
 
-    // Notifications toast
-    function showToast(msg) {
-      const t = document.getElementById('toast-notif');
-      t.innerText = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3000);
-    }
+    function showToast(m){const t=document.getElementById('toast-notif');t.innerText=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
-    // App Init
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSettings();
-      loadHistory();
-      
-      // Auto session login check
-      if (sessionStorage.getItem('mpm_session') === 'true') {
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('dashboard-container').style.display = 'block';
-        initSelectors();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      loadData();
+      if(sessionStorage.getItem('mpm_session')==='true'){
+        document.getElementById('auth-container').style.display='none';
+        document.getElementById('dashboard-container').style.display='block';
+        initUI();
         calculateAll();
       }
-
-      // Allow enter key in pass input
-      document.getElementById('calc-pass-input').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') tryLogin();
-      });
+      document.getElementById('calc-pass-input').addEventListener('keypress', e=>{if(e.key==='Enter')tryLogin();});
     });
 
-    // Authentication Checks
-    function tryLogin() {
-      const input = document.getElementById('calc-pass-input').value;
-      const targetHash = settings.passwordHash || DEFAULT_PASS_HASH;
-      
-      if (hash(input) === targetHash) {
-        sessionStorage.setItem('mpm_session', 'true');
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('dashboard-container').style.display = 'block';
-        initSelectors();
-        calculateAll();
-        showToast('Přihlášení úspěšné!');
-      } else {
-        const errorEl = document.getElementById('auth-error');
-        errorEl.innerText = 'Nesprávné heslo!';
-        errorEl.style.display = 'block';
-      }
+    function loadData(){
+      settings=JSON.parse(localStorage.getItem('mpm_calc_settings'))||JSON.parse(JSON.stringify(defaultSettings));
+      historyList=JSON.parse(localStorage.getItem('mpm_calc_history'))||[];
     }
 
-    function logout() {
-      sessionStorage.removeItem('mpm_session');
-      document.getElementById('auth-container').style.display = 'block';
-      document.getElementById('dashboard-container').style.display = 'none';
-    }
-
-    function changePassword() {
-      const newPass = document.getElementById('set-new-pass').value;
-      if (!newPass) return alert('Zadejte heslo!');
-      settings.passwordHash = hash(newPass);
-      saveSettingsToStorage();
-      document.getElementById('set-new-pass').value = '';
-      showToast('Heslo úspěšně změněno!');
-    }
-
-    // Settings management
-    function loadSettings() {
-      const stored = localStorage.getItem('mpm_calc_settings');
-      if (stored) {
-        settings = JSON.parse(stored);
-      } else {
-        settings = JSON.parse(JSON.stringify(defaultSettings));
-      }
-    }
-
-    function saveSettingsToStorage() {
+    function saveData(){
       localStorage.setItem('mpm_calc_settings', JSON.stringify(settings));
+      localStorage.setItem('mpm_calc_history', JSON.stringify(historyList));
     }
 
-    function resetSettingsToDefault() {
-      if(confirm('Opravdu chcete obnovit veškeré sazby a heslo do výchozího stavu?')) {
-        settings = JSON.parse(JSON.stringify(defaultSettings));
-        saveSettingsToStorage();
-        initSelectors();
-        renderSettingsLists();
+    function tryLogin(){
+      const val=document.getElementById('calc-pass-input').value;
+      const target=settings.passwordHash||DEFAULT_PASS;
+      if(hash(val)===target){
+        sessionStorage.setItem('mpm_session','true');
+        document.getElementById('auth-container').style.display='none';
+        document.getElementById('dashboard-container').style.display='block';
+        initUI();
         calculateAll();
-        showToast('Nastavení obnoveno.');
+        showToast('Úspěšně přihlášeno!');
+      }else{
+        document.getElementById('auth-error').innerText='Chybné heslo!';
+        document.getElementById('auth-error').style.display='block';
       }
     }
 
-    function updateGlobalSetting(key, val) {
-      settings[key] = parseFloat(val);
-      saveSettingsToStorage();
-      calculateAll();
-      showToast('Nastavení uloženo.');
+    function logout(){
+      sessionStorage.removeItem('mpm_session');
+      document.getElementById('auth-container').style.display='block';
+      document.getElementById('dashboard-container').style.display='none';
     }
 
-    // Dynamic UI selectors population
-    function initSelectors() {
-      // 3D materials
-      const s3dMat = document.getElementById('3d-material');
-      s3dMat.innerHTML = '';
-      settings.materials3d.forEach(m => {
-        s3dMat.innerHTML += `<option value="${m.pricePerKg}">${m.name} (${m.pricePerKg} Kč/kg)</option>`;
-      });
+    function changePassword(){
+      const val=document.getElementById('set-new-pass').value;
+      if(!val)return alert('Napište heslo');
+      settings.passwordHash=hash(val);
+      saveData();
+      document.getElementById('set-new-pass').value='';
+      showToast('Heslo uloženo!');
+    }
 
-      // 3D printers
-      const s3dPr = document.getElementById('3d-printer');
-      s3dPr.innerHTML = '';
-      settings.printers3d.forEach(p => {
-        s3dPr.innerHTML += `<option value="${p.pricePerHour}">${p.name} (${p.pricePerHour} Kč/h)</option>`;
-      });
+    function resetSettings(){
+      if(confirm('Tovární nastavení?')){
+        settings=JSON.parse(JSON.stringify(defaultSettings));
+        saveData();
+        initUI();
+        calculateAll();
+        showToast('Resetováno');
+      }
+    }
 
-      // Foil materials
-      const sFoil = document.getElementById('fol-material');
-      sFoil.innerHTML = '';
-      settings.materialsFoil.forEach(m => {
-        sFoil.innerHTML += `<option value="${m.pricePerM2}">${m.name} (${m.pricePerM2} Kč/m²)</option>`;
-      });
+    function updateSetting(key, val){
+      settings[key]=parseFloat(val);
+      saveData();
+      calculateAll();
+      showToast('Uloženo');
+    }
 
-      // Laser materials
-      const sLas = document.getElementById('las-material');
-      sLas.innerHTML = '';
-      settings.materialsLaser.forEach(m => {
-        sLas.innerHTML += `<option value="${m.price}">${m.name} (${m.price} Kč/ks)</option>`;
-      });
+    function initUI(){
+      // Populate select elements
+      const fillSel=(id, list, valName, textFn)=>{
+        const el=document.getElementById(id);
+        el.innerHTML='';
+        list.forEach(i=>el.innerHTML+=`<option value="${i[valName]}">${textFn(i)}</option>`);
+      };
 
-      // Set current fields in settings tab
-      document.getElementById('set-work-rate').value = settings.workHourlyRate;
-      document.getElementById('set-margin-default').value = settings.defaultMarkup;
-      document.getElementById('set-laser-rate').value = settings.laserRatePerMin;
-      
-      // Load initial margin values from defaults
-      document.getElementById('3d-margin').value = settings.defaultMarkup;
-      document.getElementById('fol-margin').value = settings.defaultMarkup;
-      document.getElementById('las-margin').value = settings.defaultMarkup;
+      fillSel('3d-material', settings.materials3d, 'pricePerKg', m=>`${m.name} (${m.pricePerKg} Kč/kg)`);
+      fillSel('3d-printer', settings.printers3d, 'pricePerHour', p=>`${p.name} (${p.pricePerHour} Kč/h)`);
+      fillSel('fol-material', settings.materialsFoil, 'pricePerM2', m=>`${m.name} (${m.pricePerM2} Kč/m²)`);
+      fillSel('las-material', settings.materialsLaser, 'price', m=>`${m.name} (${m.price} Kč/ks)`);
+
+      const populateShip=(id)=>{
+        fillSel(id, settings.shippingOptions, 'price', s=>`${s.name} (${s.price} Kč)`);
+      };
+      populateShip('3d-shipping');
+      populateShip('fol-shipping');
+      populateShip('las-shipping');
+
+      document.getElementById('set-work-rate').value=settings.workHourlyRate;
+      document.getElementById('set-margin-default').value=settings.defaultMarkup;
+      document.getElementById('set-laser-rate').value=settings.laserRatePerMin;
 
       renderSettingsLists();
     }
 
-    function renderSettingsLists() {
-      // 3d materials list
-      const l3d = document.getElementById('set-list-3d-mat');
-      l3d.innerHTML = '';
-      settings.materials3d.forEach((m, idx) => {
-        l3d.innerHTML += `<div class="setting-list-item">
-          <span>${m.name} - <strong>${m.pricePerKg} Kč/kg</strong></span>
-          <button onclick="deleteSettingItem('materials3d', ${idx})">Smazat</button>
-        </div>`;
-      });
-
-      // 3d printers list
-      const lPr = document.getElementById('set-list-3d-printers');
-      lPr.innerHTML = '';
-      settings.printers3d.forEach((p, idx) => {
-        lPr.innerHTML += `<div class="setting-list-item">
-          <span>${p.name} - <strong>${p.pricePerHour} Kč/hod</strong></span>
-          <button onclick="deleteSettingItem('printers3d', ${idx})">Smazat</button>
-        </div>`;
-      });
-
-      // foils list
-      const lFoil = document.getElementById('set-list-foil-mat');
-      lFoil.innerHTML = '';
-      settings.materialsFoil.forEach((m, idx) => {
-        lFoil.innerHTML += `<div class="setting-list-item">
-          <span>${m.name} - <strong>${m.pricePerM2} Kč/m²</strong></span>
-          <button onclick="deleteSettingItem('materialsFoil', ${idx})">Smazat</button>
-        </div>`;
-      });
-
-      // laser list
-      const lLas = document.getElementById('set-list-laser-mat');
-      lLas.innerHTML = '';
-      settings.materialsLaser.forEach((m, idx) => {
-        lLas.innerHTML += `<div class="setting-list-item">
-          <span>${m.name} - <strong>${m.price} Kč/ks</strong></span>
-          <button onclick="deleteSettingItem('materialsLaser', ${idx})">Smazat</button>
-        </div>`;
-      });
+    function renderSettingsLists(){
+      const draw=(elId, key, showPrice, unit)=>{
+        const el=document.getElementById(elId);el.innerHTML='';
+        settings[key].forEach((x, idx)=>{
+          el.innerHTML+=`<div class="setting-list-item">
+            <span>${x.name}${showPrice?` - <strong>${x.price||x.pricePerKg||x.pricePerHour||x.pricePerM2} ${unit}</strong>`:''}</span>
+            <button onclick="delSettingItem('${key}', ${idx})">Smazat</button>
+          </div>`;
+        });
+      };
+      draw('set-list-3d-mat','materials3d',true,'Kč/kg');
+      draw('set-list-3d-printers','printers3d',true,'Kč/h');
+      draw('set-list-foil-mat','materialsFoil',true,'Kč/m²');
+      draw('set-list-laser-mat','materialsLaser',true,'Kč');
+      draw('set-list-shipping','shippingOptions',true,'Kč');
     }
 
-    function deleteSettingItem(arrayName, index) {
-      settings[arrayName].splice(index, 1);
-      saveSettingsToStorage();
-      initSelectors();
-      calculateAll();
-      showToast('Položka odstraněna.');
+    function delSettingItem(k, idx){
+      settings[k].splice(idx,1);saveData();initUI();calculateAll();
     }
 
-    // Addition helpers
-    function addItem3dMaterial() {
-      const name = document.getElementById('add-3d-name').value;
-      const price = parseFloat(document.getElementById('add-3d-price').value);
-      if(!name || isNaN(price)) return alert('Vyplňte oboje pole!');
-      settings.materials3d.push({ id: hash(name), name, pricePerKg: price });
-      document.getElementById('add-3d-name').value = '';
-      document.getElementById('add-3d-price').value = '';
-      saveSettingsToStorage();
-      initSelectors();
-      calculate3d();
+    // Toggle shipping input custom price
+    function toggleShipping(pre){
+      const sel=document.getElementById(`${pre}-shipping`);
+      const val=sel.options[sel.selectedIndex].text;
+      const custEl=document.getElementById(`${pre}-ship-cust`);
+      if(val.includes('Vlastní doprava')){
+        custEl.style.display='block';
+      }else{
+        custEl.style.display='none';
+      }
+      if(pre==='3d')calculate3d();
+      if(pre==='fol')calculateFolie();
+      if(pre==='las')calculateLaser();
     }
 
-    function addPrinter() {
-      const name = document.getElementById('add-printer-name').value;
-      const price = parseFloat(document.getElementById('add-printer-price').value);
-      if(!name || isNaN(price)) return alert('Vyplňte oboje pole!');
-      settings.printers3d.push({ id: hash(name), name, pricePerHour: price });
-      document.getElementById('add-printer-name').value = '';
-      document.getElementById('add-printer-price').value = '';
-      saveSettingsToStorage();
-      initSelectors();
-      calculate3d();
+    function getShipPrice(pre){
+      const sel=document.getElementById(`${pre}-shipping`);
+      const valText=sel.options[sel.selectedIndex].text;
+      if(valText.includes('Vlastní doprava')){
+        return parseFloat(document.getElementById(`${pre}-ship-cust`).value)||0;
+      }
+      return parseFloat(sel.value)||0;
     }
 
-    function addFoilMaterial() {
-      const name = document.getElementById('add-foil-name').value;
-      const price = parseFloat(document.getElementById('add-foil-price').value);
-      if(!name || isNaN(price)) return alert('Vyplňte oboje pole!');
-      settings.materialsFoil.push({ id: hash(name), name, pricePerM2: price });
-      document.getElementById('add-foil-name').value = '';
-      document.getElementById('add-foil-price').value = '';
-      saveSettingsToStorage();
-      initSelectors();
-      calculateFolie();
+    function getShipName(pre){
+      const sel=document.getElementById(`${pre}-shipping`);
+      return sel.options[sel.selectedIndex].text.split('(')[0].trim();
     }
 
-    // Laser add material
-    function addLaserMaterial() {
-      const name = document.getElementById('add-lasmat-name').value;
-      const price = parseFloat(document.getElementById('add-lasmat-price').value);
-      if(!name || isNaN(price)) return alert('Vyplňte oboje pole!');
-      settings.materialsLaser.push({ id: hash(name), name, price: price });
-      document.getElementById('add-lasmat-name').value = '';
-      document.getElementById('add-lasmat-price').value = '';
-      saveSettingsToStorage();
-      initSelectors();
-      calculateLaser();
+    // Add list items
+    function add3DMat(){
+      const n=document.getElementById('add-3d-name').value;const p=parseFloat(document.getElementById('add-3d-price').value);
+      if(!n||isNaN(p))return;settings.materials3d.push({id:hash(n),name:n,pricePerKg:p});
+      document.getElementById('add-3d-name').value='';document.getElementById('add-3d-price').value='';
+      saveData();initUI();calculate3d();
+    }
+    function addPrinter(){
+      const n=document.getElementById('add-printer-name').value;const p=parseFloat(document.getElementById('add-printer-price').value);
+      if(!n||isNaN(p))return;settings.printers3d.push({id:hash(n),name:n,pricePerHour:p});
+      document.getElementById('add-printer-name').value='';document.getElementById('add-printer-price').value='';
+      saveData();initUI();calculate3d();
+    }
+    function addFoilMat(){
+      const n=document.getElementById('add-foil-name').value;const p=parseFloat(document.getElementById('add-foil-price').value);
+      if(!n||isNaN(p))return;settings.materialsFoil.push({id:hash(n),name:n,pricePerM2:p});
+      document.getElementById('add-foil-name').value='';document.getElementById('add-foil-price').value='';
+      saveData();initUI();calculateFolie();
+    }
+    function addLaserMat(){
+      const n=document.getElementById('add-lasmat-name').value;const p=parseFloat(document.getElementById('add-lasmat-price').value);
+      if(!n||isNaN(p))return;settings.materialsLaser.push({id:hash(n),name:n,price:p});
+      document.getElementById('add-lasmat-name').value='';document.getElementById('add-lasmat-price').value='';
+      saveData();initUI();calculateLaser();
+    }
+    function addShipOption(){
+      const n=document.getElementById('add-ship-name').value;const p=parseFloat(document.getElementById('add-ship-price').value);
+      if(!n||isNaN(p))return;settings.shippingOptions.push({id:hash(n),name:n,price:p});
+      document.getElementById('add-ship-name').value='';document.getElementById('add-ship-price').value='';
+      saveData();initUI();calculateAll();
     }
 
-    // Navigation Tabs
-    function switchTab(tabId) {
-      document.querySelectorAll('.t-panel').forEach(p => p.style.display = 'none');
-      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    function switchTab(tId){
+      document.querySelectorAll('.t-panel').forEach(p=>p.style.display='none');
+      document.querySelectorAll('.sidebar-btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById(tId).style.display='block';
       
-      document.getElementById(tabId).style.display = 'block';
-      event.currentTarget.classList.add('active');
-
-      if (tabId === 'tab-history') renderHistory();
+      let btnId='btn-' + tId.replace('tab-','');
+      const bEl=document.getElementById(btnId);
+      if(bEl)bEl.classList.add('active');
+      if(tId==='tab-history')renderHistory();
     }
 
     // Calculations
-    function calculateAll() {
-      calculate3d();
-      calculateFolie();
-      calculateLaser();
+    function calculateAll(){calculate3d();calculateFolie();calculateLaser();}
+
+    function calculate3d(){
+      const matPrice=parseFloat(document.getElementById('3d-material').value)||0;
+      const weight=parseFloat(document.getElementById('3d-weight').value)||0;
+      const h=parseFloat(document.getElementById('3d-hours').value)||0;
+      const m=parseFloat(document.getElementById('3d-mins').value)||0;
+      const printRate=parseFloat(document.getElementById('3d-printer').value)||0;
+      const prep=parseFloat(document.getElementById('3d-prep').value)||0;
+      const marginPct=parseFloat(document.getElementById('3d-margin').value)||0;
+      const ship=getShipPrice('3d');
+
+      const costMat=(weight*matPrice)/1000;
+      const costPrinter=(h+(m/60))*printRate;
+      const costLabor=(prep/60)*settings.workHourlyRate;
+      const costSub=costMat+costPrinter+costLabor;
+      const marginVal=costSub*(marginPct/100);
+      const total=costSub+marginVal+ship;
+
+      document.getElementById('3d-res-total').innerText=Math.round(total) + ' Kč';
+      document.getElementById('3d-res-mat').innerText=Math.round(costMat) + ' Kč';
+      document.getElementById('3d-res-mach').innerText=Math.round(costPrinter) + ' Kč';
+      document.getElementById('3d-res-work').innerText=Math.round(costLabor) + ' Kč';
+      document.getElementById('3d-res-ship').innerText=Math.round(ship) + ' Kč';
+      document.getElementById('3d-res-margin').innerText=Math.round(marginVal) + ' Kč';
+
+      updateBar('3d', costMat, costPrinter, costLabor, ship, marginVal, total);
     }
 
-    function calculate3d() {
-      const matPrice = parseFloat(document.getElementById('3d-material').value) || 0;
-      const weight = parseFloat(document.getElementById('3d-weight').value) || 0;
-      const hours = parseFloat(document.getElementById('3d-hours').value) || 0;
-      const mins = parseFloat(document.getElementById('3d-mins').value) || 0;
-      const printerRate = parseFloat(document.getElementById('3d-printer').value) || 0;
-      const prepMins = parseFloat(document.getElementById('3d-prep').value) || 0;
-      const marginPct = parseFloat(document.getElementById('3d-margin').value) || 0;
+    function calculateFolie(){
+      const matPrice=parseFloat(document.getElementById('fol-material').value)||0;
+      const w=parseFloat(document.getElementById('fol-width').value)||0;
+      const h=parseFloat(document.getElementById('fol-height').value)||0;
+      const count=parseInt(document.getElementById('fol-count').value)||1;
+      const waste=parseFloat(document.getElementById('fol-waste').value)||0;
+      const prep=parseFloat(document.getElementById('fol-prep').value)||0;
+      const design=parseFloat(document.getElementById('fol-design').value)||0;
+      const marginPct=parseFloat(document.getElementById('fol-margin').value)||0;
+      const ship=getShipPrice('fol');
 
-      // Material Cost
-      const costMat = (weight * matPrice) / 1000;
-      // Printer Cost
-      const printTimeHrs = hours + (mins / 60);
-      const costPrinter = printTimeHrs * printerRate;
-      // Work/Labor Cost
-      const costLabor = (prepMins / 60) * settings.workHourlyRate;
-      // Subtotal
-      const costSub = costMat + costPrinter + costLabor;
-      // Commission / margin
-      const marginVal = costSub * (marginPct / 100);
-      const total = costSub + marginVal;
+      const area=(w*h)/10000*count*(1+(waste/100));
+      const costMat=area*matPrice;
+      const costLabor=((prep/60)*settings.workHourlyRate)+design;
+      const costSub=costMat+costLabor;
+      const marginVal=costSub*(marginPct/100);
+      const total=costSub+marginVal+ship;
 
-      document.getElementById('3d-res-total').innerText = Math.round(total) + ' Kč';
-      document.getElementById('3d-res-mat').innerText = Math.round(costMat) + ' Kč';
-      document.getElementById('3d-res-mach').innerText = Math.round(costPrinter) + ' Kč';
-      document.getElementById('3d-res-work').innerText = Math.round(costLabor) + ' Kč';
-      document.getElementById('3d-res-margin').innerText = Math.round(marginVal) + ' Kč';
+      document.getElementById('fol-res-total').innerText=Math.round(total) + ' Kč';
+      document.getElementById('fol-res-per-piece').innerText=Math.round(total/count) + ' Kč';
+      document.getElementById('fol-res-mat').innerText=Math.round(costMat) + ' Kč';
+      document.getElementById('fol-res-work').innerText=Math.round(costLabor) + ' Kč';
+      document.getElementById('fol-res-ship').innerText=Math.round(ship) + ' Kč';
+      document.getElementById('fol-res-margin').innerText=Math.round(marginVal) + ' Kč';
+      document.getElementById('fol-res-area').innerText=area.toFixed(3);
 
-      // Bar proportions
-      updateBreakdownBar('3d', costMat, costPrinter, costLabor, marginVal, total);
+      updateBar('fol', costMat, 0, costLabor, ship, marginVal, total);
     }
 
-    function calculateFolie() {
-      const matPrice = parseFloat(document.getElementById('fol-material').value) || 0;
-      const width = parseFloat(document.getElementById('fol-width').value) || 0;
-      const height = parseFloat(document.getElementById('fol-height').value) || 0;
-      const count = parseInt(document.getElementById('fol-count').value) || 1;
-      const wastePct = parseFloat(document.getElementById('fol-waste').value) || 0;
-      const prepMins = parseFloat(document.getElementById('fol-prep').value) || 0;
-      const designFee = parseFloat(document.getElementById('fol-design').value) || 0;
-      const marginPct = parseFloat(document.getElementById('fol-margin').value) || 0;
+    function calculateLaser(){
+      const matUnit=parseFloat(document.getElementById('las-material').value)||0;
+      const count=parseInt(document.getElementById('las-count').value)||1;
+      const fireTime=parseFloat(document.getElementById('las-time').value)||0;
+      const prep=parseFloat(document.getElementById('las-prep').value)||0;
+      const setup=parseFloat(document.getElementById('las-setup').value)||0;
+      const marginPct=parseFloat(document.getElementById('las-margin').value)||0;
+      const ship=getShipPrice('las');
 
-      // Area calculations
-      const singleAreaM2 = (width * height) / 10000;
-      const rawAreaM2 = singleAreaM2 * count;
-      const totalAreaWithWaste = rawAreaM2 * (1 + (wastePct / 100));
+      const costMat=matUnit*count;
+      const costLaser=fireTime*settings.laserRatePerMin*count;
+      const costLabor=((prep*count)/60*settings.workHourlyRate)+setup;
+      const costSub=costMat+costLaser+costLabor;
+      const marginVal=costSub*(marginPct/100);
+      const total=costSub+marginVal+ship;
 
-      const costMat = totalAreaWithWaste * matPrice;
-      const costLabor = ((prepMins / 60) * settings.workHourlyRate) + designFee;
-      
-      const costSub = costMat + costLabor;
-      const marginVal = costSub * (marginPct / 100);
-      const total = costSub + marginVal;
-      
-      document.getElementById('fol-res-total').innerText = Math.round(total) + ' Kč';
-      document.getElementById('fol-res-per-piece').innerText = Math.round(total / count) + ' Kč';
-      document.getElementById('fol-res-mat').innerText = Math.round(costMat) + ' Kč';
-      document.getElementById('fol-res-work').innerText = Math.round(costLabor) + ' Kč';
-      document.getElementById('fol-res-margin').innerText = Math.round(marginVal) + ' Kč';
-      document.getElementById('fol-res-area').innerText = totalAreaWithWaste.toFixed(3);
+      document.getElementById('las-res-total').innerText=Math.round(total) + ' Kč';
+      document.getElementById('las-res-per-piece').innerText=Math.round(total/count) + ' Kč';
+      document.getElementById('las-res-mat').innerText=Math.round(costMat) + ' Kč';
+      document.getElementById('las-res-mach').innerText=Math.round(costLaser) + ' Kč';
+      document.getElementById('las-res-work').innerText=Math.round(costLabor) + ' Kč';
+      document.getElementById('las-res-ship').innerText=Math.round(ship) + ' Kč';
+      document.getElementById('las-res-margin').innerText=Math.round(marginVal) + ' Kč';
 
-      updateBreakdownBar('fol', costMat, 0, costLabor, marginVal, total);
+      updateBar('las', costMat, costLaser, costLabor, ship, marginVal, total);
     }
 
-    function calculateLaser() {
-      const matBaseVal = parseFloat(document.getElementById('las-material').value) || 0;
-      const count = parseInt(document.getElementById('las-count').value) || 1;
-      const burnTimeMin = parseFloat(document.getElementById('las-time').value) || 0;
-      const prepPieceMin = parseFloat(document.getElementById('las-prep').value) || 0;
-      const designFeeGlobal = parseFloat(document.getElementById('las-setup').value) || 0;
-      const marginPct = parseFloat(document.getElementById('las-margin').value) || 0;
-
-      // Costs
-      const costMat = matBaseVal * count;
-      const costLaserMachine = (burnTimeMin * settings.laserRatePerMin) * count;
-      const costLabor = ((prepPieceMin * count) / 60 * settings.workHourlyRate) + designFeeGlobal;
-
-      const costSub = costMat + costLaserMachine + costLabor;
-      const marginVal = costSub * (marginPct / 100);
-      const total = costSub + marginVal;
-
-      document.getElementById('las-res-total').innerText = Math.round(total) + ' Kč';
-      document.getElementById('las-res-per-piece').innerText = Math.round(total / count) + ' Kč';
-      document.getElementById('las-res-mat').innerText = Math.round(costMat) + ' Kč';
-      document.getElementById('las-res-mach').innerText = Math.round(costLaserMachine) + ' Kč';
-      document.getElementById('las-res-work').innerText = Math.round(costLabor) + ' Kč';
-      document.getElementById('las-res-margin').innerText = Math.round(marginVal) + ' Kč';
-
-      updateBreakdownBar('las', costMat, costLaserMachine, costLabor, marginVal, total);
+    function updateBar(pre, mat, mach, work, ship, margin, total){
+      if(total<=0)return;
+      const setW=(elId, v)=>document.getElementById(elId).style.width=(v/total*100)+'%';
+      setW(`${pre}-bar-mat`, mat);
+      if(document.getElementById(`${pre}-bar-mach`)) setW(`${pre}-bar-mach`, mach);
+      setW(`${pre}-bar-work`, work);
+      setW(`${pre}-bar-ship`, ship);
+      setW(`${pre}-bar-margin`, margin);
     }
 
-    function updateBreakdownBar(prefix, mat, mach, work, margin, total) {
-      if(total <= 0) return;
-      const pMat = (mat / total) * 100;
-      const pMach = (mach / total) * 100;
-      const pWork = (work / total) * 100;
-      const pMargin = (margin / total) * 100;
-
-      document.getElementById(`${prefix}-bar-mat`).style.width = pMat + '%';
-      if(document.getElementById(`${prefix}-bar-mach`)) {
-        document.getElementById(`${prefix}-bar-mach`).style.width = pMach + '%';
+    // Copy formatted text summary
+    function copySummaryText(pre){
+      let txt='';
+      if(pre==='3d'){
+        txt=`Cenová nabídka - 3D tisk:\n` +
+            `Díl: ${document.getElementById('3d-name').value}\n` +
+            `Hmotnost: ${document.getElementById('3d-weight').value}g | Čas: ${document.getElementById('3d-hours').value}h ${document.getElementById('3d-mins').value}m\n` +
+            `Doprava: ${getShipName('3d')} (${getShipPrice('3d')} Kč)\n` +
+            `Finální cena celkem: ${document.getElementById('3d-res-total').innerText}`;
+      }else if(pre==='folie'){
+        txt=`Cenová nabídka - Polepy a samolepky:\n` +
+            `Položka: ${document.getElementById('fol-name').value}\n` +
+            `Rozměr: ${document.getElementById('fol-width').value}x${document.getElementById('fol-height').value} cm | Počet: ${document.getElementById('fol-count').value}ks\n` +
+            `Doprava: ${getShipName('fol')} (${getShipPrice('fol')} Kč)\n` +
+            `Cena za kus: ${document.getElementById('fol-res-per-piece').innerText}\n` +
+            `Finální cena celkem: ${document.getElementById('fol-res-total').innerText}`;
+      }else if(pre==='las'){
+        txt=`Cenová nabídka - Gravírování/Laser:\n` +
+            `Položka: ${document.getElementById('las-name').value}\n` +
+            `Počet: ${document.getElementById('las-count').value}ks | Čas pálení: ${document.getElementById('las-time').value} min/ks\n` +
+            `Doprava: ${getShipName('las')} (${getShipPrice('las')} Kč)\n` +
+            `Cena za kus: ${document.getElementById('las-res-per-piece').innerText}\n` +
+            `Finální cena celkem: ${document.getElementById('las-res-total').innerText}`;
       }
-      document.getElementById(`${prefix}-bar-work`).style.width = pWork + '%';
-      document.getElementById(`${prefix}-bar-margin`).style.width = pMargin + '%';
+      navigator.clipboard.writeText(txt).then(()=>showToast('Shrnutí zkopírováno!')).catch(e=>alert(e));
     }
 
-    // Shrnutí / Summary texts copying
-    function copySummaryText(type) {
-      let txt = '';
-      if(type === '3d') {
-        const name = document.getElementById('3d-name').value;
-        const mat = document.getElementById('3d-material').options[document.getElementById('3d-material').selectedIndex].text.split('(')[0].trim();
-        const weight = document.getElementById('3d-weight').value;
-        const h = document.getElementById('3d-hours').value;
-        const m = document.getElementById('3d-mins').value;
-        const total = document.getElementById('3d-res-total').innerText;
-        txt = `Cenová nabídka - 3D tisk:\n` +
-              `Položka: ${name}\n` +
-              `Materiál: ${mat} (${weight}g)\n` +
-              `Doba tisku: ${h}h ${m}m\n` +
-              `Předpokládaná celková cena: ${total}`;
-      } else if(type === 'folie') {
-        const name = document.getElementById('fol-name').value;
-        const mat = document.getElementById('fol-material').options[document.getElementById('fol-material').selectedIndex].text.split('(')[0].trim();
-        const w = document.getElementById('fol-width').value;
-        const h = document.getElementById('fol-height').value;
-        const count = document.getElementById('fol-count').value;
-        const total = document.getElementById('fol-res-total').innerText;
-        const perPiece = document.getElementById('fol-res-per-piece').innerText;
-        txt = `Cenová nabídka - Nálepky/Fólie:\n` +
-              `Položka: ${name}\n` +
-              `Materiál: ${mat}\n` +
-              `Rozměr: ${w} x ${h} cm\n` +
-              `Množství: ${count} ks\n` +
-              `Cena za kus: ${perPiece}\n` +
-              `Cena celkem: ${total}`;
-      } else if(type === 'las') {
-        const name = document.getElementById('las-name').value;
-        const mat = document.getElementById('las-material').options[document.getElementById('las-material').selectedIndex].text.split('(')[0].trim();
-        const count = document.getElementById('las-count').value;
-        const time = document.getElementById('las-time').value;
-        const total = document.getElementById('las-res-total').innerText;
-        const perPiece = document.getElementById('las-res-per-piece').innerText;
-        txt = `Cenová nabídka - Gravírování/Laser:\n` +
-              `Položka: ${name}\n` +
-              `Polotovar/Materiál: ${mat}\n` +
-              `Počet kusů: ${count} ks\n` +
-              `Doba pálení (na ks): ${time} min\n` +
-              `Cena za kus: ${perPiece}\n` +
-              `Cena celkem: ${total}`;
-      }
-
-      navigator.clipboard.writeText(txt).then(() => {
-        showToast('Shrnutí zkopírováno do schránky!');
-      }).catch(err => {
-        alert('Chyba při kopírování: ' + err);
+    // Save outputs + all inputs to reload later
+    function saveToHistory(category, pre){
+      const name=document.getElementById(`${pre}-name`).value||'Položka bez názvu';
+      const price=document.getElementById(`${pre}-res-total`).innerText;
+      const date=new Date().toLocaleString('cs-CZ',{dateStyle:'short',timeStyle:'short'});
+      
+      const inputVals={};
+      // select all inputs of this panel
+      document.querySelectorAll(`#tab-${pre==='folie'?'folie':(pre==='3d'?'tisk':'laser')} input, #tab-${pre==='folie'?'folie':(pre==='3d'?'tisk':'laser')} select`).forEach(el=>{
+        if(el.id) inputVals[el.id] = el.value;
       });
+
+      const record={id:Date.now(),date,category,name,price,inputs:inputVals,pre};
+      historyList.unshift(record);
+      saveData();
+      showToast('Uloženo do historie!');
     }
 
-    // Calculation History Management
-    function loadHistory() {
-      const stored = localStorage.getItem('mpm_calc_history');
-      if (stored) {
-        historyList = JSON.parse(stored);
-      } else {
-        historyList = [];
-      }
-    }
-
-    function saveHistoryToStorage() {
-      localStorage.setItem('mpm_calc_history', JSON.stringify(historyList));
-    }
-
-    function saveToHistory(category, nameInputId, priceId) {
-      const name = document.getElementById(nameInputId).value || 'Bez názvu';
-      const priceText = document.getElementById(priceId).innerText;
-      const dateText = new Date().toLocaleString('cs-CZ', { dateStyle: 'short', timeStyle: 'short' });
-      
-      const record = {
-        id: Date.now(),
-        date: dateText,
-        category,
-        name,
-        price: priceText
-      };
-
-      historyList.unshift(record); // Add to top
-      saveHistoryToStorage();
-      showToast('Kalkulace uložena do historie!');
-    }
-
-    function renderHistory() {
-      const body = document.getElementById('history-rows');
-      if(historyList.length === 0) {
-        body.innerHTML = `<tr><td colspan="5" style="text-align:center;">Žádné uložené kalkulace.</td></tr>`;
+    function renderHistory(){
+      const rows=document.getElementById('history-rows');
+      if(historyList.length===0){
+        rows.innerHTML=`<tr><td colspan="5" style="text-align:center;">Žádné uložené kalkulace.</td></tr>`;
         return;
       }
-      body.innerHTML = '';
-      historyList.forEach(item => {
-        body.innerHTML += `<tr>
-          <td>${item.date}</td>
-          <td><strong>${item.category}</strong></td>
-          <td>${item.name}</td>
-          <td style="color:var(--accent); font-weight:700;">${item.price}</td>
+      rows.innerHTML='';
+      historyList.forEach(i=>{
+        rows.innerHTML+=`<tr>
+          <td><strong>${i.category}</strong></td>
+          <td>${i.name}</td>
+          <td style="color:var(--accent);font-weight:700;">${i.price}</td>
+          <td style="font-size:0.8rem;opacity:0.8;">${i.date}</td>
           <td>
-            <button class="btn-action" style="color:#ef4444;" onclick="deleteHistoryItem(${item.id})">Smazat</button>
+            <button class="btn-action" onclick="reloadCalculation(${i.id})" style="background:#22c55e;color:#fff;">Načíst</button>
+            <button class="btn-action" onclick="deleteHistoryItem(${i.id})" style="color:#ef4444;">Smazat</button>
           </td>
         </tr>`;
       });
     }
 
-    function deleteHistoryItem(id) {
-      historyList = historyList.filter(item => item.id !== id);
-      saveHistoryToStorage();
-      renderHistory();
-      showToast('Kalkulace smazána.');
+    function reloadCalculation(id){
+      const item=historyList.find(x=>x.id===id);
+      if(!item)return;
+      
+      // Load saved select options/inputs back
+      Object.keys(item.inputs).forEach(key=>{
+        const el=document.getElementById(key);
+        if(el){
+          el.value = item.inputs[key];
+          // trigger toggle if custom shipping
+          if(key.endsWith('shipping')){
+            const pre = key.split('-')[0];
+            toggleShipping(pre);
+          }
+        }
+      });
+
+      // Switch view and compute
+      switchTab(item.pre==='3D Tisk'||item.pre==='3d'?'tab-tisk':(item.pre==='Polepy'||item.pre==='fol'?'tab-folie':'tab-laser'));
+      calculateAll();
+      showToast(`Kalkulace "${item.name}" načtena!`);
     }
 
-    function clearHistory() {
-      if(confirm('Opravdu chcete vymazat celou historii výpočtů?')) {
-        historyList = [];
-        saveHistoryToStorage();
-        renderHistory();
-        showToast('Historie byla kompletně smazána.');
+    function deleteHistoryItem(id){
+      historyList=historyList.filter(x=>x.id!==id);saveData();renderHistory();showToast('Kalkulace smazána.');
+    }
+    function clearHistory(){
+      if(confirm('Smazat celou historii?')){historyList=[];saveData();renderHistory();showToast('Smazáno.');}
+    }
+
+    // Print & Beautiful PDF Generator with logo
+    function printPDF(pre){
+      let detailsHtml = '';
+      const name = document.getElementById(`${pre}-name`).value;
+      const finalPrice = document.getElementById(`${pre}-res-total`).innerText;
+      const shName = getShipName(pre);
+      const shCost = getShipPrice(pre);
+
+      if(pre==='3d'){
+        const mat = document.getElementById('3d-material').options[document.getElementById('3d-material').selectedIndex].text.split('(')[0].trim();
+        const wt = document.getElementById('3d-weight').value;
+        const hr = document.getElementById('3d-hours').value;
+        const mn = document.getElementById('3d-mins').value;
+        detailsHtml = `
+          <tr><td><strong>Metoda výroby:</strong></td><td>3D tisk (FDM)</td></tr>
+          <tr><td><strong>Materiál:</strong></td><td>${mat}</td></tr>
+          <tr><td><strong>Hmotnost výlisku:</strong></td><td>${wt} g</td></tr>
+          <tr><td><strong>Čas strojové výroby:</strong></td><td>${hr} hod. ${mn} min.</td></tr>
+          <tr><td><strong>Položky v ceně:</strong></td><td>Příprava modelu, spotřebovaná elektřina, opotřebení stroje a odstranění podpor.</td></tr>
+        `;
+      }else if(pre==='fol'){
+        const mat = document.getElementById('fol-material').options[document.getElementById('fol-material').selectedIndex].text.split('(')[0].trim();
+        const w = document.getElementById('fol-width').value;
+        const h = document.getElementById('fol-height').value;
+        const count = document.getElementById('fol-count').value;
+        const area = document.getElementById('fol-res-area').innerText;
+        detailsHtml = `
+          <tr><td><strong>Metoda výroby:</strong></td><td>Tisk a ořez fólií (samolepky)</td></tr>
+          <tr><td><strong>Typ materiálu:</strong></td><td>${mat}</td></tr>
+          <tr><td><strong>Rozměry jednoho kusu:</strong></td><td>${w} x ${h} cm</td></tr>
+          <tr><td><strong>Celková plocha (vč. prořezu):</strong></td><td>${area} m²</td></tr>
+          <tr><td><strong>Počet kusů v sérii:</strong></td><td>${count} ks</td></tr>
+          <tr><td><strong>Jednotková cena:</strong></td><td>${document.getElementById('fol-res-per-piece').innerText} / ks</td></tr>
+        `;
+      }else if(pre==='las'){
+        const mat = document.getElementById('las-material').options[document.getElementById('las-material').selectedIndex].text.split('(')[0].trim();
+        const count = document.getElementById('las-count').value;
+        const time = document.getElementById('las-time').value;
+        detailsHtml = `
+          <tr><td><strong>Metoda výroby:</strong></td><td>Laserové gravírování a řezání</td></tr>
+          <tr><td><strong>Polotovar / základ:</strong></td><td>${mat}</td></tr>
+          <tr><td><strong>Počet kusů v zakázce:</strong></td><td>${count} ks</td></tr>
+          <tr><td><strong>Doba pálení chodu laseru:</strong></td><td>${time} min / ks</td></tr>
+          <tr><td><strong>Jednotková cena:</strong></td><td>${document.getElementById('las-res-per-piece').innerText} / ks</td></tr>
+        `;
       }
+
+      const printWindow = window.open('', '_blank');
+      const dateText = new Date().toLocaleDateString('cs-CZ');
+
+      printWindow.document.write(`
+        <html>
+        <head>
+          <title>Cenová nabídka - MPMDESIGN</title>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 40px; color: #222; font-size: 14px; line-height: 1.5; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+            .logo-wrap { width: 90px; vertical-align: top; }
+            .logo-img { width: 80px; height: 80px; padding: 5px; border: 1px solid #ddd; border-radius: 8px; background: #fff; display: block; object-fit: contain; }
+            .company-info { text-align: right; font-size: 12px; line-height: 1.4; color: #555; }
+            .doc-title { font-size: 24px; font-weight: bold; border-bottom: 2px solid #FF8000; padding-bottom: 8px; margin-bottom: 20px; color: #154387; letter-spacing: 0.5px; }
+            .party-table { width: 100%; margin-bottom: 30px; border-collapse: collapse; }
+            .party-col { width: 50%; vertical-align: top; padding-right: 20px; }
+            .party-card { background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 15px; min-height: 120px; }
+            .party-title { font-weight: bold; color: #154387; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .specs-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden; }
+            .specs-table td { padding: 10px 15px; border-bottom: 1px solid #eaeaea; vertical-align: top; }
+            .specs-table tr:nth-child(even) { background-color: #fafafa; }
+            .price-summary { margin-top: 30px; background: #FFF4E6; border: 1px dashed #FF8000; border-radius: 8px; padding: 20px; text-align: right; }
+            .price-label { font-size: 14px; color: #555; margin-bottom: 4px; }
+            .price-amount { font-size: 26px; font-weight: 800; color: #FF8000; }
+            .footer-note { text-align: center; margin-top: 50px; font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 15px; }
+            @media print {
+              body { margin: 0; padding: 20px; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body onload="window.focus();">
+          <table class="header-table">
+            <tr>
+              <td class="logo-wrap">
+                <img src="logo2.svg" class="logo-img" alt="MPMDESIGN">
+              </td>
+              <td style="vertical-align: middle; padding-left: 15px;">
+                <div style="font-size:22px; font-weight:bold; color:#154387; letter-spacing: 1px;">MPMDESIGN</div>
+                <div style="font-size:12px; color:#666; font-style:italic;">3D tisk • CNC frézování • Laser • Polepy</div>
+              </td>
+              <td class="company-info">
+                <strong>MPMDESIGN</strong><br>
+                Marek Miguel Morte<br>
+                mpmdesign@outlook.cz<br>
+                +420 720 020 824<br>
+                www.mpmdesign.cz
+              </td>
+            </tr>
+          </table>
+
+          <div class="doc-title">Kalkulace cenové nabídky výrobků</div>
+
+          <table class="party-table">
+            <tr>
+              <td class="party-col">
+                <div class="party-card">
+                  <div class="party-title">Zpracovatel nabídky</div>
+                  <strong>MPMDESIGN</strong><br>
+                  Marek Miguel Morte<br>
+                  IČ: (na vyžádání)<br>
+                  Česká Republika
+                </div>
+              </td>
+              <td class="party-col">
+                <div class="party-card">
+                  <div class="party-title">Předmět kalkulace</div>
+                  <strong>Zakázka:</strong> ${name}<br>
+                  <strong>Datum vyhotovení:</strong> ${dateText}<br>
+                  <strong>Platnost nabídky:</strong> 30 dní
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <div style="font-weight: bold; color: #154387; margin-bottom: 10px; font-size: 15px;">Technické parametry a specifikace:</div>
+          <table class="specs-table">
+            ${detailsHtml}
+            <tr>
+              <td><strong>Vybraná doprava:</strong></td>
+              <td>${shName} (${shCost} Kč)</td>
+            </tr>
+          </table>
+
+          <div class="price-summary">
+            <div class="price-label">Výsledná koncová cena nabídky (celkem k úhradě):</div>
+            <div class="price-amount">${finalPrice}</div>
+            <div style="font-size:11px; color:#666; margin-top:5px; font-style:italic;">Cena je uvedena včetně započtených materiálových nákladů, opotřebení strojů, ruční práce a poštovného. Nejsme plátci DPH.</div>
+          </div>
+
+          <div class="footer-note">
+            Děkujeme za projevení zájmu o mé výrobní služby. V případě dotazů nebo objednání mě můžete kontaktovat na mpmdesign@outlook.cz.<br>
+            <strong style="color:#154387;">Těšíme se na úspěšnou spolupráci!</strong>
+          </div>
+          <script>
+            setTimeout(function(){ window.print(); }, 400);
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
     }
   </script>
 </body>
