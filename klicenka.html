@@ -75,6 +75,9 @@
     cursor:pointer;border:2px solid transparent;
   }
   .swatch.active{border-color:#fff;}
+  .check{display:flex;align-items:center;gap:8px;cursor:pointer;}
+  .check input{width:auto;accent-color:var(--accent);}
+  .range-value{float:right;color:#aaa;font-variant-numeric:tabular-nums;}
   .row2{display:flex;gap:10px;}
   .row2 > div{flex:1;}
   button#send{
@@ -120,10 +123,21 @@
       <option value="gentilis">Gentilis (elegantní, serif)</option>
     </select>
 
-    <h2 style="margin-top:20px;">3. Barva filamentu</h2>
-    <div class="colors" id="color-picker"></div>
+    <h2 style="margin-top:20px;">3. Vzhled</h2>
+    <label>Barva podkladu</label>
+    <div class="colors" id="base-color-picker"></div>
+    <label>Barva vystouplého textu</label>
+    <div class="colors" id="text-color-picker"></div>
+    <label>Výška vystouplého textu <span class="range-value" id="text-height-value">1,6 mm</span></label>
+    <input type="range" id="text-height-input" min="0.6" max="3" value="1.6" step="0.2">
 
-    <h2 style="margin-top:20px;">4. Rozměry</h2>
+    <h2 style="margin-top:20px;">4. Tvar a rozměry</h2>
+    <label>Tvar klíčenky</label>
+    <select id="shape-select">
+      <option value="rounded">Zaoblený obdélník</option>
+      <option value="rectangle">Rovné rohy</option>
+      <option value="oval">Ovál</option>
+    </select>
     <div class="row2">
       <div>
         <label>Šířka (mm)</label>
@@ -134,6 +148,11 @@
         <input type="number" id="thickness-input" value="4" min="2" max="8" step="0.5">
       </div>
     </div>
+    <label>Zaoblení rohů <span class="range-value" id="corner-radius-value">6 mm</span></label>
+    <input type="range" id="corner-radius-input" min="2" max="12" value="6" step="1">
+    <label class="check"><input type="checkbox" id="hole-toggle" checked> Otvor pro kroužek</label>
+    <label>Průměr otvoru <span class="range-value" id="hole-size-value">6 mm</span></label>
+    <input type="range" id="hole-size-input" min="3" max="10" value="6" step="1">
 
     <h2 style="margin-top:20px;">5. Objednávka</h2>
     <label>Jméno a příjmení</label>

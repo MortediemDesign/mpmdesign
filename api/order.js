@@ -48,7 +48,10 @@ export default async function handler(req, res) {
       <p><strong>Počet kusů:</strong> ${customer.qty || 1}</p>
       <p><strong>Text na klíčence:</strong> ${design.text}</p>
       <p><strong>Font:</strong> ${design.font}</p>
-      <p><strong>Barva filamentu:</strong> ${design.colorName} (${design.color})</p>
+      <p><strong>Barva podkladu:</strong> ${design.baseColorName || design.colorName} (${design.baseColor || design.color})</p>
+      <p><strong>Barva vystouplého textu:</strong> ${design.textColorName || design.colorName} (${design.textColor || design.color})</p>
+      <p><strong>Výška vystouplého textu:</strong> ${design.textHeight_mm || 1.6} mm</p>
+      <p><strong>Tvar:</strong> ${design.shape || "zaoblený obdélník"}${design.hasHole === false ? ", bez otvoru" : `, otvor ${design.holeDiameter_mm || "neuveden"} mm`}</p>
       <p><strong>Rozměry:</strong> ${design.width_mm} × ${(design.width_mm * 0.36).toFixed(1)} mm, tloušťka ${design.thickness_mm} mm</p>
       ${customer.note ? `<p><strong>Poznámka zákazníka:</strong> ${customer.note}</p>` : ""}
       <p><strong>Odesláno:</strong> ${createdAt}</p>

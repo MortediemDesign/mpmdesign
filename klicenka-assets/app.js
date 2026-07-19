@@ -29,9 +29,17 @@ const COLORS = [
 let state = {
   text: "MPMDESIGN",
   font: "helvetiker",
-  color: COLORS[0].hex,
+  baseColor: COLORS[0].hex,
+  baseColorName: COLORS[0].name,
+  textColor: COLORS[2].hex,
+  textColorName: COLORS[2].name,
   width: 70,
   thickness: 4,
+  textHeight: 1.6,
+  shape: "rounded",
+  cornerRadius: 6,
+  hasHole: true,
+  holeDiameter: 6,
 };
 const fontCache = {};
 
@@ -93,15 +101,24 @@ function roundedRectShape(w, h, r) {
 
 function buildTagGeometry(width, thickness) {
   const height = width * 0.36;
-  const shape = roundedRectShape(width, height, height * 0.18);
+  let shape;
+  if (state.shape === "oval") {
+    shape = new THREE.Shape();
+    shape.absellipse(0, 0, width / 2, height / 2, 0, Math.PI * 2, false, 0);
+  } else {
+    const radius = state.shape === "rectangle" ? 0.4 : Math.min(state.cornerRadius, height / 2 - 0.5, width / 2 - 0.5);
+    shape = roundedRectShape(width, height, radius);
+  }
 
-  // hole for keyring, near left edge
-  const holeR = Math.min(height * 0.16, 4);
-  const holeCenterX = -width / 2 + holeR * 2.2;
+  // Hole for keyring, near the left edge. It can be disabled for a tag or magnet.
+  const holeR = Math.min(state.holeDiameter / 2, height * 0.3);
+  const holeCenterX = -width / 2 + holeR + 3;
   const holeCenterY = 0;
-  const hole = new THREE.Path();
-  hole.absarc(holeCenterX, holeCenterY, holeR, 0, Math.PI * 2, true);
-  shape.holes.push(hole);
+  if (state.hasHole) {
+    const hole = new THREE.Path();
+    hole.absarc(holeCenterX, holeCenterY, holeR, 0, Math.PI * 2, true);
+    shape.holes.push(hole);
+  }
 
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth: thickness,
@@ -132,7 +149,7 @@ async function rebuild() {
 
   const { geo: tagGeo, width, height, holeCenterX, holeR } = buildTagGeometry(state.width, state.thickness);
 
-  const textDepth = 1.6;
+  const textDepth = state.textHeight;
   let textGeo = new TextGeometry(state.text || " ", {
     font,
     size: height * 0.4,
@@ -146,7 +163,7 @@ async function rebuild() {
   const textH = bb.max.y - bb.min.y;
 
   // available printable area (avoid the ring hole zone on the left)
-  const safeLeft = -width / 2 + holeR * 4.5;
+  const safeLeft = state.hasHole ? -width / 2 + holeR * 2 + 6 : -width / 2 + 3;
   const availableW = (width / 2 - 3) - safeLeft;
   const availableH = height - 4;
 
@@ -162,13 +179,23 @@ async function rebuild() {
   const centerX = safeLeft + (availableW) / 2;
   textGeo.translate(centerX - cx, -cy, state.thickness / 2 - 0.05);
 
-  // merge for a single-color STL
+  // The merged geometry is exported as STL. The preview has two meshes so
+  // the customer can independently choose the base and text colors.
   const merged = mergeGeometries([tagGeo, textGeo], false);
   merged.computeVertexNormals();
 
-  if (currentMesh) scene.remove(currentMesh);
-  const material = new THREE.MeshStandardMaterial({ color: new THREE.Color(state.color), roughness: 0.55, metalness: 0.05 });
-  currentMesh = new THREE.Mesh(merged, material);
+  if (currentMesh) {
+    scene.remove(currentMesh);
+    currentMesh.traverse((child) => {
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) child.material.dispose();
+    });
+  }
+  const baseMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(state.baseColor), roughness: 0.55, metalness: 0.05 });
+  const textMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(state.textColor), roughness: 0.5, metalness: 0.05 });
+  currentMesh = new THREE.Group();
+  currentMesh.add(new THREE.Mesh(tagGeo, baseMaterial));
+  currentMesh.add(new THREE.Mesh(textGeo, textMaterial));
   scene.add(currentMesh);
   currentGeometry = merged;
 
@@ -200,25 +227,39 @@ const textInput = document.getElementById("text-input");
 const fontSelect = document.getElementById("font-select");
 const widthInput = document.getElementById("width-input");
 const thicknessInput = document.getElementById("thickness-input");
-const colorPicker = document.getElementById("color-picker");
+const baseColorPicker = document.getElementById("base-color-picker");
+const textColorPicker = document.getElementById("text-color-picker");
+const textHeightInput = document.getElementById("text-height-input");
+const textHeightValue = document.getElementById("text-height-value");
+const shapeSelect = document.getElementById("shape-select");
+const cornerRadiusInput = document.getElementById("corner-radius-input");
+const cornerRadiusValue = document.getElementById("corner-radius-value");
+const holeToggle = document.getElementById("hole-toggle");
+const holeSizeInput = document.getElementById("hole-size-input");
+const holeSizeValue = document.getElementById("hole-size-value");
 const statusEl = document.getElementById("status");
 const sendBtn = document.getElementById("send");
 
-COLORS.forEach((c, i) => {
-  const sw = document.createElement("div");
-  sw.className = "swatch" + (i === 0 ? " active" : "");
-  sw.style.background = c.hex;
-  sw.title = c.name;
-  sw.addEventListener("click", () => {
-    document.querySelectorAll(".swatch").forEach((s) => s.classList.remove("active"));
-    sw.classList.add("active");
-    state.color = c.hex;
-    state.colorName = c.name;
-    if (currentMesh) currentMesh.material.color.set(c.hex);
+function createColorPicker(container, property, nameProperty, activeIndex) {
+  COLORS.forEach((c, i) => {
+    const sw = document.createElement("button");
+    sw.type = "button";
+    sw.className = "swatch" + (i === activeIndex ? " active" : "");
+    sw.style.background = c.hex;
+    sw.title = c.name;
+    sw.setAttribute("aria-label", c.name);
+    sw.addEventListener("click", () => {
+      container.querySelectorAll(".swatch").forEach((s) => s.classList.remove("active"));
+      sw.classList.add("active");
+      state[property] = c.hex;
+      state[nameProperty] = c.name;
+      scheduleRebuild();
+    });
+    container.appendChild(sw);
   });
-  colorPicker.appendChild(sw);
-});
-state.colorName = COLORS[0].name;
+}
+createColorPicker(baseColorPicker, "baseColor", "baseColorName", 0);
+createColorPicker(textColorPicker, "textColor", "textColorName", 2);
 
 let rebuildTimer = null;
 function scheduleRebuild() {
@@ -230,6 +271,23 @@ textInput.addEventListener("input", () => { state.text = textInput.value; schedu
 fontSelect.addEventListener("change", () => { state.font = fontSelect.value; scheduleRebuild(); });
 widthInput.addEventListener("change", () => { state.width = parseFloat(widthInput.value) || 70; scheduleRebuild(); });
 thicknessInput.addEventListener("change", () => { state.thickness = parseFloat(thicknessInput.value) || 4; scheduleRebuild(); });
+textHeightInput.addEventListener("input", () => {
+  state.textHeight = parseFloat(textHeightInput.value);
+  textHeightValue.textContent = state.textHeight.toFixed(1).replace(".", ",") + " mm";
+  scheduleRebuild();
+});
+shapeSelect.addEventListener("change", () => { state.shape = shapeSelect.value; scheduleRebuild(); });
+cornerRadiusInput.addEventListener("input", () => {
+  state.cornerRadius = parseFloat(cornerRadiusInput.value);
+  cornerRadiusValue.textContent = state.cornerRadius + " mm";
+  scheduleRebuild();
+});
+holeToggle.addEventListener("change", () => { state.hasHole = holeToggle.checked; scheduleRebuild(); });
+holeSizeInput.addEventListener("input", () => {
+  state.holeDiameter = parseFloat(holeSizeInput.value);
+  holeSizeValue.textContent = state.holeDiameter + " mm";
+  scheduleRebuild();
+});
 
 rebuild();
 
@@ -265,10 +323,17 @@ sendBtn.addEventListener("click", async () => {
       design: {
         text: state.text,
         font: state.font,
-        color: state.color,
-        colorName: state.colorName,
+        baseColor: state.baseColor,
+        baseColorName: state.baseColorName,
+        textColor: state.textColor,
+        textColorName: state.textColorName,
+        textHeight_mm: state.textHeight,
         width_mm: state.width,
         thickness_mm: state.thickness,
+        shape: state.shape,
+        cornerRadius_mm: state.cornerRadius,
+        hasHole: state.hasHole,
+        holeDiameter_mm: state.holeDiameter,
       },
       stlBase64,
       previewImageBase64: previewDataUrl.split(",")[1],
