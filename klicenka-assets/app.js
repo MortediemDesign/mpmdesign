@@ -9,7 +9,8 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 // Funkce běží samostatně na Vercelu (GitHub Pages neumí spouštět serverless
 // kód). Po nasazení sem vlož svou skutečnou Vercel URL, např.:
 // "https://mpmdesign-klicenka.vercel.app/api/order"
-const ORDER_ENDPOINT = "https://TVOJE-PROJEKT.vercel.app/api/order";
+const ORDER_ENDPOINT =
+  (typeof window !== "undefined" && window.MPM_CONFIG && window.MPM_CONFIG.orderEndpoint) || "";
 const FONT_FILES = {
   helvetiker: "./klicenka-assets/fonts/helvetiker_regular.typeface.json",
   optimer: "./klicenka-assets/fonts/optimer_regular.typeface.json",
@@ -337,8 +338,44 @@ sendBtn.addEventListener("click", async () => {
       },
       stlBase64,
       previewImageBase64: previewDataUrl.split(",")[1],
+      pricing: (typeof window !== "undefined" && window.MPM_PRICE_SNAPSHOT) || null,
+      product: "klicenka",
       createdAt: new Date().toISOString(),
     };
+
+    // Endpoint jeste neni nasazeny -> nabidni stazeni STL a predvyplneny e-mail.
+    if (!ORDER_ENDPOINT) {
+      const safe = (state.text || "klicenka").replace(/[^a-z0-9_-]/gi, "_").slice(0, 30);
+      const bin = atob(stlBase64);
+      const buf = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([buf], { type: "model/stl" }));
+      const a = document.createElement("a");
+      a.href = url; a.download = safe + ".stl";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+      const to = (window.MPM_CONFIG && window.MPM_CONFIG.orderEmail) || "";
+      const price = window.MPM_PRICE_SNAPSHOT
+        ? "\nOrientacni cena: " + Math.round(window.MPM_PRICE_SNAPSHOT.total) + " Kc"
+        : "";
+      const body =
+        "Dobry den,\n\nobjednavam klicenku z konfiguratoru.\n\n" +
+        "Text: " + state.text + "\nFont: " + state.font +
+        "\nRozmery: " + state.width + " mm, tloustka " + state.thickness + " mm" +
+        "\nPocet kusu: " + qty + price +
+        "\n\nSoubor " + safe + ".stl mam stazeny - prikladam ho k tomuto e-mailu.\n\n" +
+        name + "\n" + email + (note ? "\n\nPoznamka: " + note : "");
+      window.location.href = "mailto:" + to +
+        "?subject=" + encodeURIComponent("Objednavka klicenky: " + state.text) +
+        "&body=" + encodeURIComponent(body);
+
+      statusEl.textContent =
+        "Model se stahnul a otevrel se ti e-mail - staci prilozit stazeny STL soubor a odeslat.";
+      statusEl.className = "ok";
+      sendBtn.disabled = false;
+      return;
+    }
 
     const res = await fetch(ORDER_ENDPOINT, {
       method: "POST",

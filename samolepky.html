@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konfigurátor samolepek | MPMDESIGN</title>
+<meta name="description" content="Navrhni si samolepky na míru - nahraj vlastní motiv nebo napiš text, vyber tvar a rozměr, cenu spočítáme okamžitě.">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .cfg-wrap{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;padding-bottom:2rem;}
+  .cfg-viewer{flex:1 1 460px;min-width:300px;position:sticky;top:90px;}
+  #preview{width:100%;height:460px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
+    background:repeating-conic-gradient(rgba(255,255,255,.10) 0% 25%, transparent 0% 50%) 50%/22px 22px,
+      rgba(0,0,0,0.25);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1.4rem;}
+  #preview svg{max-width:100%;max-height:100%;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));}
+  .hint{font-size:.82rem;color:rgba(255,255,255,0.55);margin-top:.6rem;text-align:center;}
+  .cfg-panel{flex:1 1 340px;max-width:430px;background:var(--panel);border-radius:14px;padding:1.3rem;
+    border:1px solid rgba(255,255,255,0.15);}
+  .cfg-panel h2{font-size:.95rem;margin:1.4rem 0 .4rem;color:var(--accent);text-transform:uppercase;
+    letter-spacing:.05em;}
+  .cfg-panel h2:first-of-type{margin-top:0;}
+  .cfg-panel label{display:block;font-size:.85rem;margin:.8rem 0 .35rem;color:rgba(255,255,255,0.8);}
+  .cfg-panel input[type=text],.cfg-panel input[type=email],.cfg-panel input[type=number],
+  .cfg-panel select,.cfg-panel textarea{width:100%;padding:.6rem .7rem;border-radius:8px;
+    border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.25);color:var(--text);
+    font-family:inherit;font-size:.95rem;}
+  .cfg-panel input:focus,.cfg-panel select:focus,.cfg-panel textarea:focus{outline:none;
+    border-color:var(--accent);background:rgba(0,0,0,0.4);}
+  .cfg-panel input[type=file]{width:100%;color:var(--text);font-size:.85rem;padding:.4rem 0;}
+  .cfg-panel input[type=color]{width:100%;height:38px;padding:2px;border-radius:8px;
+    border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.25);cursor:pointer;}
+  .cfg-panel textarea{resize:vertical;min-height:52px;}
+  .row2{display:flex;gap:.6rem;}
+  .row2>div{flex:1;}
+  .tabs{display:flex;gap:.4rem;margin-bottom:.2rem;}
+  .tab{flex:1;padding:.5rem;border-radius:8px;background:rgba(0,0,0,0.25);
+    border:1px solid rgba(255,255,255,0.2);color:var(--text);cursor:pointer;font-weight:600;
+    font-size:.85rem;font-family:inherit;transition:all .25s ease;}
+  .tab.active{background:var(--accent);border-color:var(--accent);}
+  .price-box{margin-top:1.2rem;padding:1rem;border-radius:12px;background:rgba(255,128,0,0.12);
+    border:1px solid rgba(255,128,0,0.45);}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
+  .price-row+.price-row{margin-top:.35rem;}
+  .price-total{font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1.1;}
+  .price-sub{font-size:.82rem;color:rgba(255,255,255,0.65);}
+  #send{margin-top:1.1rem;width:100%;padding:.85rem;border:none;border-radius:10px;
+    background:var(--accent);color:#fff;font-weight:700;font-size:1rem;cursor:pointer;
+    transition:all .3s ease;}
+  #send:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 15px rgba(255,128,0,0.4);}
+  #send:disabled{opacity:.5;cursor:not-allowed;}
+  #status{margin-top:.6rem;font-size:.85rem;min-height:18px;}
+  #status.ok{color:#7ee787;}
+  #status.err{color:#ff8a8a;}
+  small.legal{display:block;margin-top:.6rem;color:rgba(255,255,255,0.45);font-size:.72rem;}
+  .cut-note{font-size:.75rem;color:rgba(255,255,255,0.5);margin-top:.4rem;}
+</style>
+</head>
+<body>
+  <header>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <img src="logo2.svg" alt="Logo firmy">
+        <span>MPMDESIGN</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li><a href="klicenka.html">Klíčenky</a></li>
+          <li><a class="active" href="samolepky.html">Samolepky</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section style="padding:2rem 0 1rem;">
+      <h1 style="margin:0 0 .5rem;">Samolepky <span class="accent">na míru</span></h1>
+      <p style="margin:0;max-width:60ch;">Nahraj vlastní motiv nebo napiš text, vyber tvar, rozměr
+        a materiál. Cenu uvidíš hned a my dostaneme rovnou řezací data.</p>
+    </section>
+
+    <div class="cfg-wrap">
+      <div class="cfg-viewer">
+        <div id="preview"></div>
+        <p class="hint">Náhled v poměru 1:1 – růžová linka je řezná kontura.</p>
+      </div>
+
+      <div class="cfg-panel">
+        <h2>1. Motiv</h2>
+        <div class="tabs">
+          <button type="button" class="tab active" id="tab-text" data-mode="text">Text</button>
+          <button type="button" class="tab" id="tab-image" data-mode="image">Vlastní obrázek</button>
+        </div>
+
+        <div id="mode-text">
+          <label>Text samolepky</label>
+          <input type="text" id="sticker-text" maxlength="24" value="MPMDESIGN" placeholder="Např. název firmy">
+          <label>Font</label>
+          <select id="sticker-font">
+            <option value="Arial, Helvetica, sans-serif">Arial (bezpatkový)</option>
+            <option value="Georgia, 'Times New Roman', serif">Georgia (patkový)</option>
+            <option value="'Courier New', monospace">Courier (technický)</option>
+            <option value="Impact, 'Arial Black', sans-serif">Impact (tučný)</option>
+          </select>
+          <div class="row2">
+            <div>
+              <label>Barva textu</label>
+              <input type="color" id="text-color" value="#154387">
+            </div>
+            <div>
+              <label>Barva podkladu</label>
+              <input type="color" id="bg-color" value="#ffffff">
+            </div>
+          </div>
+        </div>
+
+        <div id="mode-image" style="display:none;">
+          <label>Nahraj obrázek (PNG, JPG nebo SVG)</label>
+          <input type="file" id="image-input" accept="image/png,image/jpeg,image/svg+xml">
+          <p class="cut-note">Nejlepší výsledek dá PNG s průhledným pozadím nebo vektorové SVG.</p>
+        </div>
+
+        <h2>2. Tvar a rozměr</h2>
+        <label>Tvar</label>
+        <select id="shape-select">
+          <option value="rounded">Zaoblený obdélník</option>
+          <option value="rect">Obdélník</option>
+          <option value="circle">Kruh</option>
+          <option value="ellipse">Ovál</option>
+        </select>
+        <div class="row2">
+          <div>
+            <label>Šířka (cm)</label>
+            <input type="number" id="width-cm" value="10" min="1" max="100" step="0.5">
+          </div>
+          <div>
+            <label>Výška (cm)</label>
+            <input type="number" id="height-cm" value="10" min="1" max="100" step="0.5">
+          </div>
+        </div>
+        <label>Materiál</label>
+        <select id="material-select"></select>
+
+        <h2>3. Objednávka</h2>
+        <div class="row2">
+          <div>
+            <label>Počet kusů</label>
+            <input type="number" id="count-input" value="10" min="1" max="1000">
+          </div>
+          <div>
+            <label>Doprava</label>
+            <select id="ship-select"></select>
+          </div>
+        </div>
+        <label>Jméno a příjmení</label>
+        <input type="text" id="cust-name" placeholder="Jan Novák">
+        <label>E-mail (pro potvrzení)</label>
+        <input type="email" id="cust-email" placeholder="jan@example.com">
+        <label>Poznámka (volitelné)</label>
+        <textarea id="cust-note" placeholder="Např. potřebuji do pátku..."></textarea>
+
+        <div class="price-box">
+          <div class="price-row">
+            <span>Cena celkem</span>
+            <span class="price-total" id="price-total">–</span>
+          </div>
+          <div class="price-row">
+            <span class="price-sub" id="price-per-piece">&nbsp;</span>
+            <span class="price-sub" id="price-ship">&nbsp;</span>
+          </div>
+        </div>
+
+        <button id="send">Odeslat objednávku</button>
+        <div id="status"></div>
+        <small class="legal">Odesláním souhlasíš, že tvůj návrh a kontaktní údaje použijeme
+          k vyřízení objednávky. Cena je orientační, potvrdíme ji e-mailem.</small>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy | <a href="kalkulacka.html" style="opacity: 0.6; font-size: 0.9em;">🔐 Interní sekce</a></div>
+      <div class="social-links">
+        <a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/pricing-public.js"></script>
+<script src="assets/js/sticker-configurator.js"></script>
+</body>
+</html>
