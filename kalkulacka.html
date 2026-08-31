@@ -284,19 +284,16 @@
     </div>
   </footer>
 
+  <script src="assets/js/pricing.js"></script>
   <script>
     function hash(s){let h=0;for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;}return h.toString(36);}
     const DEFAULT_PASS=hash('mpm2026');
 
-    const defaultSettings={
-      workHourlyRate:350,defaultMarkup:30,laserRatePerMin:6,
-      materials3d:[{id:'pla',name:'PLA filament',pricePerKg:550},{id:'petg',name:'PETG filament',pricePerKg:600},{id:'asa',name:'ASA UV',pricePerKg:750}],
-      printers3d:[{id:'stand',name:'Bambu Lab P1S/X1C',pricePerHour:30},{id:'big',name:'Velká 3D tiskárna',pricePerHour:55}],
-      materialsFoil:[{id:'monomer',name:'Monomer (lesk/mat)',pricePerM2:250},{id:'polymer',name:'Polymer (střední)',pricePerM2:450},{id:'car',name:'Lité auto-fólie',pricePerM2:950}],
-      materialsLaser:[{id:'custom',name:'Vlastní dodaný materiál',price:0},{id:'ply3',name:'Překližka 3mm A4',price:45},{id:'plexi3',name:'Plexi 3mm A4',price:130}],
-      shippingOptions:[{id:'osobni',name:'Osobní převzetí',price:0},{id:'zasilkovna_pob',name:'Zásilkovna (výdejní místo)',price:85},{id:'zasilkovna_dom',name:'Zásilkovna (na adresu)',price:120},{id:'posta',name:'Balík do ruky (ČP)',price:110},{id:'custom',name:'Vlastní doprava',price:0}],
-      passwordHash:null
-    };
+    // Sazby jsou centralne v assets/js/pricing.js (jediny zdroj pravdy).
+    const defaultSettings=Object.assign(
+      JSON.parse(JSON.stringify(MPMPricing.DEFAULT_RATES)),
+      {passwordHash:null}
+    );
 
     let settings={};
     let historyList=[];
@@ -505,12 +502,8 @@
       const marginPct=parseFloat(document.getElementById('3d-margin').value)||0;
       const ship=getShipPrice('3d');
 
-      const costMat=(weight*matPrice)/1000;
-      const costPrinter=(h+(m/60))*printRate;
-      const costLabor=(prep/60)*settings.workHourlyRate;
-      const costSub=costMat+costPrinter+costLabor;
-      const marginVal=costSub*(marginPct/100);
-      const total=costSub+marginVal+ship;
+      const r=MPMPricing.calc3D({materialPricePerKg:matPrice,weightG:weight,printHours:h,printMins:m,printerRatePerHour:printRate,prepMins:prep,marginPct:marginPct,shipping:ship},settings);
+      const costMat=r.material, costPrinter=r.machine, costLabor=r.labor, marginVal=r.margin, total=r.total;
 
       document.getElementById('3d-res-total').innerText=Math.round(total) + ' Kč';
       document.getElementById('3d-res-mat').innerText=Math.round(costMat) + ' Kč';
@@ -533,12 +526,8 @@
       const marginPct=parseFloat(document.getElementById('fol-margin').value)||0;
       const ship=getShipPrice('fol');
 
-      const area=(w*h)/10000*count*(1+(waste/100));
-      const costMat=area*matPrice;
-      const costLabor=((prep/60)*settings.workHourlyRate)+design;
-      const costSub=costMat+costLabor;
-      const marginVal=costSub*(marginPct/100);
-      const total=costSub+marginVal+ship;
+      const r=MPMPricing.calcFoil({materialPricePerM2:matPrice,widthCm:w,heightCm:h,count:count,wastePct:waste,prepMins:prep,designCost:design,marginPct:marginPct,shipping:ship},settings);
+      const area=r.area, costMat=r.material, costLabor=r.labor, marginVal=r.margin, total=r.total;
 
       document.getElementById('fol-res-total').innerText=Math.round(total) + ' Kč';
       document.getElementById('fol-res-per-piece').innerText=Math.round(total/count) + ' Kč';
@@ -560,12 +549,8 @@
       const marginPct=parseFloat(document.getElementById('las-margin').value)||0;
       const ship=getShipPrice('las');
 
-      const costMat=matUnit*count;
-      const costLaser=fireTime*settings.laserRatePerMin*count;
-      const costLabor=((prep*count)/60*settings.workHourlyRate)+setup;
-      const costSub=costMat+costLaser+costLabor;
-      const marginVal=costSub*(marginPct/100);
-      const total=costSub+marginVal+ship;
+      const r=MPMPricing.calcLaser({materialUnitPrice:matUnit,count:count,fireMinsPerPiece:fireTime,prepMinsPerPiece:prep,setupCost:setup,marginPct:marginPct,shipping:ship},settings);
+      const costMat=r.material, costLaser=r.machine, costLabor=r.labor, marginVal=r.margin, total=r.total;
 
       document.getElementById('las-res-total').innerText=Math.round(total) + ' Kč';
       document.getElementById('las-res-per-piece').innerText=Math.round(total/count) + ' Kč';
