@@ -1,16 +1,26 @@
 /*!
- * MPMDESIGN - spolecna konfigurace konfiguratoru.
+ * MPMDESIGN - společná konfigurace konfigurátorů.
  *
- * orderEndpoint: URL nasazene serverless funkce api/order.js.
- * GitHub Pages neumi spoustet serverovy kod, proto funkce bezi zvlast
- * (Vercel). Dokud je hodnota prazdna, konfiguratory objednavku neodesilaji
- * na server, ale nabidnou zakaznikovi stazeni vyrobniho souboru a
- * predvyplneny e-mail - stranka tedy funguje i bez nasazeni.
+ * Objednávky se VŽDY odesílají na server, který je přepošle e-mailem.
+ * Zákazníkovi se nikdy nic nestahuje.
  *
- * Po nasazeni na Vercel sem vloz napr.:
- *   orderEndpoint: "https://mpmdesign.vercel.app/api/order"
+ * orderMode:
+ *   "vercel"    - vlastní funkce api/order.js nasazená na Vercelu.
+ *                 Doporučeno: zvládne i velké STL modely.
+ *                 Vyplň orderEndpoint, např.
+ *                 "https://mpmdesign.vercel.app/api/order"
+ *
+ *   "web3forms" - služba web3forms.com, není potřeba nic nasazovat.
+ *                 Stačí vyplnit web3formsKey (přístupový klíč přijde e-mailem
+ *                 po zadání adresy na web3forms.com).
+ *                 Pozor: volný tarif má limit velikosti přílohy.
+ *
+ * Dokud není vyplněný ani jeden režim, konfigurátory objednávku neodešlou
+ * a zobrazí zákazníkovi kontaktní e-mail.
  */
 window.MPM_CONFIG = {
+  orderMode: "",
   orderEndpoint: "",
-  orderEmail: "info@mpmdesign.cz"
+  web3formsKey: "",
+  orderEmail: "mpmdesign@outlook.cz"
 };

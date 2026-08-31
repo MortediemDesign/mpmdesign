@@ -190,50 +190,22 @@
       var safe = ((design.text || state.imageName || "samolepka") + "")
         .replace(/[^a-z0-9_-]/gi, "_").slice(0, 30) || "samolepka";
 
-      if (!CFG.orderEndpoint) {
-        // Endpoint zatím není nasazený - stáhni výrobní SVG a otevři e-mail.
-        var url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
-        var a = document.createElement("a");
-        a.href = url; a.download = safe + "_cutcontour.svg";
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
-
-        var body = "Dobry den,\n\nobjednavam samolepky z konfiguratoru.\n\n" +
-          "Motiv: " + (design.text || design.imageName || "vlastni obrazek") +
-          "\nTvar: " + design.shape +
-          "\nRozmer: " + design.width_cm + " x " + design.height_cm + " cm" +
-          "\nMaterial: " + design.material +
-          "\nPocet kusu: " + count +
-          "\nOrientacni cena: " + Math.round(pricing.total) + " Kc (" + pricing.shippingName + ")" +
-          "\n\nSoubor " + safe + "_cutcontour.svg mam stazeny - prikladam ho k e-mailu.\n\n" +
-          name + "\n" + email + ($("cust-note").value ? "\n\nPoznamka: " + $("cust-note").value : "");
-        window.location.href = "mailto:" + (CFG.orderEmail || "") +
-          "?subject=" + encodeURIComponent("Objednavka samolepek: " + safe) +
-          "&body=" + encodeURIComponent(body);
-
-        setStatus("Řezací soubor se stáhl a otevřel se ti e-mail – stačí soubor přiložit a odeslat.", "ok");
-        btn.disabled = false;
-        return;
-      }
-
-      var res = await fetch(CFG.orderEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          product: "samolepky",
-          customer: { name: name, email: email, qty: count, note: $("cust-note").value },
-          design: design,
-          pricing: pricing,
-          fileBase64: svgBase64,
-          fileName: safe + "_cutcontour.svg",
-          createdAt: new Date().toISOString()
-        })
+      await window.MPMOrder.sendOrder({
+        product: "samolepky",
+        subjectHint: "samolepky " + safe,
+        customer: { name: name, email: email, qty: count, note: $("cust-note").value },
+        design: design,
+        pricing: pricing,
+        fileBase64: svgBase64,
+        fileName: safe + "_cutcontour.svg",
+        fileType: "image/svg+xml",
+        createdAt: new Date().toISOString()
       });
-      if (!res.ok) throw new Error("server vrátil " + res.status);
       setStatus("Hotovo! Objednávka odešla, ozveme se ti na e-mail.", "ok");
     } catch (err) {
       console.error(err);
-      setStatus("Něco se nepovedlo (" + err.message + "). Zkus to prosím znovu.", "err");
+      setStatus(err.setup ? err.message
+        : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkus to prosím znovu.", "err");
     } finally {
       btn.disabled = false;
     }
