@@ -19,8 +19,8 @@
  * a zobrazí zákazníkovi kontaktní e-mail.
  */
 window.MPM_CONFIG = {
-  orderMode: "",
-  orderEndpoint: "",
+  orderMode: "vercel",
+  orderEndpoint: "https://mpmdesign.vercel.app/api/order",
   web3formsKey: "",
   orderEmail: "mpmdesign@outlook.cz"
 };

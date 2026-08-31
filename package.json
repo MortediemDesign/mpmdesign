@@ -2,6 +2,7 @@
   "name": "mpmdesign-klicenka-konfigurator",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "resend": "^3.2.0"
   }
