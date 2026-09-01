@@ -32,6 +32,15 @@
       { id: "ply3", name: "Překližka 3mm A4", price: 45 },
       { id: "plexi3", name: "Plexi 3mm A4", price: 130 }
     ],
+    // Samolepici papir se ucetuje po CELYCH A4 arsich, ne za m2.
+    // Pouzitelna plocha je mensi nez arch kvuli okrajum tiskarny.
+    stickerPaperA4: {
+      name: "Samolepicí papír A4 (tisk)",
+      pricePerSheet: 10,
+      usableWidthCm: 19,
+      usableHeightCm: 27.7,
+      gapCm: 0.2
+    },
     shippingOptions: [
       { id: "osobni", name: "Osobní převzetí", price: 0 },
       { id: "zasilkovna_pob", name: "Zásilkovna (výdejní místo)", price: 85 },

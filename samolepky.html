@@ -8,10 +8,15 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 <style>
   .cfg-wrap{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;padding-bottom:2rem;}
-  .cfg-viewer{flex:1 1 460px;min-width:300px;position:sticky;top:90px;}
-  #preview{width:100%;height:460px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
-    background:repeating-conic-gradient(rgba(255,255,255,.10) 0% 25%, transparent 0% 50%) 50%/22px 22px,
-      rgba(0,0,0,0.25);
+  .cfg-viewer{flex:1 1 460px;min-width:300px;}
+  /* Lepivy nahled dava smysl jen ve dvousloupcovem rozvrzeni. V jednom sloupci
+     (mobil) by se prisponendlil nahoru a prekryval formular pod sebou. */
+  @media (min-width:900px){
+    .cfg-viewer{position:sticky;top:88px;z-index:0;}
+  }
+  #preview{width:100%;height:min(460px,60vh);border-radius:14px;border:1px solid rgba(255,255,255,0.15);
+    /* Svetla sachovnice jako v grafickych programech - jinak nejsou tmave barvy videt. */
+    background:repeating-conic-gradient(#dcdcdc 0% 25%, #ffffff 0% 50%) 50%/22px 22px;
     display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1.4rem;}
   #preview svg{max-width:100%;max-height:100%;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));}
   .hint{font-size:.82rem;color:rgba(255,255,255,0.55);margin-top:.6rem;text-align:center;}
@@ -54,6 +59,9 @@
   #status.err{color:#ff8a8a;}
   small.legal{display:block;margin-top:.6rem;color:rgba(255,255,255,0.45);font-size:.72rem;}
   .cut-note{font-size:.75rem;color:rgba(255,255,255,0.5);margin-top:.4rem;}
+  .check{display:flex;align-items:center;gap:.5rem;cursor:pointer;margin:.9rem 0 .2rem;
+    font-size:.85rem;color:rgba(255,255,255,0.8);}
+  .check input{width:auto;accent-color:var(--accent);}
 </style>
 </head>
 <body>
@@ -94,6 +102,7 @@
         <h2>1. Motiv</h2>
         <div class="tabs">
           <button type="button" class="tab active" id="tab-text" data-mode="text">Text</button>
+          <button type="button" class="tab" id="tab-instagram" data-mode="instagram">Instagram</button>
           <button type="button" class="tab" id="tab-image" data-mode="image">Vlastní obrázek</button>
         </div>
 
@@ -112,11 +121,32 @@
               <label>Barva textu</label>
               <input type="color" id="text-color" value="#154387">
             </div>
-            <div>
+            <div id="bg-color-wrap">
               <label>Barva podkladu</label>
               <input type="color" id="bg-color" value="#ffffff">
             </div>
           </div>
+          <div id="no-bg-wrap">
+            <label class="check"><input type="checkbox" id="no-bg"> Bez podkladu – vyřezat samotná písmena</label>
+            <p class="cut-note">Zůstane jen text, žádná podkladová plocha. Řezná kontura kopíruje
+              písmena. Nelze kombinovat s tiskem na samolepicí papír.</p>
+          </div>
+        </div>
+
+        <div id="mode-instagram" style="display:none;">
+          <label>Jméno profilu</label>
+          <input type="text" id="ig-handle" maxlength="30" value="@mpmdesign.cz" placeholder="@tvujprofil">
+          <div class="row2">
+            <div>
+              <label>Barva loga a textu</label>
+              <input type="color" id="ig-color" value="#154387">
+            </div>
+            <div>
+              <label>Barva podkladu</label>
+              <input type="color" id="ig-bg-color" value="#ffffff">
+            </div>
+          </div>
+          <p class="cut-note">Vysází se logo Instagramu se jménem profilu.</p>
         </div>
 
         <div id="mode-image" style="display:none;">
@@ -157,6 +187,21 @@
             <select id="ship-select"></select>
           </div>
         </div>
+        <div id="address-wrap" style="display:none;">
+          <label>Ulice a číslo popisné</label>
+          <input type="text" id="addr-street" placeholder="Klínovecká 998">
+          <div class="row2">
+            <div>
+              <label>Město</label>
+              <input type="text" id="addr-city" placeholder="Ostrov">
+            </div>
+            <div>
+              <label>PSČ</label>
+              <input type="text" id="addr-zip" placeholder="363 01">
+            </div>
+          </div>
+        </div>
+
         <label>Jméno a příjmení</label>
         <input type="text" id="cust-name" placeholder="Jan Novák">
         <label>E-mail (pro potvrzení)</label>

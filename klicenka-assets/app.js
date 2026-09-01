@@ -309,6 +309,20 @@ sendBtn.addEventListener("click", async () => {
     return;
   }
 
+  // Adresa je potreba jen kdyz se doopravdy dorucuje.
+  let address = null;
+  if (window.MPM_NEEDS_ADDRESS) {
+    const street = document.getElementById("addr-street").value.trim();
+    const city = document.getElementById("addr-city").value.trim();
+    const zip = document.getElementById("addr-zip").value.trim();
+    if (!street || !city || !zip) {
+      statusEl.textContent = "Pro doručení vyplň prosím ulici, město i PSČ.";
+      statusEl.className = "err";
+      return;
+    }
+    address = { street, city, zip };
+  }
+
   sendBtn.disabled = true;
   statusEl.textContent = "Generuji STL a odesílám objednávku…";
 
@@ -318,7 +332,7 @@ sendBtn.addEventListener("click", async () => {
     const previewDataUrl = renderer.domElement.toDataURL("image/jpeg", 0.85);
 
     const payload = {
-      customer: { name, email, qty, note },
+      customer: { name, email, qty, note, address },
       design: {
         text: state.text,
         font: state.font,

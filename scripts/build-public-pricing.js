@@ -22,19 +22,19 @@ const A = {
 
   sticker: {
     prepMins: 15,                 // příprava dat + nastavení plotru na zakázku
-    wastePct: 15,                 // odpad fólie
+    wastePct: 15,                 // odpad fólie (netýká se papíru - ten se účtuje po arších)
     minOrderCzk: 150              // minimální cena zakázky bez dopravy
   },
 
   keychain: {
-    materialId: "petg",           // z čeho se klíčenky tisknou
+    materialId: "petg",
     printerId: "stand",
-    densityGPerCm3: 1.27,         // PETG
-    fillFactor: 0.55,             // stěny + výplň, ne plný objem
+    densityGPerCm3: 1.27,
+    fillFactor: 0.55,
     printHoursPer10g: 0.5,
-    setupMins: 10,                // příprava zakázky (jednorázově)
-    perPieceMins: 2,              // manipulace na kus
-    heightRatio: 0.36             // výška = 0.36 x šířka (drží konfigurátor)
+    setupMins: 10,
+    perPieceMins: 2,
+    heightRatio: 0.36
   }
 };
 
@@ -42,20 +42,33 @@ const mat = (list, id) => list.find(m => m.id === id);
 const withMargin = v => v * (1 + A.margin / 100);
 const r2 = v => Math.round(v * 100) / 100;
 
-/* --- samolepky: prodejní cena za m2 + jednorázový setup --- */
+/* --- samolepky: řezané fólie (za m2) + tištěný papír (za A4 arch) --- */
 const stickerMaterials = R.materialsFoil.map(m => ({
   id: m.id,
   name: m.name,
+  kind: "area",
   sellPerM2: r2(withMargin(m.pricePerM2))
 }));
+
+const paper = R.stickerPaperA4;
+stickerMaterials.push({
+  id: "papir_a4",
+  name: paper.name,
+  kind: "sheet",
+  sellPerSheet: r2(withMargin(paper.pricePerSheet)),
+  usableWidthCm: paper.usableWidthCm,
+  usableHeightCm: paper.usableHeightCm,
+  gapCm: paper.gapCm,
+  requiresBackground: true      // tisk nedává smysl u řezaného textu bez podkladu
+});
+
 const stickerSetupFee = r2(withMargin((A.sticker.prepMins / 60) * R.workHourlyRate));
 
-/* --- klíčenky: prodejní cena za kus + jednorázový setup --- */
+/* --- klíčenky --- */
 const kMat = mat(R.materials3d, A.keychain.materialId);
 const kPrinter = mat(R.printers3d, A.keychain.printerId);
 const keychainSetupFee = r2(withMargin((A.keychain.setupMins / 60) * R.workHourlyRate));
 const keychainPerPieceLabor = r2(withMargin((A.keychain.perPieceMins / 60) * R.workHourlyRate));
-// cena materiálu+tisku na 1 gram, už s marží
 const gramCost = kMat.pricePerKg / 1000
   + (A.keychain.printHoursPer10g / 10) * kPrinter.pricePerHour;
 const keychainSellPerGram = r2(withMargin(gramCost));
@@ -96,22 +109,55 @@ const out = `/*!
     var s = SHIPPING.filter(function (o) { return o.id === id; })[0];
     return s ? s.price : 0;
   }
+  function material(id) {
+    return MATERIALS_STICKER.filter(function (o) { return o.id === id; })[0]
+      || MATERIALS_STICKER[0];
+  }
+
+  /* Kolik kusů w x h cm se vejde na jeden arch (zkouší i otočení o 90 stupňů). */
+  function perSheet(m, w, h) {
+    function fit(a, b) {
+      var cols = Math.floor((m.usableWidthCm + m.gapCm) / (a + m.gapCm));
+      var rows = Math.floor((m.usableHeightCm + m.gapCm) / (b + m.gapCm));
+      return cols > 0 && rows > 0 ? cols * rows : 0;
+    }
+    return Math.max(fit(w, h), fit(h, w));
+  }
 
   /* Samolepky: rozměry v cm. Vrací jen výslednou cenu. */
   function sticker(i) {
     var count = Math.max(1, parseInt(i.count, 10) || 1);
-    var m = MATERIALS_STICKER.filter(function (o) { return o.id === i.materialId; })[0]
-      || MATERIALS_STICKER[0];
-    var area = (num(i.widthCm) * num(i.heightCm)) / 10000 * count * (1 + STICKER.wastePct / 100);
-    var goods = Math.max(STICKER.minOrder, area * m.sellPerM2 + STICKER.setupFee);
+    var m = material(i.materialId);
+    var w = num(i.widthCm), h = num(i.heightCm);
     var shipping = ship(i.shippingId);
+    var goods, extra = {};
+
+    if (m.kind === "sheet") {
+      var per = perSheet(m, w, h);
+      if (!per) {
+        return { error: "too-big", maxSideCm: Math.max(m.usableWidthCm, m.usableHeightCm),
+          materialName: m.name, total: 0, goods: 0, shipping: shipping, perPiece: 0 };
+      }
+      var sheets = Math.ceil(count / per);
+      goods = Math.max(STICKER.minOrder, sheets * m.sellPerSheet + STICKER.setupFee);
+      extra.sheets = sheets;
+      extra.perSheet = per;
+    } else {
+      var area = (w * h) / 10000 * count * (1 + STICKER.wastePct / 100);
+      goods = Math.max(STICKER.minOrder, area * m.sellPerM2 + STICKER.setupFee);
+      extra.areaM2 = area;
+    }
+
     return {
       total: goods + shipping,
       goods: goods,
       shipping: shipping,
       perPiece: goods / count,
-      areaM2: area,
-      materialName: m.name
+      materialName: m.name,
+      kind: m.kind,
+      areaM2: extra.areaM2,
+      sheets: extra.sheets,
+      perSheet: extra.perSheet
     };
   }
 
@@ -140,6 +186,8 @@ const out = `/*!
     SHIPPING: SHIPPING,
     sticker: sticker,
     keychain: keychain,
+    material: material,
+    perSheet: perSheet,
     czk: czk
   };
   if (typeof module === "object" && module.exports) module.exports = api;
@@ -150,6 +198,6 @@ const out = `/*!
 const target = path.join(__dirname, "..", "assets", "js", "pricing-public.js");
 fs.writeFileSync(target, out.replace(/\r?\n/g, "\r\n"), "utf8");
 console.log("zapsano:", target);
-console.log("  samolepky setup:", stickerSetupFee, "Kc | min:", A.sticker.minOrderCzk);
-stickerMaterials.forEach(m => console.log("   -", m.name, m.sellPerM2, "Kc/m2"));
-console.log("  klicenky: ", keychainSellPerGram, "Kc/g | setup", keychainSetupFee, "| na kus", keychainPerPieceLabor);
+stickerMaterials.forEach(m => console.log("  -", m.name,
+  m.kind === "sheet" ? m.sellPerSheet + " Kc/arch" : m.sellPerM2 + " Kc/m2"));
+console.log("  setup samolepky:", stickerSetupFee, "| min:", A.sticker.minOrderCzk);
