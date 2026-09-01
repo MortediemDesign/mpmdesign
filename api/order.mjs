@@ -58,19 +58,25 @@ export default async function handler(req, res) {
     const isSticker = product === "samolepky";
     const label = isSticker ? "samolepek" : "klíčenky";
     const baseName =
-      (design?.text || design?.imageName || product).toString()
+      (design?.text || design?.instagram || design?.imageName || product).toString()
         .replace(/[^a-z0-9_-]/gi, "_").slice(0, 30) || product;
     const attachmentName = fileName || `${baseName}.stl`;
 
+    const a = customer.address;
+    const addressLine = a ? `${a.street}, ${a.zip} ${a.city}` : "osobní převzetí";
+
     const detail = isSticker
       ? rows([
-          ["Motiv", design?.mode === "image" ? `obrázek ${design?.imageName || ""}` : design?.text],
+          ["Motiv", design?.mode === "image" ? `obrázek ${design?.imageName || ""}`
+            : design?.mode === "instagram" ? `Instagram ${design?.instagram || ""}`
+            : design?.text],
           ["Font", design?.font],
-          ["Barva textu", design?.textColor],
-          ["Barva podkladu", design?.bgColor],
+          ["Barva motivu", design?.textColor],
+          ["Podklad", design?.bgColor],
           ["Tvar", design?.shape],
           ["Rozměr", `${design?.width_cm} × ${design?.height_cm} cm`],
           ["Materiál", design?.material],
+          ["Spotřeba", design?.vyroba],
         ])
       : rows([
           ["Text", design?.text],
@@ -83,6 +89,11 @@ export default async function handler(req, res) {
           ["Otvor", design?.hasHole === false ? "bez otvoru" : `${design?.holeDiameter_mm || "?"} mm`],
         ]);
 
+    const warning = design?.pozor
+      ? `<p style="padding:10px 12px;background:#fff4e5;border-left:4px solid #ff8000;">
+           <strong>Pozor:</strong> ${esc(design.pozor)}</p>`
+      : "";
+
     const html = `
       <h2 style="margin:0 0 4px;">Nová objednávka ${esc(label)} – MPMDESIGN</h2>
       <p style="margin:0 0 16px;color:#666;">Přijato ${esc(createdAt || new Date().toISOString())}</p>
@@ -92,17 +103,20 @@ export default async function handler(req, res) {
         ["Jméno", customer.name],
         ["E-mail", customer.email],
         ["Počet kusů", customer.qty || 1],
+        ["Doručení", pricing?.shippingName || "neuvedeno"],
+        ["Adresa", addressLine],
         ["Poznámka", customer.note],
       ])}</table>
 
       <h3 style="margin:16px 0 4px;">Návrh</h3>
       <table>${detail}</table>
+      ${warning}
 
       <h3 style="margin:16px 0 4px;">Cena</h3>
       <table>${rows([
         ["Celkem", czk(pricing?.total)],
         ["Za kus", czk(pricing?.perPiece)],
-        ["Doprava", pricing?.shippingName || czk(pricing?.shipping)],
+        ["Doprava", czk(pricing?.shipping)],
       ])}</table>
       <p style="color:#888;font-size:12px;">Cena je orientační z konfigurátoru – potvrď ji zákazníkovi.</p>
 
@@ -116,8 +130,8 @@ export default async function handler(req, res) {
     await resend.emails.send({
       from: process.env.ORDER_FROM_EMAIL,
       to: process.env.ORDER_TO_EMAIL,
-      reply_to: customer.email,
-      subject: `Nová zakázka ${label}: "${design?.text || design?.imageName || baseName}" (${customer.name})`,
+      replyTo: customer.email, // Resend SDK v3 ocekava camelCase
+      subject: `Nová zakázka ${label}: "${design?.text || design?.instagram || design?.imageName || baseName}" (${customer.name})`,
       html,
       attachments: [
         { filename: attachmentName, content: attachmentContent },
