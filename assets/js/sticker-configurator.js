@@ -9,8 +9,24 @@
   var CFG = window.MPM_CONFIG || {};
   var $ = function (id) { return document.getElementById(id); };
 
-  // Logo Instagramu (viewBox 0 0 24 24) - stejná cesta jako v patičce webu.
-  var IG_PATH = "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.169a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z";
+  /* Logo Instagramu poskladane z presne geometrie (viewBox 0 0 24 24).
+     Drive se pouzivala cesta zkopirovana z paticky webu, ve ktere byl blesk
+     slity s objektivem. Tady je ramecek i objektiv mezikruzi (evenodd)
+     a blesk samostatne kolecko - tedy tri ciste tvary i pro rezani. */
+  function roundedRect(x, y, w, h, r) {
+    return "M" + (x + r) + "," + y + " H" + (x + w - r) +
+      " A" + r + "," + r + " 0 0 1 " + (x + w) + "," + (y + r) +
+      " V" + (y + h - r) + " A" + r + "," + r + " 0 0 1 " + (x + w - r) + "," + (y + h) +
+      " H" + (x + r) + " A" + r + "," + r + " 0 0 1 " + x + "," + (y + h - r) +
+      " V" + (y + r) + " A" + r + "," + r + " 0 0 1 " + (x + r) + "," + y + " Z";
+  }
+  function circlePath(cx, cy, r) {
+    return "M" + (cx - r) + "," + cy + " A" + r + "," + r + " 0 1 0 " + (cx + r) + "," + cy +
+      " A" + r + "," + r + " 0 1 0 " + (cx - r) + "," + cy + " Z";
+  }
+  var IG_BODY = roundedRect(0, 0, 24, 24, 7.2) + " " + roundedRect(2.6, 2.6, 18.8, 18.8, 4.6) +
+    " " + circlePath(12, 12, 6) + " " + circlePath(12, 12, 4);
+  var IG_DOT = circlePath(17.8, 6.2, 1.45);
 
   var state = { mode: "text", imageDataUrl: null, imageName: null, price: null };
 
@@ -29,7 +45,10 @@
     $("ship-select").appendChild(o);
   });
 
-  function noBg() { return state.mode === "text" && $("no-bg").checked; }
+  // Instagram se reze z vinylu bez podkladu, u textu je to volba.
+  function noBg() {
+    return state.mode === "instagram" || (state.mode === "text" && $("no-bg").checked);
+  }
 
   /* ---------- přepínání režimů ---------- */
   Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (btn) {
@@ -50,6 +69,8 @@
   function syncConstraints() {
     var cut = noBg();
     $("bg-color-wrap").style.display = cut ? "none" : "";
+    // Bez podkladu nema tvar samolepky co resit - konturu urcuje motiv.
+    $("shape-wrap").style.display = cut ? "none" : "";
     $("no-bg-wrap").style.display = state.mode === "text" ? "" : "none";
 
     var sel = $("material-select");
@@ -110,7 +131,7 @@
       '" lengthAdjust="spacingAndGlyphs" ' + (extra || "") + ">" + esc(txt) + "</text>";
   }
 
-  function instagramEl(handle, wMm, hMm, margin, fill) {
+  function instagramEl(handle, wMm, hMm, margin, fill, cutAttrs) {
     var innerW = wMm - 2 * margin, innerH = hMm - 2 * margin;
     var logo = Math.min(innerH, innerW * 0.3);
     var gap = logo * 0.25;
@@ -118,12 +139,19 @@
     var tx = margin + logo + gap;
     var maxW = wMm - margin - tx;
     var fs = Math.min(logo * 0.62, (maxW * 1.7) / Math.max(handle.length, 1));
-    return '<g transform="translate(' + margin + ',' + ((hMm - logo) / 2) + ') scale(' + scale + ')">' +
-        '<path d="' + IG_PATH + '" fill="' + fill + '"/></g>' +
-      '<text x="' + tx + '" y="' + hMm / 2 + '" dominant-baseline="central" ' +
-        'font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="' + fs +
-        '" fill="' + fill + '" textLength="' + Math.min(maxW, fs * 0.6 * handle.length) +
-        '" lengthAdjust="spacingAndGlyphs">' + esc(handle) + "</text>";
+    var tl = Math.min(maxW, fs * 0.6 * handle.length);
+
+    function build(attrs) {
+      return '<g transform="translate(' + margin + ',' + ((hMm - logo) / 2) +
+          ') scale(' + scale + ')">' +
+          '<path d="' + IG_BODY + '" fill-rule="evenodd" ' + attrs + "/>" +
+          '<path d="' + IG_DOT + '" ' + attrs + "/></g>" +
+        '<text x="' + tx + '" y="' + hMm / 2 + '" dominant-baseline="central" ' +
+          'font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="' + fs +
+          '" textLength="' + tl + '" lengthAdjust="spacingAndGlyphs" ' + attrs + ">" +
+          esc(handle) + "</text>";
+    }
+    return { art: build('fill="' + fill + '"'), cut: build(cutAttrs) };
   }
 
   /* Sestaví SVG v milimetrech. forProduction přidá řeznou konturu. */
@@ -150,9 +178,11 @@
       cutEl = shapeEl(wMm, hMm, shape, cutStroke);
 
     } else if (state.mode === "instagram") {
-      inner = instagramEl($("ig-handle").value || "@mpmdesign.cz", wMm, hMm, margin, $("ig-color").value);
-      bgEl = shapeEl(wMm, hMm, shape, 'fill="' + $("ig-bg-color").value + '"');
-      cutEl = shapeEl(wMm, hMm, shape, cutStroke);
+      var ig = instagramEl($("ig-handle").value || "@mpmdesign.cz", wMm, hMm, margin,
+        $("ig-color").value, cutStroke);
+      inner = ig.art;
+      bgEl = "";
+      cutEl = ig.cut;
 
     } else {
       var txt = $("sticker-text").value || " ";
@@ -214,7 +244,7 @@
     $(id).addEventListener("input", render);
   });
   ["sticker-font", "text-color", "bg-color", "shape-select", "material-select",
-   "ig-color", "ig-bg-color"].forEach(function (id) {
+   "ig-color"].forEach(function (id) {
     $(id).addEventListener("change", render);
   });
   $("no-bg").addEventListener("change", function () { syncConstraints(); render(); });
@@ -266,8 +296,8 @@
         font: state.mode === "text" ? $("sticker-font").value : null,
         textColor: state.mode === "text" ? $("text-color").value
           : state.mode === "instagram" ? $("ig-color").value : null,
-        bgColor: cut ? "bez podkladu (řezaný text)"
-          : state.mode === "instagram" ? $("ig-bg-color").value
+        bgColor: state.mode === "instagram" ? "bez podkladu (řezaný vinyl)"
+          : cut ? "bez podkladu (řezaný text)"
           : state.mode === "text" ? $("bg-color").value : null,
         imageName: state.imageName,
         shape: cut ? "kontura kopíruje text"
@@ -278,7 +308,9 @@
         vyroba: state.price.kind === "sheet"
           ? state.price.sheets + "× arch A4, " + state.price.perSheet + " ks na arch"
           : "plocha " + state.price.areaM2.toFixed(3) + " m² včetně odpadu",
-        pozor: cut ? "Řezaný text – v grafice je nutné převést text na křivky." : null
+        pozor: state.mode === "instagram"
+          ? "Řezané z vinylu bez podkladu – logo jsou tři samostatné díly, text převést na křivky."
+          : cut ? "Řezaný text – v grafice je nutné převést text na křivky." : null
       };
       var pricing = {
         total: state.price.total, perPiece: state.price.perPiece,

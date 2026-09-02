@@ -339,3 +339,76 @@ footer {
   width: 100%;
   text-align: center;
 }
+
+/* --- Patička s povinnými údaji podnikatele --- */
+.legal-bar {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.legal-bar a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: underline;
+}
+
+.legal-bar a:hover { color: var(--accent); }
+
+/* --- Stránky s právními texty --- */
+.doc-page {
+  max-width: 62ch;
+  padding: 2rem 0 3rem;
+}
+
+.doc-page h1 { margin-bottom: 0.3rem; }
+
+.doc-page .doc-meta {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+  margin: 0 0 2rem;
+}
+
+.doc-page h2 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.15rem;
+  color: var(--accent);
+}
+
+.doc-page h3 {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 1rem;
+}
+
+.doc-page p, .doc-page li { line-height: 1.7; }
+
+.doc-page ul { padding-left: 1.2rem; }
+
+.doc-page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8rem 0;
+  font-size: 0.92rem;
+}
+
+.doc-page th, .doc-page td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  vertical-align: top;
+}
+
+.doc-page th { color: var(--accent); font-weight: 700; }
+
+.doc-note {
+  border-left: 4px solid var(--accent);
+  background: rgba(255,128,0,0.1);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin: 1.2rem 0;
+}
