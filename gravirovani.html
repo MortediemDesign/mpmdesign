@@ -3,16 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Navrhni si klíčenku | MPMDESIGN</title>
-<meta name="description" content="Navrhni si vlastní 3D tištěnou klíčenku s textem - živý 3D náhled, okamžitá cena a objednávka rovnou do výroby.">
+<title>Konfigurátor laserového gravírování | MPMDESIGN</title>
+<meta name="description" content="Navrhni si gravírovanou klíčenku, podtácek, hodiny, fotku do dřeva nebo NFC tabulku s recenzemi - vyber materiál, napiš text a cenu uvidíš hned.">
 <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/nav.js" defer></script>
 <style>
   .cfg-wrap{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;padding-bottom:2rem;}
   .cfg-viewer{flex:1 1 460px;min-width:300px;}
-  #viewer{width:100%;height:460px;background:rgba(0,0,0,0.25);border-radius:14px;overflow:hidden;
-    position:relative;border:1px solid rgba(255,255,255,0.15);}
-  #viewer canvas{display:block;}
+  /* Lepivy nahled dava smysl jen ve dvousloupcovem rozvrzeni. */
+  @media (min-width:900px){
+    .cfg-viewer{position:sticky;top:88px;z-index:0;}
+  }
+  #preview{width:100%;height:min(460px,60vh);border-radius:14px;border:1px solid rgba(255,255,255,0.15);
+    background:repeating-conic-gradient(#dcdcdc 0% 25%, #ffffff 0% 50%) 50%/22px 22px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1.4rem;}
+  #preview svg{max-width:100%;max-height:100%;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45));}
   .hint{font-size:.82rem;color:rgba(255,255,255,0.55);margin-top:.6rem;text-align:center;}
   .cfg-panel{flex:1 1 340px;max-width:430px;background:var(--panel);border-radius:14px;padding:1.3rem;
     border:1px solid rgba(255,255,255,0.15);}
@@ -26,16 +31,20 @@
     font-family:inherit;font-size:.95rem;}
   .cfg-panel input:focus,.cfg-panel select:focus,.cfg-panel textarea:focus{outline:none;
     border-color:var(--accent);background:rgba(0,0,0,0.4);}
-  .cfg-panel input[type=range]{width:100%;accent-color:var(--accent);}
+  .cfg-panel input[type=file]{width:100%;color:var(--text);font-size:.85rem;padding:.4rem 0;}
   .cfg-panel textarea{resize:vertical;min-height:52px;}
-  .colors{display:flex;flex-wrap:wrap;gap:8px;margin-top:.2rem;}
-  .swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
-  .swatch.active{border-color:#fff;box-shadow:0 0 0 2px var(--accent);}
-  .check{display:flex;align-items:center;gap:.5rem;cursor:pointer;}
-  .check input{width:auto;accent-color:var(--accent);}
-  .range-value{float:right;color:var(--accent);font-variant-numeric:tabular-nums;font-weight:700;}
   .row2{display:flex;gap:.6rem;}
   .row2>div{flex:1;}
+  /* Peti produktu se do jedne radky nevejde - tabs se zalamuji. */
+  .tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.2rem;}
+  .tab{flex:1 1 46%;padding:.5rem;border-radius:8px;background:rgba(0,0,0,0.25);
+    border:1px solid rgba(255,255,255,0.2);color:var(--text);cursor:pointer;font-weight:600;
+    font-size:.85rem;font-family:inherit;transition:all .25s ease;}
+  .tab.active{background:var(--accent);border-color:var(--accent);}
+  .check{display:flex;align-items:center;gap:.5rem;cursor:pointer;margin:.9rem 0 .2rem;
+    font-size:.85rem;color:rgba(255,255,255,0.8);}
+  .check input{width:auto;accent-color:var(--accent);}
+  .cut-note{font-size:.75rem;color:rgba(255,255,255,0.5);margin-top:.4rem;}
   .price-box{margin-top:1.2rem;padding:1rem;border-radius:12px;background:rgba(255,128,0,0.12);
     border:1px solid rgba(255,128,0,0.45);}
   .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
@@ -73,9 +82,9 @@
               <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="active" href="klicenka.html">Klíčenky</a></li>
+              <li><a href="klicenka.html">Klíčenky</a></li>
               <li><a href="samolepky.html">Samolepky</a></li>
-              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a class="active" href="gravirovani.html">Laserové gravírování</a></li>
             </ul>
           </li>
           <li><a href="portfolio.html">Portfolio</a></li>
@@ -88,68 +97,65 @@
 
   <main class="container">
     <section style="padding:2rem 0 1rem;">
-      <h1 style="margin:0 0 .5rem;">Navrhni si <span class="accent">klíčenku</span></h1>
-      <p style="margin:0;max-width:60ch;">Napiš text, vyber font, barvy a rozměry. Model uvidíš rovnou
-        ve 3D, cenu spočítáme okamžitě a objednávka jde přímo do výroby.</p>
+      <h1 style="margin:0 0 .5rem;">Laserové <span class="accent">gravírování</span></h1>
+      <p style="margin:0;max-width:60ch;">Vyber produkt, materiál a napiš text – náhled uvidíš hned
+        a cenu taky. My dostaneme rovnou výrobní data.</p>
     </section>
 
     <div class="cfg-wrap">
       <div class="cfg-viewer">
-        <div id="viewer"></div>
-        <p class="hint">Tahem myší nebo prstem model otočíš, kolečkem přiblížíš.</p>
+        <div id="preview"></div>
+        <p class="hint" id="preview-hint">&nbsp;</p>
       </div>
 
       <div class="cfg-panel">
-        <h2>1. Text</h2>
-        <input type="text" id="text-input" maxlength="14" value="MPMDESIGN" placeholder="Např. jméno">
+        <h2>1. Produkt</h2>
+        <div class="tabs" id="product-tabs"></div>
+        <p class="cut-note" id="product-note"></p>
 
-        <h2>2. Font</h2>
+        <h2>2. Text a fotka</h2>
+        <label id="line1-label">Hlavní text</label>
+        <input type="text" id="line1" maxlength="28" value="MPMDESIGN" placeholder="Např. název firmy">
+        <div id="line2-wrap">
+          <label id="line2-label">Druhý řádek (volitelné)</label>
+          <input type="text" id="line2" maxlength="34" value="" placeholder="Např. město nebo slogan">
+        </div>
+        <div id="stars-wrap" style="display:none;">
+          <label class="check"><input type="checkbox" id="show-stars" checked> Vygravírovat pět hvězdiček</label>
+        </div>
+        <label>Font</label>
         <select id="font-select">
-          <option value="helvetiker">Helvetiker (moderní, hranaté)</option>
-          <option value="optimer">Optimer (zaoblené)</option>
-          <option value="gentilis">Gentilis (elegantní, serif)</option>
+          <option value="Arial, Helvetica, sans-serif">Arial (bezpatkový)</option>
+          <option value="Georgia, 'Times New Roman', serif">Georgia (patkový)</option>
+          <option value="'Courier New', monospace">Courier (technický)</option>
+          <option value="Impact, 'Arial Black', sans-serif">Impact (tučný)</option>
         </select>
+        <div id="photo-wrap" style="display:none;">
+          <label>Fotka ke gravírování (JPG nebo PNG)</label>
+          <input type="file" id="photo-input" accept="image/png,image/jpeg">
+          <p class="cut-note">Nejlépe vychází kontrastní snímek s výrazným motivem.
+            Fotku převedeme do stupňů šedi.</p>
+        </div>
 
-        <h2>3. Vzhled</h2>
-        <label>Barva podkladu</label>
-        <div class="colors" id="base-color-picker"></div>
-        <label>Barva vystouplého textu</label>
-        <div class="colors" id="text-color-picker"></div>
-        <label>Výška vystouplého textu <span class="range-value" id="text-height-value">1,6 mm</span></label>
-        <input type="range" id="text-height-input" min="0.6" max="3" value="1.6" step="0.2">
-
-        <h2>4. Tvar a rozměry</h2>
-        <label>Tvar klíčenky</label>
-        <select id="shape-select">
-          <option value="rounded">Zaoblený obdélník</option>
-          <option value="rectangle">Rovné rohy</option>
-          <option value="oval">Ovál</option>
-        </select>
+        <h2>3. Materiál a rozměr</h2>
+        <label>Materiál</label>
+        <select id="material-select"></select>
         <div class="row2">
           <div>
-            <label>Šířka (mm)</label>
-            <input type="number" id="width-input" value="70" min="30" max="120" step="1">
+            <label id="width-label">Šířka (mm)</label>
+            <input type="number" id="width-mm" value="60" min="25" max="450" step="5">
           </div>
-          <div>
-            <label>Tloušťka (mm)</label>
-            <input type="number" id="thickness-input" value="4" min="2" max="8" step="0.5">
+          <div id="height-wrap">
+            <label>Výška (mm)</label>
+            <input type="number" id="height-mm" value="30" min="25" max="450" step="5">
           </div>
         </div>
-        <label>Zaoblení rohů <span class="range-value" id="corner-radius-value">6 mm</span></label>
-        <input type="range" id="corner-radius-input" min="2" max="12" value="6" step="1">
-        <label class="check"><input type="checkbox" id="hole-toggle" checked> Otvor pro kroužek</label>
-        <label>Průměr otvoru <span class="range-value" id="hole-size-value">6 mm</span></label>
-        <input type="range" id="hole-size-input" min="3" max="10" value="6" step="1">
 
-        <h2>5. Objednávka</h2>
-        <label>Jméno a příjmení</label>
-        <input type="text" id="cust-name" placeholder="Jan Novák">
-        <label>E-mail (pro potvrzení)</label>
-        <input type="email" id="cust-email" placeholder="jan@example.com">
+        <h2>4. Objednávka</h2>
         <div class="row2">
           <div>
             <label>Počet kusů</label>
-            <input type="number" id="cust-qty" value="1" min="1" max="20">
+            <input type="number" id="count-input" value="1" min="1" max="500">
           </div>
           <div>
             <label>Doprava</label>
@@ -171,8 +177,12 @@
           </div>
         </div>
 
+        <label>Jméno a příjmení</label>
+        <input type="text" id="cust-name" placeholder="Jan Novák">
+        <label>E-mail (pro potvrzení)</label>
+        <input type="email" id="cust-email" placeholder="jan@example.com">
         <label>Poznámka (volitelné)</label>
-        <textarea id="cust-note" placeholder="Např. barva ok, ale ať je text menší..."></textarea>
+        <textarea id="cust-note" placeholder="Např. potřebuji do pátku..."></textarea>
 
         <div class="price-box">
           <div class="price-row">
@@ -197,7 +207,8 @@
             <a href="obchodni-podminky.html">obchodních podmínkách</a>.</p>
           <p><strong>Výrobce:</strong> Miguel Pérez Morales, Lidická 1018, 363 01 Ostrov,
             mpmdesign@outlook.cz.</p>
-          <p><strong>Upozornění:</strong> klíčenka není hračka. Obsahuje drobné části, nevhodné pro děti do 3 let – hrozí vdechnutí nebo spolknutí.</p>
+          <p><strong>Upozornění:</strong> nahráním fotky potvrzuješ, že k ní máš práva.
+            Odstín gravírování se liší podle materiálu a jeho struktury.</p>
         </div>
       </div>
     </div>
@@ -220,61 +231,6 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/pricing-public.js"></script>
 <script src="assets/js/order-client.js"></script>
-<script>
-  // Zivy vypocet ceny. Bezi nezavisle na 3D nahledu (app.js).
-  (function () {
-    var P = window.MPMPublicPricing;
-    var shipSel = document.getElementById('ship-select');
-    P.SHIPPING.forEach(function (s, i) {
-      var o = document.createElement('option');
-      o.value = s.id;
-      o.textContent = s.name + (s.price ? ' (' + s.price + ' Kč)' : ' (zdarma)');
-      if (i === 0) o.selected = true;
-      shipSel.appendChild(o);
-    });
-
-    function recalc() {
-      var r = P.keychain({
-        widthMm: document.getElementById('width-input').value,
-        thicknessMm: document.getElementById('thickness-input').value,
-        count: document.getElementById('cust-qty').value,
-        shippingId: shipSel.value
-      });
-      var count = Math.max(1, parseInt(document.getElementById('cust-qty').value, 10) || 1);
-      document.getElementById('price-total').textContent = P.czk(r.total);
-      document.getElementById('price-per-piece').textContent =
-        count > 1 ? P.czk(r.perPiece) + ' za kus' : ' ';
-      document.getElementById('price-ship').textContent =
-        r.shipping ? 'včetně dopravy ' + P.czk(r.shipping) : 'osobní převzetí';
-      window.MPM_PRICE_SNAPSHOT = {
-        total: r.total, perPiece: r.perPiece, shipping: r.shipping,
-        shippingName: shipSel.options[shipSel.selectedIndex].text, currency: 'CZK'
-      };
-    }
-
-    ['width-input', 'thickness-input', 'cust-qty'].forEach(function (id) {
-      document.getElementById(id).addEventListener('input', recalc);
-    });
-    function syncAddress() {
-      var needs = shipSel.value !== 'osobni';
-      document.getElementById('address-wrap').style.display = needs ? '' : 'none';
-      window.MPM_NEEDS_ADDRESS = needs;
-      return needs;
-    }
-    shipSel.addEventListener('change', function () { syncAddress(); recalc(); });
-    syncAddress();
-    recalc();
-  })();
-</script>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module" src="./klicenka-assets/app.js"></script>
+<script src="assets/js/engraving-configurator.js"></script>
 </body>
 </html>

@@ -35,12 +35,26 @@ const A = {
     setupMins: 10,
     perPieceMins: 2,
     heightRatio: 0.36
+  },
+
+  laser: {
+    wastePct: 20,                 // odřezky a okraje desky
+    cutMinsPerMeter: 3.5,         // řezání obrysu - minuty na metr dráhy
+    engraveMinsPerDm2: 5,         // gravírování plné plochy - minuty na dm2
+    textCoverage: 0.18,           // jakou část plochy zabere gravírovaný text/logo
+    setupMins: 12,                // příprava dat a nastavení stroje na zakázku
+    perPieceMins: 1.5,            // manipulace, čištění a kontrola na kus
+    minOrderCzk: 150,
+    sheetAreaCm2: 21 * 29.7,      // materiály v pricing.js jsou v ceně za arch A4
+    clockMovementCzk: 65,         // hodinový strojek včetně ručiček (nákup)
+    nfcTagCzk: 25                 // NFC štítek NTAG215 (nákup)
   }
 };
 
 const mat = (list, id) => list.find(m => m.id === id);
 const withMargin = v => v * (1 + A.margin / 100);
 const r2 = v => Math.round(v * 100) / 100;
+const r4 = v => Math.round(v * 10000) / 10000;
 
 /* --- samolepky: řezané fólie (za m2) + tištěný papír (za A4 arch) --- */
 const stickerMaterials = R.materialsFoil.map(m => ({
@@ -73,6 +87,37 @@ const gramCost = kMat.pricePerKg / 1000
   + (A.keychain.printHoursPer10g / 10) * kPrinter.pricePerHour;
 const keychainSellPerGram = r2(withMargin(gramCost));
 
+/* --- laserové gravírování --- */
+// Materiály v pricing.js jsou v ceně za arch A4, konfigurátor počítá plochu.
+const laserMaterials = R.materialsLaser
+  .filter(m => m.id !== "custom")
+  .map(m => ({
+    id: m.id,
+    name: m.name.replace(" A4", ""),
+    sellPerCm2: r4(withMargin(m.price / A.laser.sheetAreaCm2))
+  }));
+laserMaterials.push({ id: "custom", name: "Vlastní dodaný materiál", sellPerCm2: 0 });
+
+const laserSetupFee = r2(withMargin((A.laser.setupMins / 60) * R.workHourlyRate));
+const laserPerPieceLabor = r2(withMargin((A.laser.perPieceMins / 60) * R.workHourlyRate));
+const laserCutPerMeter = r2(withMargin(A.laser.cutMinsPerMeter * R.laserRatePerMin));
+const laserEngravePerDm2 = r2(withMargin(A.laser.engraveMinsPerDm2 * R.laserRatePerMin));
+
+const laserProducts = [
+  { id: "klicenka", name: "Klíčenka", shape: "rounded", widthMm: 60, heightMm: 30,
+    minMm: 25, maxMm: 120, engrave: "text", hole: true },
+  { id: "podtacek", name: "Podtácek", shape: "circle", widthMm: 95, heightMm: 95,
+    minMm: 70, maxMm: 140, engrave: "text" },
+  { id: "hodiny", name: "Nástěnné hodiny", shape: "circle", widthMm: 300, heightMm: 300,
+    minMm: 180, maxMm: 450, engrave: "text",
+    extraName: "hodinový strojek", extraSell: r2(withMargin(A.laser.clockMovementCzk)) },
+  { id: "foto", name: "Fotka do dřeva", shape: "rect", widthMm: 150, heightMm: 100,
+    minMm: 60, maxMm: 400, engrave: "photo", needsPhoto: true },
+  { id: "nfc", name: "NFC tabulka s recenzemi", shape: "rounded", widthMm: 85, heightMm: 55,
+    minMm: 50, maxMm: 200, engrave: "text",
+    extraName: "NFC štítek", extraSell: r2(withMargin(A.laser.nfcTagCzk)) }
+];
+
 const out = `/*!
  * MPMDESIGN - VEŘEJNÝ ceník pro konfigurátory.
  *
@@ -102,6 +147,20 @@ const out = `/*!
     densityGPerCm3: ${A.keychain.densityGPerCm3},
     fillFactor: ${A.keychain.fillFactor},
     heightRatio: ${A.keychain.heightRatio}
+  };
+
+  var MATERIALS_LASER = ${JSON.stringify(laserMaterials, null, 2).replace(/\n/g, "\n  ")};
+
+  var PRODUCTS_LASER = ${JSON.stringify(laserProducts, null, 2).replace(/\n/g, "\n  ")};
+
+  var LASER = {
+    setupFee: ${laserSetupFee},
+    perPieceLabor: ${laserPerPieceLabor},
+    cutPerMeter: ${laserCutPerMeter},
+    engravePerDm2: ${laserEngravePerDm2},
+    textCoverage: ${A.laser.textCoverage},
+    wastePct: ${A.laser.wastePct},
+    minOrder: ${A.laser.minOrderCzk}
   };
 
   function num(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
@@ -179,14 +238,68 @@ const out = `/*!
     };
   }
 
+  function laserMaterial(id) {
+    return MATERIALS_LASER.filter(function (o) { return o.id === id; })[0]
+      || MATERIALS_LASER[0];
+  }
+  function laserProduct(id) {
+    return PRODUCTS_LASER.filter(function (o) { return o.id === id; })[0]
+      || PRODUCTS_LASER[0];
+  }
+
+  /* Laserové gravírování: rozměry v mm. Vrací jen výslednou cenu. */
+  function laser(i) {
+    var count = Math.max(1, parseInt(i.count, 10) || 1);
+    var p = laserProduct(i.productId);
+    var m = laserMaterial(i.materialId);
+    var w = num(i.widthMm), h = num(i.heightMm);
+    var areaCm2, perimeterM;
+
+    if (p.shape === "circle") {
+      var d = Math.min(w, h);
+      areaCm2 = Math.PI * (d / 20) * (d / 20);
+      perimeterM = (Math.PI * d) / 1000;
+    } else {
+      areaCm2 = (w * h) / 100;
+      perimeterM = (2 * (w + h)) / 1000;
+    }
+
+    // Foto se pálí přes celou plochu, text/logo jen zlomek.
+    var coverage = p.engrave === "photo" ? 1 : LASER.textCoverage;
+    var perPieceCost =
+      m.sellPerCm2 * areaCm2 * (1 + LASER.wastePct / 100)
+      + LASER.cutPerMeter * perimeterM
+      + (LASER.engravePerDm2 * areaCm2 * coverage) / 100
+      + LASER.perPieceLabor
+      + num(p.extraSell);
+    var goods = Math.max(LASER.minOrder, LASER.setupFee + count * perPieceCost);
+    var shipping = ship(i.shippingId);
+
+    return {
+      total: goods + shipping,
+      goods: goods,
+      shipping: shipping,
+      perPiece: goods / count,
+      areaCm2: areaCm2,
+      materialName: m.name,
+      productName: p.name,
+      extraName: p.extraName || null
+    };
+  }
+
   function czk(v) { return Math.round(v) + " Kč"; }
 
   var api = {
     MATERIALS_STICKER: MATERIALS_STICKER,
+    MATERIALS_LASER: MATERIALS_LASER,
+    PRODUCTS_LASER: PRODUCTS_LASER,
     SHIPPING: SHIPPING,
     sticker: sticker,
     keychain: keychain,
+    laser: laser,
     material: material,
+    laserMaterial: laserMaterial,
+    laserProduct: laserProduct,
     perSheet: perSheet,
     czk: czk
   };
@@ -201,3 +314,6 @@ console.log("zapsano:", target);
 stickerMaterials.forEach(m => console.log("  -", m.name,
   m.kind === "sheet" ? m.sellPerSheet + " Kc/arch" : m.sellPerM2 + " Kc/m2"));
 console.log("  setup samolepky:", stickerSetupFee, "| min:", A.sticker.minOrderCzk);
+laserMaterials.forEach(m => console.log("  - laser:", m.name, m.sellPerCm2 + " Kc/cm2"));
+console.log("  setup laser:", laserSetupFee, "| rez:", laserCutPerMeter,
+  "Kc/m | gravir:", laserEngravePerDm2, "Kc/dm2");

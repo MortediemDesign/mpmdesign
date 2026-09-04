@@ -56,7 +56,8 @@ export default async function handler(req, res) {
     }
 
     const isSticker = product === "samolepky";
-    const label = isSticker ? "samolepek" : "klíčenky";
+    const isEngraving = product === "gravirovani";
+    const label = isSticker ? "samolepek" : isEngraving ? "gravírování" : "klíčenky";
     const baseName =
       (design?.text || design?.instagram || design?.imageName || product).toString()
         .replace(/[^a-z0-9_-]/gi, "_").slice(0, 30) || product;
@@ -65,7 +66,21 @@ export default async function handler(req, res) {
     const a = customer.address;
     const addressLine = a ? `${a.street}, ${a.zip} ${a.city}` : "osobní převzetí";
 
-    const detail = isSticker
+    const detail = isEngraving
+      ? rows([
+          ["Produkt", design?.produkt],
+          ["Text", design?.text],
+          ["Druhý řádek", design?.text2],
+          ["Font", design?.font],
+          ["Hvězdičky", design?.hvezdicky],
+          ["Fotka", design?.imageName],
+          ["Tvar", design?.tvar],
+          ["Rozměr", design?.rozmer],
+          ["Materiál", design?.material],
+          ["Příslušenství", design?.prislusenstvi],
+          ["Spotřeba", design?.vyroba],
+        ])
+      : isSticker
       ? rows([
           ["Motiv", design?.mode === "image" ? `obrázek ${design?.imageName || ""}`
             : design?.mode === "instagram" ? `Instagram ${design?.instagram || ""}`
@@ -121,7 +136,9 @@ export default async function handler(req, res) {
       <p style="color:#888;font-size:12px;">Cena je orientační z konfigurátoru – potvrď ji zákazníkovi.</p>
 
       <p style="margin-top:16px;">Výrobní soubor <strong>${esc(attachmentName)}</strong> je v příloze${
-        isSticker
+        isEngraving
+          ? " – gravírování je ve vrstvě <em>Engrave</em>, obrys ve vrstvě <em>CutContour</em>."
+          : isSticker
           ? " – řezná kontura je ve vrstvě <em>CutContour</em>."
           : " – stačí přetáhnout do Bambu Studio."
       }</p>

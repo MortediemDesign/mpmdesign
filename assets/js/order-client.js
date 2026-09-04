@@ -15,6 +15,12 @@
 
   function cfg() { return root.MPM_CONFIG || {}; }
 
+  var PRODUCT_NAMES = {
+    klicenka: "Klíčenka",
+    samolepky: "Samolepky",
+    gravirovani: "Laserové gravírování"
+  };
+
   // Chyba nastaveni webu - opakovani pokusu zakaznikovi nepomuze.
   function setupError(msg) {
     var e = new Error(msg);
@@ -32,7 +38,7 @@
   function summary(order) {
     var d = order.design || {}, p = order.pricing || {}, c = order.customer || {};
     var lines = [
-      "Produkt: " + (order.product === "samolepky" ? "Samolepky" : "Klíčenka"),
+      "Produkt: " + (PRODUCT_NAMES[order.product] || "Klíčenka"),
       "Zákazník: " + c.name + " <" + c.email + ">",
       "Počet kusů: " + (c.qty || 1),
       "Cena celkem: " + (p.total != null ? Math.round(p.total) + " Kč" : "neuvedeno"),

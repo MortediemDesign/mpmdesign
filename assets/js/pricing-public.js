@@ -7,7 +7,7 @@
  *
  * Obsahuje pouze PRODEJNÍ ceny. Nákladové sazby, hodinovka ani marže
  * tu schválně nejsou - tento soubor si stáhne každý návštěvník webu.
- * Vygenerováno: 2026-09-01
+ * Vygenerováno: 2026-09-04
  */
 (function (root) {
   "use strict";
@@ -74,6 +74,93 @@
     densityGPerCm3: 1.27,
     fillFactor: 0.55,
     heightRatio: 0.36
+  };
+
+  var MATERIALS_LASER = [
+    {
+      "id": "ply3",
+      "name": "Překližka 3mm",
+      "sellPerCm2": 0.0938
+    },
+    {
+      "id": "plexi3",
+      "name": "Plexi 3mm",
+      "sellPerCm2": 0.271
+    },
+    {
+      "id": "custom",
+      "name": "Vlastní dodaný materiál",
+      "sellPerCm2": 0
+    }
+  ];
+
+  var PRODUCTS_LASER = [
+    {
+      "id": "klicenka",
+      "name": "Klíčenka",
+      "shape": "rounded",
+      "widthMm": 60,
+      "heightMm": 30,
+      "minMm": 25,
+      "maxMm": 120,
+      "engrave": "text",
+      "hole": true
+    },
+    {
+      "id": "podtacek",
+      "name": "Podtácek",
+      "shape": "circle",
+      "widthMm": 95,
+      "heightMm": 95,
+      "minMm": 70,
+      "maxMm": 140,
+      "engrave": "text"
+    },
+    {
+      "id": "hodiny",
+      "name": "Nástěnné hodiny",
+      "shape": "circle",
+      "widthMm": 300,
+      "heightMm": 300,
+      "minMm": 180,
+      "maxMm": 450,
+      "engrave": "text",
+      "extraName": "hodinový strojek",
+      "extraSell": 84.5
+    },
+    {
+      "id": "foto",
+      "name": "Fotka do dřeva",
+      "shape": "rect",
+      "widthMm": 150,
+      "heightMm": 100,
+      "minMm": 60,
+      "maxMm": 400,
+      "engrave": "photo",
+      "needsPhoto": true
+    },
+    {
+      "id": "nfc",
+      "name": "NFC tabulka s recenzemi",
+      "shape": "rounded",
+      "widthMm": 85,
+      "heightMm": 55,
+      "minMm": 50,
+      "maxMm": 200,
+      "engrave": "text",
+      "extraName": "NFC štítek",
+      "extraSell": 32.5
+    }
+  ];
+
+  var LASER = {
+    setupFee: 91,
+    perPieceLabor: 11.38,
+    cutPerMeter: 27.3,
+    engravePerDm2: 39,
+    textCoverage: 0.18,
+    wastePct: 20,
+    minOrder: 150
   };
 
   function num(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
@@ -151,14 +238,68 @@
     };
   }
 
+  function laserMaterial(id) {
+    return MATERIALS_LASER.filter(function (o) { return o.id === id; })[0]
+      || MATERIALS_LASER[0];
+  }
+  function laserProduct(id) {
+    return PRODUCTS_LASER.filter(function (o) { return o.id === id; })[0]
+      || PRODUCTS_LASER[0];
+  }
+
+  /* Laserové gravírování: rozměry v mm. Vrací jen výslednou cenu. */
+  function laser(i) {
+    var count = Math.max(1, parseInt(i.count, 10) || 1);
+    var p = laserProduct(i.productId);
+    var m = laserMaterial(i.materialId);
+    var w = num(i.widthMm), h = num(i.heightMm);
+    var areaCm2, perimeterM;
+
+    if (p.shape === "circle") {
+      var d = Math.min(w, h);
+      areaCm2 = Math.PI * (d / 20) * (d / 20);
+      perimeterM = (Math.PI * d) / 1000;
+    } else {
+      areaCm2 = (w * h) / 100;
+      perimeterM = (2 * (w + h)) / 1000;
+    }
+
+    // Foto se pálí přes celou plochu, text/logo jen zlomek.
+    var coverage = p.engrave === "photo" ? 1 : LASER.textCoverage;
+    var perPieceCost =
+      m.sellPerCm2 * areaCm2 * (1 + LASER.wastePct / 100)
+      + LASER.cutPerMeter * perimeterM
+      + (LASER.engravePerDm2 * areaCm2 * coverage) / 100
+      + LASER.perPieceLabor
+      + num(p.extraSell);
+    var goods = Math.max(LASER.minOrder, LASER.setupFee + count * perPieceCost);
+    var shipping = ship(i.shippingId);
+
+    return {
+      total: goods + shipping,
+      goods: goods,
+      shipping: shipping,
+      perPiece: goods / count,
+      areaCm2: areaCm2,
+      materialName: m.name,
+      productName: p.name,
+      extraName: p.extraName || null
+    };
+  }
+
   function czk(v) { return Math.round(v) + " Kč"; }
 
   var api = {
     MATERIALS_STICKER: MATERIALS_STICKER,
+    MATERIALS_LASER: MATERIALS_LASER,
+    PRODUCTS_LASER: PRODUCTS_LASER,
     SHIPPING: SHIPPING,
     sticker: sticker,
     keychain: keychain,
+    laser: laser,
     material: material,
+    laserMaterial: laserMaterial,
+    laserProduct: laserProduct,
     perSheet: perSheet,
     czk: czk
   };
