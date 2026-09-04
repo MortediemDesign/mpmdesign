@@ -35,7 +35,10 @@ def check_json() -> None:
 
 
 def check_nav_consistency() -> None:
-    expected = ['index.html', 'sluzby.html', 'portfolio.html', 'blog.html', 'kontakt.html', 'eshop.html']
+    expected = [
+        'index.html', 'sluzby.html', 'klicenka.html', 'samolepky.html',
+        'portfolio.html', 'kontakt.html', 'blog.html', 'eshop.html', 'kalkulacka.html',
+    ]
     for page in PAGES:
         text = Path(page).read_text(encoding='utf-8')
         m = re.search(r'<nav>.*?</nav>', text, re.S)
