@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interní kalkulačka | MPMDESIGN</title>
   <link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/nav.js" defer></script>
   <style>
     .calc-layout{display:grid;grid-template-columns:230px 1fr;gap:2rem;margin-top:2rem;min-height:550px;}
     @media(max-width:768px){.calc-layout{grid-template-columns:1fr;}}
@@ -51,8 +52,16 @@
         <ul>
           <li><a href="index.html">Domů</a></li>
           <li><a href="sluzby.html">Služby</a></li>
-          <li><a href="klicenka.html">Klíčenky</a></li>
-          <li><a href="samolepky.html">Samolepky</a></li>
+          <li class="nav-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+              Produkty
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+            </ul>
+          </li>
           <li><a href="portfolio.html">Portfolio</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
           <li><a href="blog.html">Blog</a></li>

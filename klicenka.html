@@ -6,6 +6,7 @@
 <title>Navrhni si klíčenku | MPMDESIGN</title>
 <meta name="description" content="Navrhni si vlastní 3D tištěnou klíčenku s textem - živý 3D náhled, okamžitá cena a objednávka rovnou do výroby.">
 <link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/nav.js" defer></script>
 <style>
   .cfg-wrap{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;padding-bottom:2rem;}
   .cfg-viewer{flex:1 1 460px;min-width:300px;}
@@ -66,8 +67,16 @@
         <ul>
           <li><a href="index.html">Domů</a></li>
           <li><a href="sluzby.html">Služby</a></li>
-          <li><a class="active" href="klicenka.html">Klíčenky</a></li>
-          <li><a href="samolepky.html">Samolepky</a></li>
+          <li class="nav-dropdown active">
+            <button type="button" class="dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
+              Produkty
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="active" href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+            </ul>
+          </li>
           <li><a href="portfolio.html">Portfolio</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
           <li><a href="blog.html">Blog</a></li>

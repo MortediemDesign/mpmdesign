@@ -68,6 +68,93 @@ nav ul {
 
 nav a.active { color: var(--accent); font-weight: 700; }
 
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover,
+.dropdown-toggle:focus-visible {
+  color: var(--accent);
+}
+
+.dropdown-toggle.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.dropdown-toggle .chevron {
+  transition: transform 0.25s ease;
+}
+
+.nav-dropdown:hover .dropdown-toggle .chevron,
+.nav-dropdown.open .dropdown-toggle .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  position: absolute;
+  top: calc(100% + 0.85rem);
+  left: 50%;
+  min-width: 170px;
+  background: #0e2c58;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -10px) scale(0.98);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  z-index: 40;
+}
+
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown.open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.dropdown-menu li {
+  margin: 0;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu a:focus-visible {
+  background: rgba(255,255,255,0.1);
+  color: var(--accent);
+}
+
+.dropdown-menu a.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .hero {
   padding: 4rem 0 3rem;
 }
