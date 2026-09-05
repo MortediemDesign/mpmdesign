@@ -16,6 +16,9 @@
     photoW: 0,
     photoH: 0,
     photoZoom: 1,      // přiblížení fotky v rámečku
+    photoLo: 0,        // automaticky nalezená nejtmavší a nejsvětlejší hodnota
+    photoHi: 1,
+    photoContrast: 1,  // ruční doladění kontrastu
     photoX: 0,         // posun výřezu v mm
     photoY: 0,
     price: null
@@ -111,6 +114,52 @@
       }
     }
     return '<path d="' + d + '" fill="' + fill + '" shape-rendering="crispEdges"/>';
+  }
+
+  /* Automatické dotažení: najde 2. a 98. percentil jasu, aby fotka využila
+     celou škálu vypálení. Bez toho vyjde šedivá fotka do dřeva mdle. */
+  function analyzePhoto(img) {
+    state.photoLo = 0;
+    state.photoHi = 1;
+    try {
+      var c = document.createElement("canvas");
+      var k = Math.min(1, 240 / Math.max(img.width, img.height, 1));
+      c.width = Math.max(1, Math.round(img.width * k));
+      c.height = Math.max(1, Math.round(img.height * k));
+      var ctx = c.getContext("2d");
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      var d = ctx.getImageData(0, 0, c.width, c.height).data;
+      var hist = [], i;
+      for (i = 0; i < 256; i++) hist.push(0);
+      for (i = 0; i < d.length; i += 4) {
+        var y = (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) | 0;
+        hist[y < 0 ? 0 : y > 255 ? 255 : y]++;
+      }
+      var total = d.length / 4, acc = 0, lo = 0, hi = 255;
+      for (i = 0; i < 256; i++) { acc += hist[i]; if (acc >= total * 0.02) { lo = i; break; } }
+      acc = 0;
+      for (i = 255; i >= 0; i--) { acc += hist[i]; if (acc >= total * 0.02) { hi = i; break; } }
+      if (hi - lo < 30) { lo = Math.max(0, lo - 15); hi = Math.min(255, hi + 15); }
+      state.photoLo = lo / 255;
+      state.photoHi = hi / 255;
+    } catch (e) {
+      // Když prohlížeč nepustí pixely, jede se bez dotažení.
+      state.photoLo = 0;
+      state.photoHi = 1;
+    }
+  }
+
+  /* Převod jasu: dotažení na plnou škálu + ruční kontrast kolem středu. */
+  function toneTransfer() {
+    var lo = state.photoLo, hi = state.photoHi;
+    if (hi - lo < 0.15) {
+      var mid = (hi + lo) / 2;
+      lo = Math.max(0, mid - 0.075);
+      hi = Math.min(1, mid + 0.075);
+    }
+    var c = Math.max(0.4, Math.min(2.2, state.photoContrast || 1));
+    var s0 = 1 / (hi - lo), i0 = -lo * s0;
+    return { slope: s0 * c, intercept: i0 * c + 0.5 * (1 - c) };
   }
 
   /* Výřez fotky: rámeček v návrhu + umístění fotky v něm.
@@ -258,22 +307,27 @@
 
   /* Fotka: převod do stupňů šedi, zvýšení kontrastu a rozpad do 6 hladin -
      laser vypaluje po hladinách, hladká fotka na dřevě nevznikne. */
-  function photoFilter(forProduction, lk) {
+  function photoFilter(forProduction, lk, filterId) {
     var levels = 6, i, dark, light, vals = [], ch = ["R", "G", "B"], out = "";
-    dark = forProduction ? [0, 0, 0] : rgb(lk.burn === "#f4fafd" ? "#f4fafd" : "#33200a");
+    var tone = toneTransfer();
+    dark = forProduction ? [0, 0, 0] : rgb(lk.burn === "#f4fafd" ? "#f4fafd" : "#2a1806");
     light = forProduction ? [1, 1, 1] : rgb(lk.base);
     // U plexi je gravírování světlejší než materiál, u dřeva tmavší.
     for (i = 0; i < 3; i++) {
-      var a = dark[i], b = light[i], t = [];
-      for (var k = 0; k < levels; k++) t.push((a + ((b - a) * k) / (levels - 1)).toFixed(3));
-      vals.push('<feFunc' + ch[i] + ' type="discrete" tableValues="' + t.join(" ") + '"/>');
+      var a = dark[i], b = light[i], tbl = [];
+      for (var k = 0; k < levels; k++) tbl.push((a + ((b - a) * k) / (levels - 1)).toFixed(3));
+      vals.push('<feFunc' + ch[i] + ' type="discrete" tableValues="' + tbl.join(" ") + '"/>');
     }
-    out = '<filter id="engraveLook"><feColorMatrix type="saturate" values="0"/>' +
-      '<feComponentTransfer>' +
-        '<feFuncR type="linear" slope="1.35" intercept="-0.18"/>' +
-        '<feFuncG type="linear" slope="1.35" intercept="-0.18"/>' +
-        '<feFuncB type="linear" slope="1.35" intercept="-0.18"/>' +
-      "</feComponentTransfer>" +
+    var lin = ch.map(function (x) {
+      return '<feFunc' + x + ' type="linear" slope="' + tone.slope.toFixed(4) +
+        '" intercept="' + tone.intercept.toFixed(4) + '"/>';
+    }).join("");
+    // color-interpolation-filters musi byt sRGB, jinak filtr pocita
+    // v linearnim prostoru a hodnoty z histogramu (sRGB) nesedi.
+    out = '<filter id="' + (filterId || "engraveLook") +
+      '" color-interpolation-filters="sRGB">' +
+      '<feColorMatrix type="saturate" values="0"/>' +
+      "<feComponentTransfer>" + lin + "</feComponentTransfer>" +
       "<feComponentTransfer>" + vals.join("") + "</feComponentTransfer></filter>";
     return out;
   }
@@ -452,6 +506,7 @@
         state.photoName = f.name;
         state.photoW = im.naturalWidth || im.width;
         state.photoH = im.naturalHeight || im.height;
+        analyzePhoto(im);
         resetCrop();
         $("crop-wrap").style.display = "";
         setStatus("", "");
@@ -468,7 +523,27 @@
     state.photoZoom = 1;
     state.photoX = 0;
     state.photoY = 0;
+    state.photoContrast = 1;
     $("photo-zoom").value = 1;
+    $("photo-contrast").value = 1;
+  }
+
+  /* Kontrast mění jen hodnoty ve filtru - přestavovat celé SVG s vloženou
+     fotkou by při tažení posuvníku sekalo. */
+  var toneSeq = 0;
+  function updateTone() {
+    var svg = view.querySelector("svg");
+    var img = $("foto-img");
+    var defs = svg && svg.querySelector("defs");
+    var old = defs && defs.querySelector("filter");
+    if (!svg || !img || !old) { render(); return; }
+    // Přepsané hodnoty uvnitř filtru prohlížeč sám nepřekreslí, proto se
+    // vymění celý filtr pod novým id a obrázek se na něj přepne.
+    var id = "engraveLook" + (++toneSeq);
+    var wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    wrap.innerHTML = photoFilter(false, look($("material-select").value), id);
+    defs.replaceChild(wrap.firstChild, old);
+    img.setAttribute("filter", "url(#" + id + ")");
   }
 
   /* Posun a přiblížení přepisují jen atributy obrázku - překreslovat celé SVG
@@ -535,8 +610,20 @@
     setZoom(parseFloat($("photo-zoom").value) || 1);
   });
   $("photo-reset").addEventListener("click", function () {
+    var c = state.photoContrast;
     resetCrop();
+    state.photoContrast = c;
+    $("photo-contrast").value = c;
     updatePhoto();
+  });
+  $("photo-contrast").addEventListener("input", function () {
+    state.photoContrast = parseFloat($("photo-contrast").value) || 1;
+    updateTone();
+  });
+  $("contrast-reset").addEventListener("click", function () {
+    state.photoContrast = 1;
+    $("photo-contrast").value = 1;
+    updateTone();
   });
 
   /* Rozměr většího než dovolí produkt se rovnou stáhne na maximum;
