@@ -32,6 +32,13 @@
       { id: "ply3", name: "Překližka 3mm A4", price: 45 },
       { id: "plexi3", name: "Plexi 3mm A4", price: 130 }
     ],
+    // Prekliza 4 mm se kupuje po celych deskach, ne po arsich A4.
+    laserPlywood4: {
+      name: "Překližka 4 mm",
+      boardWidthCm: 152.5,
+      boardHeightCm: 152.5,
+      pricePerBoard: 874
+    },
     // Samolepici papir se ucetuje po CELYCH A4 arsich, ne za m2.
     // Pouzitelna plocha je mensi nez arch kvuli okrajum tiskarny.
     stickerPaperA4: {

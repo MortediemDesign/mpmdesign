@@ -45,7 +45,7 @@ const A = {
     setupMins: 12,                // příprava dat a nastavení stroje na zakázku
     perPieceMins: 1.5,            // manipulace, čištění a kontrola na kus
     minOrderCzk: 150,
-    sheetAreaCm2: 21 * 29.7,      // materiály v pricing.js jsou v ceně za arch A4
+    maxSideMm: 350,               // největší rozměr, který laser zvládne (35 x 35 cm)
     clockMovementCzk: 65,         // hodinový strojek včetně ručiček (nákup)
     nfcTagCzk: 25                 // NFC štítek NTAG215 (nákup)
   }
@@ -88,35 +88,36 @@ const gramCost = kMat.pricePerKg / 1000
 const keychainSellPerGram = r2(withMargin(gramCost));
 
 /* --- laserové gravírování --- */
-// Materiály v pricing.js jsou v ceně za arch A4, konfigurátor počítá plochu.
-const laserMaterials = R.materialsLaser
-  .filter(m => m.id !== "custom")
-  .map(m => ({
-    id: m.id,
-    name: m.name.replace(" A4", ""),
-    sellPerCm2: r4(withMargin(m.price / A.laser.sheetAreaCm2))
-  }));
-laserMaterials.push({ id: "custom", name: "Vlastní dodaný materiál", sellPerCm2: 0 });
+// Konfigurátor nabízí jen překližku 4 mm. Kupuje se po celých deskách,
+// takže se cena přepočítá z desky na cm2.
+const board = R.laserPlywood4;
+const laserMaterials = [{
+  id: "ply4",
+  name: board.name,
+  sellPerCm2: r4(withMargin(board.pricePerBoard /
+    (board.boardWidthCm * board.boardHeightCm)))
+}];
 
 const laserSetupFee = r2(withMargin((A.laser.setupMins / 60) * R.workHourlyRate));
 const laserPerPieceLabor = r2(withMargin((A.laser.perPieceMins / 60) * R.workHourlyRate));
 const laserCutPerMeter = r2(withMargin(A.laser.cutMinsPerMeter * R.laserRatePerMin));
 const laserEngravePerDm2 = r2(withMargin(A.laser.engraveMinsPerDm2 * R.laserRatePerMin));
 
+// maxMm nikde nepřesáhne A.laser.maxSideMm - větší kus se na stůl nevejde.
 const laserProducts = [
   { id: "klicenka", name: "Klíčenka", shape: "rounded", widthMm: 60, heightMm: 30,
     minMm: 25, maxMm: 120, engrave: "text", hole: true },
   { id: "podtacek", name: "Podtácek", shape: "circle", widthMm: 95, heightMm: 95,
-    minMm: 70, maxMm: 140, engrave: "text" },
+    minMm: 70, maxMm: 200, engrave: "text" },
   { id: "hodiny", name: "Nástěnné hodiny", shape: "circle", widthMm: 300, heightMm: 300,
-    minMm: 180, maxMm: 450, engrave: "text",
+    minMm: 180, maxMm: 350, engrave: "text",
     extraName: "hodinový strojek", extraSell: r2(withMargin(A.laser.clockMovementCzk)) },
   { id: "foto", name: "Fotka do dřeva", shape: "rect", widthMm: 150, heightMm: 100,
-    minMm: 60, maxMm: 400, engrave: "photo", needsPhoto: true },
-  { id: "nfc", name: "NFC tabulka s recenzemi", shape: "rounded", widthMm: 85, heightMm: 55,
-    minMm: 50, maxMm: 200, engrave: "text",
+    minMm: 60, maxMm: 350, engrave: "photo", needsPhoto: true },
+  { id: "nfc", name: "NFC tabulka s recenzemi", shape: "rounded", widthMm: 100, heightMm: 120,
+    minMm: 60, maxMm: 350, engrave: "text", coverage: 0.28,
     extraName: "NFC štítek", extraSell: r2(withMargin(A.laser.nfcTagCzk)) }
-];
+].map(p => ({ ...p, maxMm: Math.min(p.maxMm, A.laser.maxSideMm) }));
 
 const out = `/*!
  * MPMDESIGN - VEŘEJNÝ ceník pro konfigurátory.
@@ -160,6 +161,7 @@ const out = `/*!
     engravePerDm2: ${laserEngravePerDm2},
     textCoverage: ${A.laser.textCoverage},
     wastePct: ${A.laser.wastePct},
+    maxSideMm: ${A.laser.maxSideMm},
     minOrder: ${A.laser.minOrderCzk}
   };
 
@@ -265,7 +267,7 @@ const out = `/*!
     }
 
     // Foto se pálí přes celou plochu, text/logo jen zlomek.
-    var coverage = p.engrave === "photo" ? 1 : LASER.textCoverage;
+    var coverage = p.engrave === "photo" ? 1 : (p.coverage || LASER.textCoverage);
     var perPieceCost =
       m.sellPerCm2 * areaCm2 * (1 + LASER.wastePct / 100)
       + LASER.cutPerMeter * perimeterM
@@ -314,6 +316,7 @@ console.log("zapsano:", target);
 stickerMaterials.forEach(m => console.log("  -", m.name,
   m.kind === "sheet" ? m.sellPerSheet + " Kc/arch" : m.sellPerM2 + " Kc/m2"));
 console.log("  setup samolepky:", stickerSetupFee, "| min:", A.sticker.minOrderCzk);
-laserMaterials.forEach(m => console.log("  - laser:", m.name, m.sellPerCm2 + " Kc/cm2"));
+laserMaterials.forEach(m => console.log("  - laser:", m.name, m.sellPerCm2 + " Kc/cm2",
+  "(deska " + board.pricePerBoard + " Kc)"));
 console.log("  setup laser:", laserSetupFee, "| rez:", laserCutPerMeter,
   "Kc/m | gravir:", laserEngravePerDm2, "Kc/dm2");

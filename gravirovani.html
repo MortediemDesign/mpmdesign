@@ -120,7 +120,14 @@
           <label id="line2-label">Druhý řádek (volitelné)</label>
           <input type="text" id="line2" maxlength="34" value="" placeholder="Např. město nebo slogan">
         </div>
-        <div id="stars-wrap" style="display:none;">
+        <div id="nfc-wrap" style="display:none;">
+          <label>Horní řádek</label>
+          <input type="text" id="nfc-top" maxlength="24" value="Napište nám" placeholder="Napište nám">
+          <label>Odkaz na recenze (QR kód)</label>
+          <input type="text" id="nfc-url" maxlength="200" value="" placeholder="https://g.page/r/...">
+          <p class="cut-note">Z odkazu vygenerujeme QR kód rovnou do gravírování.
+            Nech prázdné, pokud QR nechceš. NFC štítek s tímto odkazem nahrajeme
+            před odesláním.</p>
           <label class="check"><input type="checkbox" id="show-stars" checked> Vygravírovat pět hvězdiček</label>
         </div>
         <label>Font</label>
@@ -140,14 +147,15 @@
         <h2>3. Materiál a rozměr</h2>
         <label>Materiál</label>
         <select id="material-select"></select>
+        <p class="cut-note">Gravírujeme do překližky 4 mm, největší kus je 35 × 35 cm.</p>
         <div class="row2">
           <div>
             <label id="width-label">Šířka (mm)</label>
-            <input type="number" id="width-mm" value="60" min="25" max="450" step="5">
+            <input type="number" id="width-mm" value="60" min="25" max="350" step="5">
           </div>
           <div id="height-wrap">
             <label>Výška (mm)</label>
-            <input type="number" id="height-mm" value="30" min="25" max="450" step="5">
+            <input type="number" id="height-mm" value="30" min="25" max="350" step="5">
           </div>
         </div>
 
@@ -231,6 +239,7 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/pricing-public.js"></script>
 <script src="assets/js/order-client.js"></script>
+<script src="assets/js/qr.js"></script>
 <script src="assets/js/engraving-configurator.js"></script>
 </body>
 </html>

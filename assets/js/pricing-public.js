@@ -7,7 +7,7 @@
  *
  * Obsahuje pouze PRODEJNÍ ceny. Nákladové sazby, hodinovka ani marže
  * tu schválně nejsou - tento soubor si stáhne každý návštěvník webu.
- * Vygenerováno: 2026-09-04
+ * Vygenerováno: 2026-09-05
  */
 (function (root) {
   "use strict";
@@ -78,19 +78,9 @@
 
   var MATERIALS_LASER = [
     {
-      "id": "ply3",
-      "name": "Překližka 3mm",
-      "sellPerCm2": 0.0938
-    },
-    {
-      "id": "plexi3",
-      "name": "Plexi 3mm",
-      "sellPerCm2": 0.271
-    },
-    {
-      "id": "custom",
-      "name": "Vlastní dodaný materiál",
-      "sellPerCm2": 0
+      "id": "ply4",
+      "name": "Překližka 4 mm",
+      "sellPerCm2": 0.0489
     }
   ];
 
@@ -113,7 +103,7 @@
       "widthMm": 95,
       "heightMm": 95,
       "minMm": 70,
-      "maxMm": 140,
+      "maxMm": 200,
       "engrave": "text"
     },
     {
@@ -123,7 +113,7 @@
       "widthMm": 300,
       "heightMm": 300,
       "minMm": 180,
-      "maxMm": 450,
+      "maxMm": 350,
       "engrave": "text",
       "extraName": "hodinový strojek",
       "extraSell": 84.5
@@ -135,7 +125,7 @@
       "widthMm": 150,
       "heightMm": 100,
       "minMm": 60,
-      "maxMm": 400,
+      "maxMm": 350,
       "engrave": "photo",
       "needsPhoto": true
     },
@@ -143,11 +133,12 @@
       "id": "nfc",
       "name": "NFC tabulka s recenzemi",
       "shape": "rounded",
-      "widthMm": 85,
-      "heightMm": 55,
-      "minMm": 50,
-      "maxMm": 200,
+      "widthMm": 100,
+      "heightMm": 120,
+      "minMm": 60,
+      "maxMm": 350,
       "engrave": "text",
+      "coverage": 0.28,
       "extraName": "NFC štítek",
       "extraSell": 32.5
     }
@@ -160,6 +151,7 @@
     engravePerDm2: 39,
     textCoverage: 0.18,
     wastePct: 20,
+    maxSideMm: 350,
     minOrder: 150
   };
 
@@ -265,7 +257,7 @@
     }
 
     // Foto se pálí přes celou plochu, text/logo jen zlomek.
-    var coverage = p.engrave === "photo" ? 1 : LASER.textCoverage;
+    var coverage = p.engrave === "photo" ? 1 : (p.coverage || LASER.textCoverage);
     var perPieceCost =
       m.sellPerCm2 * areaCm2 * (1 + LASER.wastePct / 100)
       + LASER.cutPerMeter * perimeterM
