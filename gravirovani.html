@@ -41,6 +41,16 @@
     border:1px solid rgba(255,255,255,0.2);color:var(--text);cursor:pointer;font-weight:600;
     font-size:.85rem;font-family:inherit;transition:all .25s ease;}
   .tab.active{background:var(--accent);border-color:var(--accent);}
+  .zoom-row{display:flex;gap:.6rem;align-items:center;}
+  .zoom-row input[type=range]{flex:1;accent-color:var(--accent);}
+  .mini{padding:.4rem .7rem;border-radius:8px;background:rgba(0,0,0,0.25);
+    border:1px solid rgba(255,255,255,0.2);color:var(--text);cursor:pointer;
+    font-family:inherit;font-size:.8rem;white-space:nowrap;}
+  .mini:hover{border-color:var(--accent);}
+  /* Posouvání výřezu fotky nesmí na mobilu rolovat stránkou. */
+  #preview.can-drag{cursor:grab;}
+  #preview.dragging{cursor:grabbing;touch-action:none;}
+  #preview.can-drag svg{touch-action:none;}
   .check{display:flex;align-items:center;gap:.5rem;cursor:pointer;margin:.9rem 0 .2rem;
     font-size:.85rem;color:rgba(255,255,255,0.8);}
   .check input{width:auto;accent-color:var(--accent);}
@@ -142,6 +152,15 @@
           <input type="file" id="photo-input" accept="image/png,image/jpeg">
           <p class="cut-note">Nejlépe vychází kontrastní snímek s výrazným motivem.
             Fotku převedeme do stupňů šedi.</p>
+          <div id="crop-wrap" style="display:none;">
+            <label>Přiblížení fotky</label>
+            <div class="zoom-row">
+              <input type="range" id="photo-zoom" min="1" max="4" step="0.05" value="1">
+              <button type="button" id="photo-reset" class="mini">Vycentrovat</button>
+            </div>
+            <p class="cut-note">Fotku v náhledu chyť myší (nebo prstem) a posuň, kolečkem
+              nebo posuvníkem ji přiblížíš. Gravíruje se přesně to, co je vidět v rámečku.</p>
+          </div>
         </div>
 
         <h2>3. Materiál a rozměr</h2>

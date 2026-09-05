@@ -13,6 +13,11 @@
     productId: P.PRODUCTS_LASER[0].id,
     photoDataUrl: null,
     photoName: null,
+    photoW: 0,
+    photoH: 0,
+    photoZoom: 1,      // přiblížení fotky v rámečku
+    photoX: 0,         // posun výřezu v mm
+    photoY: 0,
     price: null
   };
 
@@ -108,6 +113,27 @@
     return '<path d="' + d + '" fill="' + fill + '" shape-rendering="crispEdges"/>';
   }
 
+  /* Výřez fotky: rámeček v návrhu + umístění fotky v něm.
+     Fotka rámeček vždy překryje, posun se ořízne na okraje. */
+  function photoLayout(w, h) {
+    var pm = Math.min(w, h) * 0.06;
+    var capH = $("line1").value.trim() ? h * 0.16 : 0;
+    var fw = w - 2 * pm, fh = h - 2 * pm - capH;
+    var iw = state.photoW || 4, ih = state.photoH || 3;
+    var cover = Math.max(fw / iw, fh / ih);
+    var zoom = Math.max(1, state.photoZoom || 1);
+    var dw = iw * cover * zoom, dh = ih * cover * zoom;
+    var maxX = (dw - fw) / 2, maxY = (dh - fh) / 2;
+    state.photoX = Math.max(-maxX, Math.min(maxX, state.photoX));
+    state.photoY = Math.max(-maxY, Math.min(maxY, state.photoY));
+    return {
+      pm: pm, capH: capH, fx: pm, fy: pm, fw: fw, fh: fh,
+      x: pm + (fw - dw) / 2 + state.photoX,
+      y: pm + (fh - dh) / 2 + state.photoY,
+      w: dw, h: dh
+    };
+  }
+
   /* ---------- geometrie produktu ---------- */
   function dims() {
     var p = product();
@@ -180,18 +206,19 @@
     }
 
     if (id === "foto") {
-      var pm = Math.min(w, h) * 0.06;
-      var capH = l1.trim() ? h * 0.16 : 0;
-      var iw = w - 2 * pm, ih = h - 2 * pm - capH;
+      var L = photoLayout(w, h);
       out += state.photoDataUrl
-        ? '<image href="' + state.photoDataUrl + '" x="' + pm + '" y="' + pm +
-          '" width="' + iw + '" height="' + ih + '" preserveAspectRatio="xMidYMid slice"' +
-          ' filter="url(#engraveLook)"/>'
-        : '<rect x="' + pm + '" y="' + pm + '" width="' + iw + '" height="' + ih +
+        ? '<g clip-path="url(#fotoClip)"><image id="foto-img" href="' + state.photoDataUrl +
+          '" x="' + L.x + '" y="' + L.y + '" width="' + L.w + '" height="' + L.h +
+          '" preserveAspectRatio="none" filter="url(#engraveLook)"/></g>'
+        : '<rect x="' + L.fx + '" y="' + L.fy + '" width="' + L.fw + '" height="' + L.fh +
           '" fill="none" stroke="' + burn + '" stroke-width="' + (Math.min(w, h) * 0.006) +
           '" stroke-dasharray="' + (Math.min(w, h) * 0.03) + '"/>' +
-          textEl("Nahraj fotku", w / 2, pm + ih / 2, iw * 0.55, h * 0.08, burn, font, null);
-      if (capH) out += textEl(l1, w / 2, h - pm - capH * 0.45, w * 0.8, capH * 0.62, burn, font, "bold");
+          textEl("Nahraj fotku", w / 2, L.fy + L.fh / 2, L.fw * 0.55, h * 0.08, burn, font, null);
+      if (L.capH) {
+        out += textEl(l1, w / 2, h - L.pm - L.capH * 0.45, w * 0.8, L.capH * 0.62,
+          burn, font, "bold");
+      }
       return out;
     }
 
@@ -262,8 +289,11 @@
       : 'fill="none" stroke="#FF00FF" stroke-width="' +
         Math.max(0.3, Math.min(w, h) * 0.006) + '" stroke-dasharray="2 1.5"';
 
+    var fotoL = p.needsPhoto ? photoLayout(w, h) : null;
     var defs =
       '<defs>' +
+        (fotoL ? '<clipPath id="fotoClip"><rect x="' + fotoL.fx + '" y="' + fotoL.fy +
+          '" width="' + fotoL.fw + '" height="' + fotoL.fh + '"/></clipPath>' : "") +
         '<linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">' +
           '<stop offset="0%" stop-color="#dcb888"/><stop offset="55%" stop-color="#cfa972"/>' +
           '<stop offset="100%" stop-color="#c0965c"/></linearGradient>' +
@@ -353,6 +383,7 @@
     }
 
     $("photo-wrap").style.display = p.needsPhoto ? "" : "none";
+    $("crop-wrap").style.display = p.needsPhoto && state.photoDataUrl ? "" : "none";
     $("nfc-wrap").style.display = p.id === "nfc" ? "" : "none";
     $("line1-label").textContent = p.id === "nfc" ? "Nadpis"
       : p.id === "foto" ? "Popisek pod fotkou (volitelné)" : "Hlavní text";
@@ -373,6 +404,7 @@
 
   function render() {
     $("preview").innerHTML = buildSvg(false);
+    $("preview").classList.toggle("can-drag", product().needsPhoto && !!state.photoDataUrl);
     var p = product(), d = dims();
     $("preview-hint").textContent = p.name + " " +
       (p.shape === "circle" ? "⌀ " + d.w : d.w + " × " + d.h) + " mm – " +
@@ -414,15 +446,116 @@
     }
     var fr = new FileReader();
     fr.onload = function () {
-      state.photoDataUrl = fr.result;
-      state.photoName = f.name;
-      setStatus("", "");
-      render();
+      var im = new Image();
+      im.onload = function () {
+        state.photoDataUrl = fr.result;
+        state.photoName = f.name;
+        state.photoW = im.naturalWidth || im.width;
+        state.photoH = im.naturalHeight || im.height;
+        resetCrop();
+        $("crop-wrap").style.display = "";
+        setStatus("", "");
+        render();
+      };
+      im.onerror = function () { setStatus("Soubor se nepodařilo načíst jako obrázek.", "err"); };
+      im.src = fr.result;
     };
     fr.readAsDataURL(f);
   });
 
-  ["line1", "line2", "nfc-top", "nfc-url", "width-mm", "height-mm", "count-input"]
+  /* ---------- výřez fotky: tažení, přiblížení, vycentrování ---------- */
+  function resetCrop() {
+    state.photoZoom = 1;
+    state.photoX = 0;
+    state.photoY = 0;
+    $("photo-zoom").value = 1;
+  }
+
+  /* Posun a přiblížení přepisují jen atributy obrázku - překreslovat celé SVG
+     s vloženou fotkou by při tažení sekalo. */
+  function updatePhoto() {
+    var img = $("foto-img");
+    if (!img) { render(); return; }
+    var d = dims(), L = photoLayout(d.w, d.h);
+    img.setAttribute("x", L.x);
+    img.setAttribute("y", L.y);
+    img.setAttribute("width", L.w);
+    img.setAttribute("height", L.h);
+  }
+
+  function setZoom(z) {
+    state.photoZoom = Math.max(1, Math.min(4, z));
+    $("photo-zoom").value = state.photoZoom;
+    updatePhoto();
+  }
+
+  function cropActive() {
+    return product().needsPhoto && !!state.photoDataUrl;
+  }
+
+  var drag = null;
+  var view = $("preview");
+
+  view.addEventListener("pointerdown", function (e) {
+    if (!cropActive()) return;
+    var svg = view.querySelector("svg");
+    if (!svg || !svg.viewBox || !svg.viewBox.baseVal) return;
+    var rect = svg.getBoundingClientRect();
+    if (!rect.width) return;
+    drag = { x: e.clientX, y: e.clientY, mm: svg.viewBox.baseVal.width / rect.width };
+    view.classList.add("dragging");
+    if (view.setPointerCapture) view.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  view.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    state.photoX += (e.clientX - drag.x) * drag.mm;
+    state.photoY += (e.clientY - drag.y) * drag.mm;
+    drag.x = e.clientX;
+    drag.y = e.clientY;
+    updatePhoto();
+  });
+
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+    view.addEventListener(ev, function () {
+      if (!drag) return;
+      drag = null;
+      view.classList.remove("dragging");
+    });
+  });
+
+  view.addEventListener("wheel", function (e) {
+    if (!cropActive()) return;
+    e.preventDefault();
+    setZoom(state.photoZoom * (e.deltaY < 0 ? 1.08 : 1 / 1.08));
+  }, { passive: false });
+
+  $("photo-zoom").addEventListener("input", function () {
+    setZoom(parseFloat($("photo-zoom").value) || 1);
+  });
+  $("photo-reset").addEventListener("click", function () {
+    resetCrop();
+    updatePhoto();
+  });
+
+  /* Rozměr většího než dovolí produkt se rovnou stáhne na maximum;
+     dolní mez se dorovná až po dopsání, ať jde číslo přepsat. */
+  function clampSize(el, done) {
+    var p = product();
+    var v = parseFloat(el.value);
+    if (isNaN(v)) { if (done) el.value = p.minMm; return; }
+    if (v > p.maxMm) el.value = p.maxMm;
+    else if (done && v < p.minMm) el.value = p.minMm;
+  }
+
+  ["width-mm", "height-mm"].forEach(function (id) {
+    $(id).addEventListener("input", function () { clampSize($(id), false); render(); });
+    $(id).addEventListener("change", function () { clampSize($(id), true); render(); });
+    $(id).addEventListener("blur", function () { clampSize($(id), true); render(); });
+  });
+
+  ["line1", "line2", "nfc-top", "nfc-url", "count-input"]
     .forEach(function (id) { $(id).addEventListener("input", render); });
   ["font-select", "material-select"].forEach(function (id) {
     $(id).addEventListener("change", render);
