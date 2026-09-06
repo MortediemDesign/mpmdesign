@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tvorba webu na míru | MPMDESIGN</title>
+  <meta name="description" content="Tvorba webu na míru pro firmy a živnostníky - návrh, naprogramování, spuštění na doméně a následná správa i hosting. Bez šablon, s důrazem na mobil a rychlost.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/nav.js" defer></script>
+<style>
+  .steps{list-style:none;padding:0;margin:0;display:grid;gap:1rem;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  .steps li{background:var(--panel);border:1px solid rgba(255,255,255,0.15);
+    border-radius:14px;padding:1.2rem;}
+  .steps .step-num{display:inline-flex;align-items:center;justify-content:center;
+    width:2rem;height:2rem;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:700;margin-bottom:.7rem;}
+  .steps h3{margin:0 0 .4rem;font-size:1.05rem;}
+  .steps p{margin:0;font-size:.92rem;line-height:1.6;color:rgba(255,255,255,0.85);}
+  .cta-block{background:var(--panel);border:1px solid rgba(255,255,255,0.15);
+    border-radius:14px;padding:1.6rem;text-align:center;}
+  .cta-block h2{margin-top:0;}
+  .cta-block p{max-width:62ch;margin:0 auto 1.2rem;line-height:1.7;}
+</style>
+</head>
+<body>
+  <header>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <img src="logo2.svg" alt="Logo firmy">
+        <span>MPMDESIGN</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li class="nav-dropdown active">
+            <button type="button" class="dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
+              Produkty
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a class="active" href="tvorba-webu.html">Tvorba webu</a></li>
+            </ul>
+          </li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="eshop.html">E-shop</a></li>
+          <li><a href="kalkulacka.html">Přihlášení</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <h1>Tvorba <span class="accent">webu</span> na míru</h1>
+      <p>Navrhnu a naprogramuju web, který dobře vypadá na mobilu i na počítači, rychle se načítá a dá se snadno rozšiřovat. Po spuštění se o něj můžu dál starat &ndash; doména, hosting i úpravy obsahu.</p>
+      <a class="cta" href="kontakt.html?sluzba=web#formular">Nezávazná poptávka webu</a>
+    </section>
+
+    <section>
+      <h2>Co je součástí</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Web na míru</h3>
+          <p>Prezentační web pro firmu, živnostníka nebo konkrétní projekt. Struktura i vzhled podle toho, co skutečně potřebujete &ndash; ne podle univerzální šablony.</p>
+        </article>
+        <article class="card">
+          <h3>Mobil na prvním místě</h3>
+          <p>Většina návštěvníků přijde z telefonu. Web proto testuju na mobilu, tabletu i velkém monitoru, aby všude fungoval a dal se pohodlně ovládat.</p>
+        </article>
+        <article class="card">
+          <h3>Čistý technický základ</h3>
+          <p>Rychlé načítání, přehledný kód a správně vyplněné popisky stránek, aby si web poradil ve vyhledávačích a při sdílení na sociálních sítích.</p>
+        </article>
+        <article class="card">
+          <h3>Správa a hosting</h3>
+          <p>Po spuštění web nezůstane bez péče &ndash; zařídím doménu a hosting, zálohy, aktualizace a průběžné úpravy obsahu, když je potřeba něco změnit.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Jak to probíhá</h2>
+      <ol class="steps">
+        <li>
+          <span class="step-num">1</span>
+          <h3>Poptávka</h3>
+          <p>Projdeme, k čemu má web sloužit, komu je určený a co na něm musí být. Z toho vyjde rozsah i cena.</p>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <h3>Návrh</h3>
+          <p>Připravím strukturu stránek a vizuální podobu ke schválení, ať víte dopředu, jak to bude vypadat.</p>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <h3>Realizace</h3>
+          <p>Web naprogramuju, naplním obsahem a otestuju na mobilu i na počítači ve všech běžných prohlížečích.</p>
+        </li>
+        <li>
+          <span class="step-num">4</span>
+          <h3>Spuštění a správa</h3>
+          <p>Nasadím web na doménu, předám přístupy a pokud chcete, starám se o něj dál.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="cta-block">
+        <h2>Značka, která drží pohromadě</h2>
+        <p>Kromě webu dělám i grafiku, tiskoviny, polepy a gravírování. Logo, vizitka, polep auta i web tak můžou vzniknout na jednom místě a vypadat jako jeden celek. Cenu webu počítám vždy podle rozsahu &ndash; napište mi, co potřebujete, a ozvu se s konkrétní nabídkou.</p>
+        <a class="cta" href="kontakt.html?sluzba=web#formular">Napsat poptávku</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy • Tvorba webu | <a href="kalkulacka.html" style="opacity: 0.6; font-size: 0.9em;">🔐 Interní sekce</a></div>
+      <div class="social-links">
+        <a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.169a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+      </div>
+    </div>
+    <div class="container legal-bar">
+      <span>Miguel Pérez Morales · IČO 24859931 · Lidická 1018, 363 01 Ostrov · zapsán v živnostenském rejstříku vedeném Městským úřadem Ostrov</span>
+      <span><a href="obchodni-podminky.html">Obchodní podmínky</a> · <a href="ochrana-osobnich-udaju.html">Ochrana osobních údajů</a></span>
+    </div>
+  </footer>
+</body>
+</html>

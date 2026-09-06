@@ -20,6 +20,7 @@ Statický web připravený pro **GitHub Pages**.
 ## Struktura stránek
 - `index.html` – hlavní stránka
 - `sluzby.html` – služby
+- `tvorba-webu.html` – tvorba webu na míru
 - `portfolio.html` – portfolio
 - `kontakt.html` – kontakt
 - `eshop.html` – příprava na budoucí e-shop
