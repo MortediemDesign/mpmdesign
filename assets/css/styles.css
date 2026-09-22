@@ -1,16 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 :root {
-  --bg: #154387;
-  --accent: #FF8000;
+  --bg: #05070c;
+  --navy: #1B4B9B;
+  --accent: #F5921E;
   --text: #ffffff;
-  --panel: rgba(255,255,255,0.08);
+  --panel: rgba(27,75,155,0.16);
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
+  font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(1100px 520px at 15% -10%, rgba(27,75,155,0.35), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(245,146,30,0.08), transparent 55%),
+    var(--bg);
   color: var(--text);
   line-height: 1.6;
 }
@@ -25,11 +31,11 @@ a:hover { color: var(--accent); }
 }
 
 header {
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
   position: sticky;
   top: 0;
-  background: rgba(21,67,135,0.95);
-  backdrop-filter: blur(4px);
+  background: rgba(5,7,12,0.92);
+  backdrop-filter: blur(6px);
   z-index: 30;
 }
 
@@ -122,7 +128,7 @@ nav a.active { color: var(--accent); font-weight: 700; }
   top: calc(100% + 0.85rem);
   left: 50%;
   min-width: 170px;
-  background: #0e2c58;
+  background: #0e1a30;
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 12px;
   box-shadow: 0 16px 32px rgba(0,0,0,0.3);
@@ -237,7 +243,7 @@ nav a.active { color: var(--accent); font-weight: 700; }
   background: var(--accent); 
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 128, 0, 0.4);
+  box-shadow: 0 4px 15px rgba(245, 146, 30, 0.4);
 }
 
 section { padding: 2rem 0; }
@@ -351,7 +357,7 @@ footer {
 .notice {
   border-left: 4px solid var(--accent);
   padding: 0.8rem 1rem;
-  background: rgba(255,128,0,0.1);
+  background: rgba(245,146,30,0.1);
   border-radius: 8px;
 }
 
@@ -504,8 +510,111 @@ footer {
 
 .doc-note {
   border-left: 4px solid var(--accent);
-  background: rgba(255,128,0,0.1);
+  background: rgba(245,146,30,0.1);
   border-radius: 8px;
   padding: 0.8rem 1rem;
   margin: 1.2rem 0;
+}
+
+/* --- Hamburger menu (mobil) ---
+   Sdílené napříč celým webem. Stránka jen přidá tlačítko .nav-toggle
+   a panel #mobileNav (viz index.html pro vzor) - bez nich se nic
+   neaktivuje, takže je bezpečné mít tato pravidla v hlavním stylesheetu. */
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: #fff;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  border-top: 0 solid rgba(255,255,255,0.12);
+  transition: max-height 0.3s ease;
+  background: rgba(5,7,12,0.98);
+}
+
+.mobile-nav.open {
+  max-height: 80vh;
+  overflow-y: auto;
+  border-top-width: 1px;
+}
+
+.mobile-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 1.1rem 5%;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mobile-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.02rem;
+  font-weight: 600;
+  display: block;
+}
+
+.mobile-nav a.active { color: var(--accent); }
+
+/* Uvnitř mobilního panelu chceme rozbalenou nabídku Produkty rovnou
+   vidět, ne skrytou pod hover menu určeným pro desktop. */
+.mobile-nav .nav-dropdown::after { display: none; }
+
+.mobile-nav .dropdown-menu {
+  position: static;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  box-shadow: none;
+  background: rgba(0,0,0,0.22);
+  margin-top: 0.6rem;
+  padding: 0.4rem;
+}
+
+.mobile-nav .dropdown-menu li { margin: 0; }
+
+@media (max-width: 860px) {
+  nav { display: none; }
+  .nav-toggle { display: flex; }
+}
+
+/* --- Jemné odhalení obsahu při scrollu (bez GSAP, IntersectionObserver) ---
+   Přidává assets/js/reveal.js - respektuje prefers-reduced-motion (skript
+   se v tom případě vůbec nespustí, obsah zůstává normálně viditelný). */
+
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-pending.reveal-in {
+  opacity: 1;
+  transform: none;
 }
