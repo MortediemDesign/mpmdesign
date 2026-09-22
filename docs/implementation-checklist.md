@@ -90,13 +90,24 @@ Postupuje se striktně P0 → P1 → P2/P3 → P4, po každé fázi běží `pyt
 
 ---
 
-## ČÁST C – Otázky na uživatele (nutné odpovědi před P1)
+## ČÁST C – Otázky na uživatele (odpovědi obdrženy)
 
-1. **K1**: Souhlasí s redukcí hlavní navigace na Služby/Realizace/Konfigurátory/O nás/Kontakt, i když to znamená přejmenovat "Portfolio"→"Realizace" a odsunout Blog/E-book/E-shop mimo hlavní menu (kam – patička? sekundární nav?)?
-2. **K3**: Pro nové service-page URL (`/samolepky`, `/laser`, `/3d-tisk`) – nová informační stránka převezme hlavní URL a stávající konfigurátor se přesune jinam, nebo naopak?
-3. **K5**: Pokud se URL budou měnit, jak řešit 301 na GitHub Pages (meta-refresh stránka vs. přesun hostingu)?
-4. **P0-1**: Jaká je reálná cena e-booku (nebo se má cenový blok dočasně skrýt)?
-5. **P0-2**: Sjednotit homepage formulář na `formsubmit.co` (stejně jako `kontakt.html`, rychlé), nebo dodat reálný Formspree endpoint?
-6. **P1 (C1/C5/C8)**: Jaká konkrétní fakta (roky praxe, technické parametry strojů, počet realizací) může uživatel dodat pro hero/"Proč MPMDESIGN"/technické sekce nových service pages?
+1. **K1** (redukce hlavní navigace) → **Souhlas.** Implementováno: hlavní i mobilní navigace na všech multi-page šablonách (14 stránek: sluzby/portfolio/blog/kontakt/eshop/tvorba-webu/klicenka/samolepky/gravirovani/ebook/kalkulacka/o-nas/obchodni-podminky/ochrana-osobnich-udaju) teď obsahuje Domů/Služby/Realizace(dříve "Portfolio")/Konfigurátory(dropdown: Klíčenky/Samolepky/Laserové gravírování)/O nás/Kontakt + primární CTA "Poptat výrobu" (`kontakt.html#formular`). Blog/E-book/E-shop/Tvorba webu odsunuty do patičky (`.footer-links`) a mobilního sekundárního menu (`.mobile-nav-secondary`). `tools/check_site.py` upraven na nový očekávaný nav a na to, že Blog/E-shop už nemají v nav vlastní aktivní položku. Homepage (`index.html`) si zachovává svou vlastní kotva-navigaci (samostatný, dříve schválený vzorec) – jen doplněna o odkaz na `o-nas.html` v mobilním menu a patičce.
+2. **K3** (URL nových service pages vs. konfigurátory) → **"Udělej, co uznáš za vhodné."** Rozhodnutí: nebude se nic přesouvat ihned. Jediná reálná kolize je `samolepky.html` (nová informační stránka `/samolepky` by chtěla stejné URL jako existující konfigurátor) – vyřeší se až ve chvíli, kdy se skutečně začnou stavět nové plnohodnotné service pages (P1 zbytek, viz Část B), ne dnes jen kvůli přejmenování nav. Do té doby zůstává "Konfigurátory" dropdown beze změny (klicenka.html/samolepky.html/gravirovani.html), takže žádná kolize v této fázi nevznikla.
+3. **K5** (301 na GitHub Pages) → **"Nevím."** Zatím se žádné URL neměnily (jen popisky v nav a `<title>`), takže redirect mechanismus nebyl potřeba. Zůstává otevřené pro budoucí fázi, kdy se skutečně přesune/vytvoří nové URL.
+4. **P0-1** (cena e-booku) → **299 Kč, sleva 100 Kč → 199 Kč.** Implementováno (viz historie commitů), doplněno na `ebook.html` i homepage teaseru.
+5. **P0-2** (homepage formulář) → vyřešeno dřív (formsubmit.co, stejně jako kontakt.html).
+6. **Roky praxe** → **7 let.** Doplněno do homepage hero (`index.html`) a do nové stránky `o-nas.html` (sekce "Fakta o dílně").
 
-Dokud nejsou body 1–3 rozhodnuté, nedoporučuje se začínat P1 (mění se IA a URL napříč webem) – P0 lze ale začít okamžitě, protože nezávisí na těchto rozhodnutích.
+## Nově vytvořené/změněné v této fázi
+
+- Nová stránka `o-nas.html` – fakticky založená (jméno, IČO, adresa, 7 let praxe, seznam skutečně nabízených služeb, kontakt), žádné vymyšlené recenze/čísla.
+- `eshop.html` doplněn o poctivé sdělení "e-shop připravujeme" + CTA na poptávku (dřív prázdná sekce bez vysvětlení).
+- Opraveny duplicitní/nesedící `<title>` na 5 core stránkách a 3 blog článcích (mechanická oprava, žádná nová fakta).
+- Homepage hero CTA sjednocena na "Poptat výrobu" (dřív "Služby"/"E-book").
+
+## Zbývá (budoucí fáze P1, mimo dnešní rozsah)
+
+- Skutečné plnohodnotné service pages (`/cnc-frezovani`, `/3d-tisk`, `/laser`, `/polepy`, `/dtf`) se strukturou hero/Co vyrábíme/Materiály/Technické parametry/proces/Realizace/FAQ/CTA – vyžaduje další fakta od uživatele (technické parametry strojů) a rozhodnutí o `samolepky.html` kolizi (K3) v okamžiku, kdy se na ni skutečně dojde.
+- Lemon Squeezy checkout URL pro e-book (P0-1b, stále otevřené).
+- Sjednocení polí kontaktních formulářů (`dtf` chybí v `kontakt.html` selectu) – drobný zbytek P1/U4.

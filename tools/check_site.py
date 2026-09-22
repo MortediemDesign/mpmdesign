@@ -10,7 +10,14 @@ PAGES = [
     'blog.html',
     'kontakt.html',
     'eshop.html',
+    'o-nas.html',
 ]
+
+# Stránky, které se v hlavní navigaci samy odkazují (mají tam vlastní
+# položku a tedy i "active" stav). Blog a e-shop byly zadáním odsunuty
+# mimo hlavní menu (jsou jen v patičce/mobile-nav-secondary), takže na
+# nich žádná položka navigace není aktivní.
+NAV_SELF_LINKED = {'sluzby.html', 'portfolio.html', 'kontakt.html', 'o-nas.html'}
 
 
 def check_files_exist() -> None:
@@ -37,11 +44,13 @@ def check_json() -> None:
 def check_nav_consistency() -> None:
     # index.html má od redesignu vlastní kotva-navigaci (Služby/Konfigurátory/
     # E-book/Reference/Kontakt), viz check_home_nav(). Ostatní stránky sdílí
-    # jednotnou navigaci, kterou hlídáme přesně jako dřív.
+    # jednotnou (zredukovanou) navigaci: Domů/Služby/Realizace/Konfigurátory
+    # (Klíčenky/Samolepky/Laser)/O nás/Kontakt + CTA "Poptat výrobu". Blog,
+    # E-book, E-shop a Tvorba webu jsou odsunuté mimo hlavní menu (jen
+    # patička/mobile-nav-secondary) - viz implementation-checklist.md K1.
     expected = [
-        'index.html', 'sluzby.html', 'klicenka.html', 'samolepky.html',
-        'gravirovani.html', 'tvorba-webu.html', 'portfolio.html', 'kontakt.html',
-        'blog.html', 'ebook.html', 'eshop.html',
+        'index.html', 'sluzby.html', 'portfolio.html', 'klicenka.html',
+        'samolepky.html', 'gravirovani.html', 'o-nas.html', 'kontakt.html',
     ]
     for page in PAGES:
         if page == 'index.html':
@@ -52,13 +61,15 @@ def check_nav_consistency() -> None:
             raise SystemExit(f'{page}: missing <nav>')
         nav = m.group(0)
         hrefs = re.findall(r'href="([^"]+)"', nav)
-        # ignore externals if any future addition
+        # ignore externals a CTA s kotvou (#formular) - ta se do porovnání
+        # nepočítá, protože nesměruje na samostatnou položku menu
         hrefs = [h for h in hrefs if h.endswith('.html')]
         if hrefs != expected:
             raise SystemExit(f'{page}: nav mismatch {hrefs} != {expected}')
         active = re.findall(r'<a class="active" href="([^"]+)"', nav)
-        if active != [page]:
-            raise SystemExit(f'{page}: expected single active link to itself, got {active}')
+        expected_active = [page] if page in NAV_SELF_LINKED else []
+        if active != expected_active:
+            raise SystemExit(f'{page}: expected active {expected_active}, got {active}')
 
 
 def check_home_nav() -> None:
@@ -73,7 +84,7 @@ def check_home_nav() -> None:
 
     # Odkazy na zbytek webu nesmí z hlavní stránky úplně zmizet – čekáme je
     # v mobilním menu (mobile-nav-secondary) i v patičce.
-    for required in ('sluzby.html', 'portfolio.html', 'blog.html', 'eshop.html', 'kalkulacka.html'):
+    for required in ('sluzby.html', 'portfolio.html', 'blog.html', 'eshop.html', 'o-nas.html', 'kalkulacka.html'):
         if f'href="{required}"' not in text:
             raise SystemExit(f'index.html: chybí odkaz na {required} (mobile-nav / patička)')
 
