@@ -52,7 +52,8 @@ Postupuje se striktně P0 → P1 → P2/P3 → P4, po každé fázi běží `pyt
 
 | # | Úkol | Poznámka |
 |---|---|---|
-| P0-1 | Odstranit `[CENA] Kč` z `ebook.html` (2×) a `index.html` (1×) | Vyžaduje reálnou cenu od uživatele, nebo skrytí ceníkového bloku + CTA "napište si o cenu" |
+| P0-1 | Odstranit `[CENA] Kč` z `ebook.html` (2×) a `index.html` (1×) | **Hotovo** (PR – viz historie): placeholder text odstraněn, cenový blok skrytý, CTA upravena tak, aby nic nepředstírala. Reálná cena zatím nedodána. |
+| P0-1b | **Nový nález při implementaci P0-1**: tlačítka "Koupit e-book" / "Stáhnout ukázku zdarma" na `ebook.html` mají `href="#"` (Lemon Squeezy overlay skript `assets.lemonsqueezy.com/lemon.js` je načtený, ale bez reálné product/checkout URL nemůže nic otevřít) | Nevyřešeno – vyžaduje od uživatele reálnou Lemon Squeezy product URL (nebo rozhodnutí nepoužívat Lemon Squeezy a prodávat e-book přes kontaktní formulář/e-mail místo automatického checkoutu) |
 | P0-2 | Zprovoznit homepage kontaktní formulář | Buď reálný Formspree endpoint, nebo sjednotit s `kontakt.html` mechanismem (viz K-related U4) |
 | P0-3 | Odstranit "Přihlášení"/`kalkulacka.html` z veřejné navigace na všech stránkách | Vyžaduje úpravu `tools/check_site.py` (`check_home_nav` už to nebude vyžadovat) |
 | P0-4 | Zabezpečit/`noindex` `kalkulacka.html` | Minimálně `<meta name="robots" content="noindex,nofollow">`; ideálně i skutečné zabezpečení nad rámec client-side hash (mimo rozsah statického webu – doporučeno alespoň HTTP Basic Auth přes hosting, pokud dostupné) |

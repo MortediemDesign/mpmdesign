@@ -42,9 +42,6 @@ na mobilu.
   pole `REFERENCE_ITEMS` v `assets/js/home-reference.js` (viz
   `assets/reference/README.md`). Dokud tam fotky nejsou, karty se
   zobrazí jako čitelný placeholder.
-- **Kontaktní formulář** – vytvořte formulář na formspree.io a
-  vložte jeho endpoint do konstanty `FORMSPREE_ENDPOINT` na začátku
-  `assets/js/home-contact.js`.
 - **Hero animace ze snímků z Blenderu** (volitelné) – viz
   `assets/hero-frames/README.md`. Dokud tam snímky nejsou, běží
   výchozí SVG verze (fréza kreslí skutečné logo).

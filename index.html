@@ -31,7 +31,6 @@
   <script src="assets/js/home-hero.js" defer></script>
   <script src="assets/js/home-services.js" defer></script>
   <script src="assets/js/home-reference.js" defer></script>
-  <script src="assets/js/home-contact.js" defer></script>
 
   <!-- Strukturovaná data pro vyhledávače -->
   <script type="application/ld+json">
@@ -226,8 +225,7 @@
           <span class="eyebrow">Pro fanoušky Vectricu</span>
           <h2 class="section-title">Naučte se Vectric od základů</h2>
           <p>19 kapitol, které vás provedou softwarem Vectric od prvního spuštění až po hotový CNC projekt – s praktickým příkladem krok za krokem.</p>
-          <div class="ebook-teaser-price">[CENA] Kč</div>
-          <a href="ebook.html" class="btn btn-primary">Chci e-book</a>
+          <a href="ebook.html" class="btn btn-primary">Zjistit cenu a obsah</a>
         </div>
         <div class="mini-book-wrap">
           <div class="mini-book" aria-hidden="true">
@@ -355,7 +353,13 @@
             </div>
           </div>
 
-          <form class="contact-form" id="contactForm">
+          <div id="form-success" class="notice" style="display: none; margin-bottom: 1.5rem;">
+            Děkujeme! Vaše poptávka byla úspěšně odeslána. Ozveme se vám co nejdříve.
+          </div>
+          <form class="contact-form" id="contactForm" action="https://formsubmit.co/mpmdesign@outlook.cz" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_next" value="https://mpmdesign.cz/index.html?success=true#kontakt">
+            <input type="hidden" name="_subject" value="Nová poptávka z webu MPMDESIGN (homepage)">
+            <input type="hidden" name="_captcha" value="false">
             <div class="contact-form-row">
               <div>
                 <label for="name">Jméno a příjmení *</label>
@@ -395,11 +399,20 @@
               <input type="file" id="attachment" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.stl">
             </div>
             <button type="submit" class="btn btn-primary">Odeslat poptávku</button>
-            <p class="contact-status" id="contactStatus"></p>
           </form>
         </div>
       </div>
     </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+          const banner = document.getElementById('form-success');
+          if (banner) banner.style.display = 'block';
+        }
+      });
+    </script>
 
   </main>
 

@@ -509,13 +509,6 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
   line-height: 1.6;
 }
 
-.ebook-teaser-price {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--accent);
-  margin: 0.6rem 0 1.2rem;
-}
-
 .mini-book-wrap {
   display: flex;
   justify-content: center;
