@@ -6,6 +6,7 @@
   <title>CNC a 3D výroba | E-shop</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/nav.js" defer></script>
+<script src="assets/js/reveal.js" defer></script>
 </head>
 <body>
   <header>
@@ -38,6 +39,33 @@
           <li><a href="kalkulacka.html">Přihlášení</a></li>
         </ul>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li class="nav-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+              Produkty
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a href="tvorba-webu.html">Tvorba webu</a></li>
+            </ul>
+          </li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="ebook.html">E-book</a></li>
+          <li><a class="active" href="eshop.html">E-shop</a></li>
+          <li><a href="kalkulacka.html">Přihlášení</a></li>
+        </ul>
     </div>
   </header>
   <main class="container">
