@@ -1,0 +1,890 @@
+/* ============================================================
+   MPMDESIGN – hlavní stránka (redesign)
+   Tmavé industriální schéma + Space Grotesk. Načítá se navíc
+   k assets/css/styles.css a platí jen pro body.home-page –
+   ostatní stránky webu tento soubor vůbec nenačítají, takže
+   zůstávají beze změny.
+   ============================================================ */
+
+body.home-page {
+  --navy: #1B4B9B;
+  --navy-deep: #0a1a3d;
+  --accent: #F5921E;
+  --bg: #05070c;
+  --panel: rgba(27, 75, 155, 0.16);
+  --line: rgba(255, 255, 255, 0.12);
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+body.home-page * { box-sizing: border-box; }
+
+/* Sekce, které GSAP ještě neinicializoval (nenačetlo se JS / pomalá
+   síť), musí vypadat hotově, ne rozbitě – schovává je až JS těsně
+   před spuštěním animace přidáním třídy na <html>. */
+html.js-ready body.home-page .reveal-on-init { opacity: 1; }
+
+body.home-page section { padding: 0; }
+
+body.home-page .section-inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 5rem 0;
+}
+
+body.home-page h1, body.home-page h2, body.home-page h3 {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+body.home-page .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+body.home-page .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--accent);
+}
+
+body.home-page .section-title {
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  margin: 0.6rem 0 0.8rem;
+}
+
+body.home-page .section-lead {
+  max-width: 60ch;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 2.4rem;
+  line-height: 1.6;
+}
+
+body.home-page .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+body.home-page .btn-primary { background: var(--accent); color: #16110a; }
+
+body.home-page .btn-primary:hover {
+  color: #16110a;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(245, 146, 30, 0.35);
+}
+
+body.home-page .btn-ghost:hover {
+  color: #fff;
+  background: rgba(245, 146, 30, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ---------- Hlavička / navigace ---------- */
+
+body.home-page header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(5, 7, 12, 0.88);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+
+body.home-page .nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  position: relative;
+}
+
+body.home-page .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+body.home-page .brand img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 9px;
+  padding: 5px;
+}
+
+body.home-page .home-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.6rem;
+  padding: 0;
+  margin: 0;
+}
+
+body.home-page .home-nav a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+body.home-page .home-nav a:hover { color: var(--accent); }
+
+body.home-page .nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+}
+
+body.home-page .nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: #fff;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+body.home-page .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.home-page .nav-toggle.open span:nth-child(2) { opacity: 0; }
+body.home-page .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+body.home-page .mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  border-top: 0 solid var(--line);
+  transition: max-height 0.3s ease;
+  background: rgba(5, 7, 12, 0.98);
+}
+
+body.home-page .mobile-nav.open {
+  max-height: 70vh;
+  overflow-y: auto;
+  border-top-width: 1px;
+}
+
+body.home-page .mobile-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 1.2rem 5%;
+  display: grid;
+  gap: 0.9rem;
+}
+
+body.home-page .mobile-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+body.home-page .mobile-nav-secondary {
+  padding-top: 0 !important;
+  border-top: 1px solid var(--line);
+  margin-top: 0.4rem;
+}
+
+body.home-page .mobile-nav-secondary a {
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 860px) {
+  body.home-page .home-nav { display: none; }
+  body.home-page .nav-toggle { display: flex; }
+}
+
+/* ---------- Hero: CNC frézuje logo ---------- */
+
+#hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(27, 75, 155, 0.35), transparent 60%),
+    radial-gradient(700px 420px at 85% 90%, rgba(245, 146, 30, 0.1), transparent 55%),
+    var(--bg);
+}
+
+.hero-inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 6rem 0 3rem;
+  display: grid;
+  gap: 2rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.hero-stage {
+  position: relative;
+  width: min(360px, 70vw);
+  aspect-ratio: 1555.42 / 1608.56;
+}
+
+.hero-svg, .hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-canvas { pointer-events: none; }
+
+.hero-svg path {
+  fill: transparent;
+  stroke: var(--accent);
+  stroke-width: 6px;
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-svg path.hero-path-navy { stroke: #6f93d6; }
+
+.hero-spindle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 14px 3px rgba(245, 146, 30, 0.85);
+  opacity: 0;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.hero-copy h1 {
+  font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.hero-copy h1 .accent { color: var(--accent); }
+
+.hero-copy p {
+  max-width: 52ch;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Statická varianta (prefers-reduced-motion nebo bez GSAP): logo je
+   rovnou hotové, žádné piny ani částice. */
+html.motion-reduced .hero-svg path,
+html.no-gsap .hero-svg path {
+  stroke: transparent;
+}
+
+html.motion-reduced .hero-copy,
+html.no-gsap .hero-copy {
+  opacity: 1;
+  transform: none;
+}
+
+html.motion-reduced .hero-spindle,
+html.no-gsap .hero-spindle,
+html.motion-reduced .hero-scroll-hint,
+html.no-gsap .hero-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .hero-inner { padding: 4rem 0 2.5rem; }
+  .hero-stage { width: min(280px, 62vw); }
+}
+
+/* ---------- Služby: horizontální scroll ---------- */
+
+#sluzby {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.services-pin {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 0;
+  overflow: hidden;
+}
+
+.services-head {
+  width: min(1200px, 92%);
+  margin: 0 auto 2.4rem;
+}
+
+.services-track {
+  display: flex;
+  gap: 1.4rem;
+  padding: 0 5vw;
+  will-change: transform;
+}
+
+.service-card {
+  flex: 0 0 auto;
+  width: min(320px, 78vw);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.service-icon {
+  width: 100%;
+  height: 130px;
+}
+
+.service-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.service-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+/* --- ikony jednotlivých karet: navy = materiál/nástroj, oranžová = akce --- */
+
+.svc-mat { fill: none; stroke: #6f93d6; stroke-width: 3; }
+.svc-tool { fill: var(--accent); }
+.svc-line { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.svc-fill { fill: var(--accent); }
+.svc-fill-navy { fill: var(--navy); }
+.svc-ghost { fill: none; stroke: #6f93d6; stroke-width: 3; stroke-linecap: round; }
+
+/* CNC */
+.cnc-pocket { fill: rgba(245, 146, 30, 0.28); stroke: var(--accent); stroke-width: 2; transform-origin: 60px 30px; transform: scaleY(0); }
+
+/* 3D tisk */
+.print-layer { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+
+/* Laser */
+.laser-dot { fill: var(--accent); filter: drop-shadow(0 0 6px rgba(245, 146, 30, 0.9)); opacity: 0; }
+.laser-smoke { fill: rgba(255, 255, 255, 0.35); opacity: 0; }
+
+/* DTF */
+.dtf-press { fill: rgba(255, 255, 255, 0.5); transform-box: fill-box; transform-origin: 50% 0%; }
+.dtf-motif { opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; transform: scale(0.6); }
+
+/* Weby */
+.web-line { transform-box: fill-box; transform-origin: 0% 50%; transform: scaleX(0); }
+.web-browser { opacity: 0; }
+
+.reveal-once { opacity: 1; }
+
+@media (max-width: 860px) {
+  .services-pin {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+  .services-track {
+    flex-direction: column;
+    padding: 0 4%;
+  }
+  .service-card { width: 100%; }
+}
+
+/* Statická varianta (prefers-reduced-motion nebo bez GSAP): ikony rovnou
+   v "hotovém" stavu, bez pinu a bez pohyblivých detailů. */
+html.motion-reduced .cnc-pocket, html.no-gsap .cnc-pocket,
+html.motion-reduced .print-layer, html.no-gsap .print-layer {
+  transform: scaleY(1);
+}
+html.motion-reduced .dtf-motif, html.no-gsap .dtf-motif {
+  opacity: 1;
+  transform: scale(1);
+}
+html.motion-reduced .web-line, html.no-gsap .web-line {
+  transform: scaleX(1);
+}
+html.motion-reduced .laser-dot, html.no-gsap .laser-dot,
+html.motion-reduced .laser-smoke, html.no-gsap .laser-smoke,
+html.motion-reduced .dtf-press, html.no-gsap .dtf-press,
+html.motion-reduced .cnc-tool, html.no-gsap .cnc-tool,
+html.motion-reduced .web-browser, html.no-gsap .web-browser {
+  display: none;
+}
+
+/* Bez pinu/horizontálního scrollu (reduced-motion nebo chybějící GSAP) by
+   karty jen přetekly mimo obrazovku – proto je i na desktopu složíme pod
+   sebe stejně jako na mobilu. */
+html.motion-reduced .services-pin, html.no-gsap .services-pin {
+  min-height: auto;
+}
+html.motion-reduced .services-track, html.no-gsap .services-track {
+  flex-direction: column;
+  padding: 0 5vw;
+}
+html.motion-reduced .service-card, html.no-gsap .service-card {
+  width: 100%;
+}
+
+/* ---------- E-book upoutávka ---------- */
+
+#ebook-teaser {
+  background: linear-gradient(120deg, rgba(27, 75, 155, 0.18), rgba(245, 146, 30, 0.06));
+  border-top: 1px solid var(--line);
+}
+
+.ebook-teaser-inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 4.5rem 0;
+}
+
+.ebook-teaser-copy p {
+  max-width: 46ch;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
+
+.ebook-teaser-price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0.6rem 0 1.2rem;
+}
+
+.mini-book-wrap {
+  display: flex;
+  justify-content: center;
+  perspective: 900px;
+}
+
+.mini-book {
+  position: relative;
+  width: 170px;
+  height: 230px;
+  transform-style: preserve-3d;
+  animation: mini-book-float 6s ease-in-out infinite;
+}
+
+@keyframes mini-book-float {
+  0%, 100% { transform: rotateY(-24deg) rotateX(4deg) translateY(0); }
+  50% { transform: rotateY(-14deg) rotateX(2deg) translateY(-8px); }
+}
+
+.mini-book-page, .mini-book-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px 8px 8px 3px;
+  backface-visibility: hidden;
+}
+
+.mini-book-page {
+  background: #f4efe4;
+  transform: translateZ(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.mini-book-cover {
+  background: linear-gradient(155deg, var(--navy), var(--navy-deep));
+  border: 1px solid rgba(245, 146, 30, 0.35);
+  transform: translateZ(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+  padding: 1rem;
+}
+
+.mini-book-title { display: block; }
+
+.mini-book-cover .accent {
+  display: block;
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-book { animation: none; transform: rotateY(-18deg) rotateX(3deg); }
+}
+
+@media (max-width: 860px) {
+  .ebook-teaser-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 3.5rem 0;
+  }
+  .ebook-teaser-copy p { margin-left: auto; margin-right: auto; }
+  .mini-book-wrap { order: -1; }
+}
+
+/* ---------- Konfigurátory: "Vyzkoušej si to" ---------- */
+
+#konfiguratory {
+  border-top: 1px solid var(--line);
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+}
+
+.config-card {
+  position: relative;
+  min-height: 230px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: var(--panel);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.config-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(5, 7, 12, 0.92) 10%, rgba(5, 7, 12, 0.15) 75%);
+}
+
+.config-card:hover, .config-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.config-card-body {
+  position: relative;
+  z-index: 1;
+  padding: 1.4rem;
+}
+
+.config-card-body h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+}
+
+.config-card-body p {
+  margin: 0 0 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 34ch;
+}
+
+.config-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.92rem;
+}
+
+.config-cta svg {
+  transition: transform 0.25s ease;
+}
+
+.config-card:hover .config-cta svg {
+  transform: translateX(4px);
+}
+
+.config-card-soon {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-style: dashed;
+  cursor: default;
+}
+
+.config-card-soon::before { display: none; }
+
+.config-card-soon .config-card-body { padding: 1.6rem; }
+
+.config-card-soon h3 { color: rgba(255, 255, 255, 0.85); }
+
+.config-card-soon p {
+  margin: 0 auto 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.config-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 146, 30, 0.4);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- Reference: masonry galerie ---------- */
+
+#reference {
+  border-top: 1px solid var(--line);
+}
+
+.reference-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 2.2rem;
+}
+
+.reference-head .section-lead { margin-bottom: 0; }
+
+.reference-grid {
+  columns: 3 260px;
+  column-gap: 1.1rem;
+}
+
+.reference-grid figure {
+  break-inside: avoid;
+  margin: 0 0 1.1rem;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  cursor: zoom-in;
+}
+
+.reference-grid img {
+  width: 100%;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.reference-grid figure:hover img { transform: scale(1.06); }
+
+.reference-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.8rem;
+  background: linear-gradient(0deg, rgba(5, 7, 12, 0.92), transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.reference-grid figure:hover .reference-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reference-caption strong { display: block; font-size: 0.92rem; }
+.reference-caption span { display: block; font-size: 0.78rem; color: rgba(255, 255, 255, 0.7); }
+
+/* Dokud reálná fotka v assets/reference/ chybí, ukážeme čitelný placeholder
+   místo rozbité ikony prohlížeče. */
+.reference-grid figure.ref-missing {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+}
+
+.reference-grid figure.ref-missing img { display: none; }
+
+.reference-grid figure.ref-missing .reference-caption {
+  position: static;
+  opacity: 1;
+  transform: none;
+  background: none;
+  text-align: center;
+  padding: 1.4rem 1rem;
+}
+
+.reference-grid figure.ref-missing .reference-caption::before {
+  content: "🖼";
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+  opacity: 0.6;
+}
+
+.reference-more { margin-top: 2rem; text-align: center; }
+
+@media (max-width: 640px) {
+  .reference-grid { columns: 1 100%; }
+}
+
+/* ---------- Kontakt ---------- */
+
+#kontakt {
+  border-top: 1px solid var(--line);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-info {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.contact-info-item {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.2rem;
+}
+
+.contact-info-item h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.contact-info-item p { margin: 0; color: rgba(255, 255, 255, 0.85); }
+.contact-info-item a { color: #fff; }
+.contact-info-item a:hover { color: var(--accent); }
+
+.contact-form {
+  display: grid;
+  gap: 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.8rem;
+}
+
+.contact-form label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.96rem;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.contact-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.contact-form input[type="file"] {
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+.contact-status {
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.contact-status.ok { color: #7ee787; }
+.contact-status.err { color: #ff8a8a; }
+
+@media (max-width: 860px) {
+  .contact-layout { grid-template-columns: 1fr; }
+  .contact-form-row { grid-template-columns: 1fr; }
+}

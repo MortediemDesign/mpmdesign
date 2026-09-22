@@ -24,3 +24,27 @@ Statický web připravený pro **GitHub Pages**.
 - `portfolio.html` – portfolio
 - `kontakt.html` – kontakt
 - `eshop.html` – příprava na budoucí e-shop
+- `ebook.html` – prodejní stránka e-booku o Vectricu
+
+## Hlavní stránka (index.html)
+
+Hlavní stránka má vlastní tmavé schéma (`assets/css/home.css`) a
+animace (`assets/js/home*.js`), postavené kolem myšlenky "ze
+surového materiálu hotový výrobek". Sekce po sobě: Hero (CNC
+frézuje logo), Služby (horizontální scroll), upoutávka na e-book,
+Konfigurátory, Reference a Kontakt. Animace běží přes GSAP +
+ScrollTrigger + MotionPathPlugin (cdnjs) a plynulý scroll přes Lenis
+(jsDelivr); vše respektuje `prefers-reduced-motion` a je zjednodušené
+na mobilu.
+
+**Co je potřeba doplnit ručně:**
+- **Reference** – nahrajte fotky do `assets/reference/` a upravte
+  pole `REFERENCE_ITEMS` v `assets/js/home-reference.js` (viz
+  `assets/reference/README.md`). Dokud tam fotky nejsou, karty se
+  zobrazí jako čitelný placeholder.
+- **Kontaktní formulář** – vytvořte formulář na formspree.io a
+  vložte jeho endpoint do konstanty `FORMSPREE_ENDPOINT` na začátku
+  `assets/js/home-contact.js`.
+- **Hero animace ze snímků z Blenderu** (volitelné) – viz
+  `assets/hero-frames/README.md`. Dokud tam snímky nejsou, běží
+  výchozí SVG verze (fréza kreslí skutečné logo).
