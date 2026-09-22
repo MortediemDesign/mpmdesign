@@ -1,0 +1,408 @@
+/* Podstránka /ebook/ – prodejní stránka e-booku o Vectricu.
+   Vlastní tmavé navy/oranžové schéma, načítá se navíc k assets/css/styles.css
+   a přepisuje jen proměnné pro tuto stránku (ostatní stránky nejsou dotčené). */
+
+body.ebook-page {
+  --bg: #0a1220;
+  --navy: #1B4B9B;
+  --navy-deep: #0e2c5c;
+  --accent: #F5921E;
+  --panel: rgba(27, 75, 155, 0.18);
+  background:
+    radial-gradient(1100px 520px at 15% -10%, rgba(27, 75, 155, 0.45), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(245, 146, 30, 0.12), transparent 55%),
+    var(--bg);
+}
+
+body.ebook-page header {
+  background: rgba(10, 18, 32, 0.92);
+  border-bottom: 1px solid rgba(27, 75, 155, 0.5);
+}
+
+body.ebook-page .dropdown-menu {
+  background: #0e1a30;
+}
+
+/* ---------- Obecné prvky stránky ---------- */
+
+.ebook-eyebrow {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.ebook-hero {
+  padding: 3.2rem 0 2.5rem;
+  display: grid;
+  gap: 1rem;
+  max-width: 46rem;
+}
+
+.ebook-hero h1 {
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  line-height: 1.12;
+  margin: 0;
+}
+
+.ebook-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 42rem;
+  margin: 0;
+}
+
+.ebook-price-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.ebook-price {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.ebook-price small {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 0.3rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid var(--accent);
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #1a1102;
+}
+
+.btn-primary:hover {
+  color: #1a1102;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(245, 146, 30, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: rgba(245, 146, 30, 0.12);
+  transform: translateY(-2px);
+}
+
+.ebook-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Sekce ---------- */
+
+.ebook-section {
+  padding: 2.6rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ebook-section h2 {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  margin: 0 0 1.5rem;
+}
+
+.ebook-section .section-lead {
+  max-width: 56ch;
+  color: rgba(255, 255, 255, 0.78);
+  margin: -0.8rem 0 1.6rem;
+}
+
+/* ---------- 3D kniha (scroll animace) ---------- */
+
+.book-scene {
+  perspective: 1600px;
+  padding: 2rem 0 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.book {
+  position: relative;
+  width: min(280px, 62vw);
+  height: min(380px, 84vw);
+  transform-style: preserve-3d;
+  transform: rotateY(-12deg) rotateX(4deg);
+}
+
+.book-back,
+.book-page,
+.book-cover-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px 10px 10px 4px;
+  transform-origin: left center;
+  backface-visibility: hidden;
+}
+
+.book-back {
+  background: linear-gradient(135deg, var(--navy-deep), var(--navy));
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+  transform: translateZ(-6px);
+}
+
+.book-page {
+  background: #f4efe4;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.book-page1 { transform: translateZ(-2px) rotateY(0deg); }
+.book-page2 { transform: translateZ(0px) rotateY(0deg); }
+.book-page3 { transform: translateZ(2px) rotateY(0deg); }
+
+.book-cover-front {
+  background: linear-gradient(155deg, var(--navy), #123a7a);
+  border: 1px solid rgba(245, 146, 30, 0.35);
+  box-shadow: 0 26px 50px rgba(0, 0, 0, 0.55);
+  transform: translateZ(4px) rotateY(0deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem;
+}
+
+.book-cover-title {
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.25;
+  font-size: 1.15rem;
+  letter-spacing: 0.03em;
+}
+
+.book-cover-title .accent {
+  display: block;
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  margin-top: 0.5rem;
+}
+
+.book-content {
+  position: absolute;
+  inset: 8% 10%;
+  transform: translateZ(3px);
+  opacity: 0;
+  color: #1c1c1c;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.book-content strong {
+  display: block;
+  color: var(--navy-deep);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.book-content ol {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.book-content li { margin-bottom: 0.25rem; }
+
+.book-hint {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Statická/zjednodušená varianta – prefers-reduced-motion a stránky bez JS podpory animace */
+.book-static .book {
+  transform: rotateY(-18deg) rotateX(3deg);
+}
+
+.book-static .book-cover-front {
+  transform: translateZ(4px) rotateY(-55deg);
+}
+
+.book-static .book-page1 { transform: translateZ(-2px) rotateY(-42deg); }
+.book-static .book-page2 { transform: translateZ(0px) rotateY(-30deg); }
+.book-static .book-page3 { transform: translateZ(2px) rotateY(-18deg); }
+
+.book-static .book-content { opacity: 1; }
+
+/* ---------- Pro koho / co se naučíte ---------- */
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.benefit-card {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 1.2rem;
+}
+
+.benefit-card .icon {
+  color: var(--accent);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Seznam kapitol ---------- */
+
+.chapter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.chapter-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+}
+
+.chapter-num {
+  flex: 0 0 auto;
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 0.95rem;
+  min-width: 2ch;
+}
+
+.chapter-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- Ukázka zdarma ---------- */
+
+.sample-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  background: linear-gradient(120deg, rgba(27, 75, 155, 0.35), rgba(245, 146, 30, 0.12));
+  border: 1px solid rgba(245, 146, 30, 0.4);
+  border-radius: 16px;
+  padding: 1.6rem;
+}
+
+.sample-box p { margin: 0.3rem 0 0; color: rgba(255, 255, 255, 0.78); max-width: 46ch; }
+
+/* ---------- O autorovi ---------- */
+
+.author-box {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.author-badge {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.author-box p { margin: 0.4rem 0 0; color: rgba(255, 255, 255, 0.8); max-width: 62ch; }
+
+/* ---------- FAQ ---------- */
+
+.faq-item {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: var(--panel);
+  margin-bottom: 0.7rem;
+  overflow: hidden;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  padding: 1rem 1.2rem;
+  font-weight: 700;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: "+";
+  color: var(--accent);
+  font-size: 1.3rem;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.faq-item[open] summary::after { content: "−"; }
+
+.faq-item .faq-answer {
+  padding: 0 1.2rem 1.1rem;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+}
+
+/* ---------- Opakovaná výzva ---------- */
+
+.cta-repeat {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.cta-repeat h2 { margin: 0 0 0.4rem; }
+.cta-repeat p { margin: 0 0 1.4rem; color: rgba(255, 255, 255, 0.75); }
+
+/* ---------- Mobil: zjednodušení ---------- */
+
+@media (max-width: 640px) {
+  .book { height: min(340px, 78vw); }
+  .book-content { font-size: 0.7rem; }
+  .sample-box { flex-direction: column; align-items: flex-start; }
+}
