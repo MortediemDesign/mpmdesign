@@ -1,0 +1,356 @@
+/* ============================================================
+   MPMDESIGN – hlavní stránka (redesign)
+   Tmavé industriální schéma + Space Grotesk. Načítá se navíc
+   k assets/css/styles.css a platí jen pro body.home-page –
+   ostatní stránky webu tento soubor vůbec nenačítají, takže
+   zůstávají beze změny.
+   ============================================================ */
+
+body.home-page {
+  --navy: #1B4B9B;
+  --navy-deep: #0a1a3d;
+  --accent: #F5921E;
+  --bg: #05070c;
+  --panel: rgba(27, 75, 155, 0.16);
+  --line: rgba(255, 255, 255, 0.12);
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+body.home-page * { box-sizing: border-box; }
+
+/* Sekce, které GSAP ještě neinicializoval (nenačetlo se JS / pomalá
+   síť), musí vypadat hotově, ne rozbitě – schovává je až JS těsně
+   před spuštěním animace přidáním třídy na <html>. */
+html.js-ready body.home-page .reveal-on-init { opacity: 1; }
+
+body.home-page section { padding: 0; }
+
+body.home-page .section-inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 5rem 0;
+}
+
+body.home-page h1, body.home-page h2, body.home-page h3 {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+body.home-page .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+body.home-page .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--accent);
+}
+
+body.home-page .section-title {
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  margin: 0.6rem 0 0.8rem;
+}
+
+body.home-page .section-lead {
+  max-width: 60ch;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 2.4rem;
+  line-height: 1.6;
+}
+
+body.home-page .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+body.home-page .btn-primary { background: var(--accent); color: #16110a; }
+
+body.home-page .btn-primary:hover {
+  color: #16110a;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(245, 146, 30, 0.35);
+}
+
+body.home-page .btn-ghost:hover {
+  color: #fff;
+  background: rgba(245, 146, 30, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ---------- Hlavička / navigace ---------- */
+
+body.home-page header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(5, 7, 12, 0.88);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+
+body.home-page .nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  position: relative;
+}
+
+body.home-page .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+body.home-page .brand img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 9px;
+  padding: 5px;
+}
+
+body.home-page .home-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.6rem;
+  padding: 0;
+  margin: 0;
+}
+
+body.home-page .home-nav a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+body.home-page .home-nav a:hover { color: var(--accent); }
+
+body.home-page .nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+}
+
+body.home-page .nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: #fff;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+body.home-page .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.home-page .nav-toggle.open span:nth-child(2) { opacity: 0; }
+body.home-page .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+body.home-page .mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  border-top: 0 solid var(--line);
+  transition: max-height 0.3s ease;
+  background: rgba(5, 7, 12, 0.98);
+}
+
+body.home-page .mobile-nav.open {
+  max-height: 70vh;
+  overflow-y: auto;
+  border-top-width: 1px;
+}
+
+body.home-page .mobile-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 1.2rem 5%;
+  display: grid;
+  gap: 0.9rem;
+}
+
+body.home-page .mobile-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+body.home-page .mobile-nav-secondary {
+  padding-top: 0 !important;
+  border-top: 1px solid var(--line);
+  margin-top: 0.4rem;
+}
+
+body.home-page .mobile-nav-secondary a {
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 860px) {
+  body.home-page .home-nav { display: none; }
+  body.home-page .nav-toggle { display: flex; }
+}
+
+/* ---------- Hero: CNC frézuje logo ---------- */
+
+#hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(27, 75, 155, 0.35), transparent 60%),
+    radial-gradient(700px 420px at 85% 90%, rgba(245, 146, 30, 0.1), transparent 55%),
+    var(--bg);
+}
+
+.hero-inner {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 6rem 0 3rem;
+  display: grid;
+  gap: 2rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.hero-stage {
+  position: relative;
+  width: min(360px, 70vw);
+  aspect-ratio: 1555.42 / 1608.56;
+}
+
+.hero-svg, .hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-canvas { pointer-events: none; }
+
+.hero-svg path {
+  fill: transparent;
+  stroke: var(--accent);
+  stroke-width: 6px;
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-svg path.hero-path-navy { stroke: #6f93d6; }
+
+.hero-spindle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 14px 3px rgba(245, 146, 30, 0.85);
+  opacity: 0;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.hero-copy h1 {
+  font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.hero-copy h1 .accent { color: var(--accent); }
+
+.hero-copy p {
+  max-width: 52ch;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Statická varianta (prefers-reduced-motion nebo bez GSAP): logo je
+   rovnou hotové, žádné piny ani částice. */
+html.motion-reduced .hero-svg path,
+html.no-gsap .hero-svg path {
+  stroke: transparent;
+}
+
+html.motion-reduced .hero-copy,
+html.no-gsap .hero-copy {
+  opacity: 1;
+  transform: none;
+}
+
+html.motion-reduced .hero-spindle,
+html.no-gsap .hero-spindle,
+html.motion-reduced .hero-scroll-hint,
+html.no-gsap .hero-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .hero-inner { padding: 4rem 0 2.5rem; }
+  .hero-stage { width: min(280px, 62vw); }
+}
