@@ -693,3 +693,198 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* ---------- Reference: masonry galerie ---------- */
+
+#reference {
+  border-top: 1px solid var(--line);
+}
+
+.reference-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 2.2rem;
+}
+
+.reference-head .section-lead { margin-bottom: 0; }
+
+.reference-grid {
+  columns: 3 260px;
+  column-gap: 1.1rem;
+}
+
+.reference-grid figure {
+  break-inside: avoid;
+  margin: 0 0 1.1rem;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  cursor: zoom-in;
+}
+
+.reference-grid img {
+  width: 100%;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.reference-grid figure:hover img { transform: scale(1.06); }
+
+.reference-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.8rem;
+  background: linear-gradient(0deg, rgba(5, 7, 12, 0.92), transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.reference-grid figure:hover .reference-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reference-caption strong { display: block; font-size: 0.92rem; }
+.reference-caption span { display: block; font-size: 0.78rem; color: rgba(255, 255, 255, 0.7); }
+
+/* Dokud reálná fotka v assets/reference/ chybí, ukážeme čitelný placeholder
+   místo rozbité ikony prohlížeče. */
+.reference-grid figure.ref-missing {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+}
+
+.reference-grid figure.ref-missing img { display: none; }
+
+.reference-grid figure.ref-missing .reference-caption {
+  position: static;
+  opacity: 1;
+  transform: none;
+  background: none;
+  text-align: center;
+  padding: 1.4rem 1rem;
+}
+
+.reference-grid figure.ref-missing .reference-caption::before {
+  content: "🖼";
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+  opacity: 0.6;
+}
+
+.reference-more { margin-top: 2rem; text-align: center; }
+
+@media (max-width: 640px) {
+  .reference-grid { columns: 1 100%; }
+}
+
+/* ---------- Kontakt ---------- */
+
+#kontakt {
+  border-top: 1px solid var(--line);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-info {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.contact-info-item {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.2rem;
+}
+
+.contact-info-item h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.contact-info-item p { margin: 0; color: rgba(255, 255, 255, 0.85); }
+.contact-info-item a { color: #fff; }
+.contact-info-item a:hover { color: var(--accent); }
+
+.contact-form {
+  display: grid;
+  gap: 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.8rem;
+}
+
+.contact-form label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.96rem;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.contact-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.contact-form input[type="file"] {
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+.contact-status {
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.contact-status.ok { color: #7ee787; }
+.contact-status.err { color: #ff8a8a; }
+
+@media (max-width: 860px) {
+  .contact-layout { grid-template-columns: 1fr; }
+  .contact-form-row { grid-template-columns: 1fr; }
+}

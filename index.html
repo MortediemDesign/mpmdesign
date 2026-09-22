@@ -28,6 +28,8 @@
   <script src="assets/js/home.js" defer></script>
   <script src="assets/js/home-hero.js" defer></script>
   <script src="assets/js/home-services.js" defer></script>
+  <script src="assets/js/home-reference.js" defer></script>
+  <script src="assets/js/home-contact.js" defer></script>
 </head>
 <body class="home-page">
   <header>
@@ -280,7 +282,104 @@
       </div>
     </section>
 
+    <!-- FÁZE 5: Reference -->
+    <section id="reference">
+      <div class="section-inner">
+        <div class="reference-head">
+          <div>
+            <span class="eyebrow">Co jsme vyrobili</span>
+            <h2 class="section-title">Reference</h2>
+            <p class="section-lead">Výběr z realizací – kompletní portfolio se všemi fotkami a filtrováním najdete na samostatné stránce.</p>
+          </div>
+        </div>
+
+        <div class="reference-grid" id="referenceGrid" aria-live="polite"></div>
+
+        <div class="reference-more">
+          <a href="portfolio.html" class="btn btn-ghost">Zobrazit celé portfolio</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FÁZE 5: Kontakt -->
+    <section id="kontakt">
+      <div class="section-inner">
+        <span class="eyebrow">Máte poptávku?</span>
+        <h2 class="section-title">Kontakt</h2>
+        <p class="section-lead">Pošlete poptávku a připravím vám cenovou nabídku i termín realizace.</p>
+
+        <div class="contact-layout">
+          <div class="contact-info">
+            <div class="contact-info-item">
+              <h3>E-mail</h3>
+              <p><a href="mailto:mpmdesign@outlook.cz">mpmdesign@outlook.cz</a></p>
+            </div>
+            <div class="contact-info-item">
+              <h3>IČO</h3>
+              <p>24859931</p>
+            </div>
+            <div class="contact-info-item">
+              <h3>Lokalita</h3>
+              <p>Ostrov u Karlových Varů</p>
+            </div>
+            <div class="contact-info-item">
+              <h3>Sociální sítě</h3>
+              <p><a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">Instagram</a> · <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></p>
+            </div>
+          </div>
+
+          <form class="contact-form" id="contactForm">
+            <div class="contact-form-row">
+              <div>
+                <label for="name">Jméno a příjmení *</label>
+                <input type="text" id="name" name="name" required placeholder="Jan Novák">
+              </div>
+              <div>
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" required placeholder="vas@email.cz">
+              </div>
+            </div>
+            <div class="contact-form-row">
+              <div>
+                <label for="phone">Telefon</label>
+                <input type="tel" id="phone" name="phone" placeholder="+420 …">
+              </div>
+              <div>
+                <label for="service">Typ služby *</label>
+                <select id="service" name="service" required>
+                  <option value="">Vyberte službu…</option>
+                  <option value="cnc">CNC frézování</option>
+                  <option value="3d-tisk">3D tisk</option>
+                  <option value="laser">Laserové gravírování</option>
+                  <option value="polepy">Polepy a reklamní grafika</option>
+                  <option value="samolepky">Samolepky</option>
+                  <option value="dtf">DTF potisk textilu</option>
+                  <option value="web">Tvorba webu</option>
+                  <option value="ostatni">Něco jiného</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="message">Popis projektu / vaše představa *</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Rád bych si nechal vyrobit… (nezapomeňte uvést počty kusů nebo materiály)"></textarea>
+            </div>
+            <div>
+              <label for="attachment">Příloha (nákres, fotka nebo 3D model)</label>
+              <input type="file" id="attachment" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.stl">
+            </div>
+            <button type="submit" class="btn btn-primary">Odeslat poptávku</button>
+            <p class="contact-status" id="contactStatus"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img">
+  </div>
 
   <footer>
     <div class="container footer-content">
