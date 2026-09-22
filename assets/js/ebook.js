@@ -37,18 +37,20 @@
     }
   });
 
+  // Text s obsahem kapitol leží na ploché .book-spread (nikdy se neotáčí),
+  // takže zůstává čitelný po celou animaci – otáčí se jen deska a dva
+  // prázdné listy, které ji na začátku zakrývají.
   if (isSmallScreen) {
     // Zjednodušená animace pro mobil – jeden plynulý krok místo postupného listování.
-    tl.to('.book', { rotateY: -30, rotateX: 6, duration: 1 })
-      .to('.book-cover-front', { rotateY: -140, duration: 1 }, '<0.1')
-      .to(['.book-page1', '.book-page2', '.book-page3'], { rotateY: -110, duration: 1 }, '<0.1')
-      .to('.book-content', { opacity: 1, duration: 0.6 }, '-=0.4');
+    tl.to('.book', { rotateY: -22, rotateX: 4, duration: 1 })
+      .to('.book-cover-front', { rotateY: -150, duration: 1 }, '<0.1')
+      .to(['.book-page1', '.book-page2'], { rotateY: -115, duration: 1 }, '<0.1')
+      .to('.book-spread', { opacity: 1, duration: 0.6 }, '-=0.4');
   } else {
-    tl.to('.book', { rotateY: -35, rotateX: 8, duration: 1 })
-      .to('.book-cover-front', { rotateY: -150, duration: 1.2 }, '<')
-      .to('.book-page1', { rotateY: -140, duration: 1 }, '-=0.9')
-      .to('.book-page2', { rotateY: -120, duration: 1 }, '-=0.8')
-      .to('.book-page3', { rotateY: -100, duration: 1 }, '-=0.7')
-      .to('.book-content', { opacity: 1, duration: 0.6 }, '-=0.4');
+    tl.to('.book', { rotateY: -28, rotateX: 6, duration: 1 })
+      .to('.book-cover-front', { rotateY: -160, duration: 1.2 }, '<')
+      .to('.book-page1', { rotateY: -135, duration: 1 }, '-=0.9')
+      .to('.book-page2', { rotateY: -115, duration: 1 }, '-=0.8')
+      .to('.book-spread', { opacity: 1, duration: 0.6 }, '-=0.4');
   }
 })();
