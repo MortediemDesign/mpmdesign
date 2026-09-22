@@ -587,3 +587,109 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
   .ebook-teaser-copy p { margin-left: auto; margin-right: auto; }
   .mini-book-wrap { order: -1; }
 }
+
+/* ---------- Konfigurátory: "Vyzkoušej si to" ---------- */
+
+#konfiguratory {
+  border-top: 1px solid var(--line);
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+}
+
+.config-card {
+  position: relative;
+  min-height: 230px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: var(--panel);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.config-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(5, 7, 12, 0.92) 10%, rgba(5, 7, 12, 0.15) 75%);
+}
+
+.config-card:hover, .config-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.config-card-body {
+  position: relative;
+  z-index: 1;
+  padding: 1.4rem;
+}
+
+.config-card-body h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+}
+
+.config-card-body p {
+  margin: 0 0 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 34ch;
+}
+
+.config-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.92rem;
+}
+
+.config-cta svg {
+  transition: transform 0.25s ease;
+}
+
+.config-card:hover .config-cta svg {
+  transform: translateX(4px);
+}
+
+.config-card-soon {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-style: dashed;
+  cursor: default;
+}
+
+.config-card-soon::before { display: none; }
+
+.config-card-soon .config-card-body { padding: 1.6rem; }
+
+.config-card-soon h3 { color: rgba(255, 255, 255, 0.85); }
+
+.config-card-soon p {
+  margin: 0 auto 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.config-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 146, 30, 0.4);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
