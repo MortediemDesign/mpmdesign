@@ -16,7 +16,7 @@
     .calc-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:1.5rem;}
     @media(max-width:900px){.calc-grid{grid-template-columns:1fr;}}
     .out-card{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.3rem;height:fit-content;position:sticky;top:90px;}
-    .result-price{font-size:2rem;font-weight:800;color:var(--accent);margin:0.4rem 0;text-shadow:0 0 8px rgba(255,128,0,0.25);}
+    .result-price{font-size:2rem;font-weight:800;color:var(--accent);margin:0.4rem 0;text-shadow:0 0 8px rgba(245,146,30,0.25);}
     .breakdown-bar{display:flex;height:14px;border-radius:5px;overflow:hidden;margin:1rem 0;border:1px solid rgba(255,255,255,0.1);}
     .bar-seg{height:100%;transition:width 0.25s;}
     .seg-mat{background:#3b82f6;}
@@ -72,6 +72,33 @@
           <li><a class="active" href="kalkulacka.html">Přihlášení</a></li>
         </ul>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li class="nav-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+              Produkty
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a href="tvorba-webu.html">Tvorba webu</a></li>
+            </ul>
+          </li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="ebook.html">E-book</a></li>
+          <li><a href="eshop.html">E-shop</a></li>
+          <li><a class="active" href="kalkulacka.html">Přihlášení</a></li>
+        </ul>
     </div>
   </header>
 
@@ -747,7 +774,7 @@
             .logo-wrap { width: 90px; vertical-align: top; }
             .logo-img { width: 80px; height: 80px; padding: 5px; border: 1px solid #ddd; border-radius: 8px; background: #fff; display: block; object-fit: contain; }
             .company-info { text-align: right; font-size: 12px; line-height: 1.4; color: #555; }
-            .doc-title { font-size: 24px; font-weight: bold; border-bottom: 2px solid #FF8000; padding-bottom: 8px; margin-bottom: 20px; color: #154387; letter-spacing: 0.5px; }
+            .doc-title { font-size: 24px; font-weight: bold; border-bottom: 2px solid #F5921E; padding-bottom: 8px; margin-bottom: 20px; color: #154387; letter-spacing: 0.5px; }
             .party-table { width: 100%; margin-bottom: 30px; border-collapse: collapse; }
             .party-col { width: 50%; vertical-align: top; padding-right: 20px; }
             .party-card { background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 15px; min-height: 120px; }
@@ -755,9 +782,9 @@
             .specs-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border: 1px solid #eaeaea; border-radius: 6px; overflow: hidden; }
             .specs-table td { padding: 10px 15px; border-bottom: 1px solid #eaeaea; vertical-align: top; }
             .specs-table tr:nth-child(even) { background-color: #fafafa; }
-            .price-summary { margin-top: 30px; background: #FFF4E6; border: 1px dashed #FF8000; border-radius: 8px; padding: 20px; text-align: right; }
+            .price-summary { margin-top: 30px; background: #FFF4E6; border: 1px dashed #F5921E; border-radius: 8px; padding: 20px; text-align: right; }
             .price-label { font-size: 14px; color: #555; margin-bottom: 4px; }
-            .price-amount { font-size: 26px; font-weight: 800; color: #FF8000; }
+            .price-amount { font-size: 26px; font-weight: 800; color: #F5921E; }
             .footer-note { text-align: center; margin-top: 50px; font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 15px; }
             @media print {
               body { margin: 0; padding: 20px; }
