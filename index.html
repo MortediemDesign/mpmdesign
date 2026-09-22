@@ -27,6 +27,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
   <script src="assets/js/home.js" defer></script>
   <script src="assets/js/home-hero.js" defer></script>
+  <script src="assets/js/home-services.js" defer></script>
 </head>
 <body class="home-page">
   <header>
@@ -93,6 +94,99 @@
         </div>
 
         <span class="hero-scroll-hint">Rolujte ↓</span>
+      </div>
+    </section>
+
+    <!-- FÁZE 2: Služby – horizontální scroll -->
+    <section id="sluzby">
+      <div class="services-pin">
+        <div class="services-head">
+          <span class="eyebrow">Co umíme</span>
+          <h2 class="section-title">Služby</h2>
+          <p class="section-lead">Kompletní výroba od návrhu po finální produkt. Přizpůsobím se kusovým zakázkám i menším sériím.</p>
+        </div>
+
+        <div class="services-track">
+
+          <article class="service-card" data-service="cnc">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <rect class="svc-mat" x="16" y="18" width="88" height="84" rx="4" />
+              <rect class="cnc-pocket" x="34" y="30" width="52" height="30" rx="2" />
+              <rect class="svc-tool cnc-tool" x="30" y="26" width="8" height="8" />
+            </svg>
+            <h3>CNC frézování</h3>
+            <p>Zakázková výroba dílů z plastů, dřeva i hliníku s důrazem na přesnost a opakovatelnost.</p>
+          </article>
+
+          <article class="service-card" data-service="3d-tisk">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <rect class="svc-mat" x="16" y="18" width="88" height="84" rx="4" />
+              <rect class="svc-fill print-layer" x="30" y="82" width="60" height="8" rx="1" />
+              <rect class="svc-fill print-layer" x="30" y="70" width="60" height="8" rx="1" />
+              <rect class="svc-fill print-layer" x="30" y="58" width="60" height="8" rx="1" />
+              <rect class="svc-fill print-layer" x="30" y="46" width="60" height="8" rx="1" />
+              <rect class="svc-fill print-layer" x="30" y="34" width="60" height="8" rx="1" />
+            </svg>
+            <h3>3D tisk</h3>
+            <p>Funkční prototypy, držáky, díly i designové modely pro domácnosti i firmy.</p>
+          </article>
+
+          <article class="service-card" data-service="laser">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <rect class="svc-mat" x="16" y="30" width="88" height="60" rx="4" />
+              <path class="svc-line laser-path" d="M32 60 L46 44 L60 76 L74 44 L88 60" />
+              <circle class="laser-dot" cx="32" cy="60" r="4" />
+              <circle class="laser-smoke" cx="60" cy="40" r="10" />
+            </svg>
+            <h3>Laserové gravírování</h3>
+            <p>Označení produktů, personalizace dárků, gravírování log a textů na různé materiály.</p>
+          </article>
+
+          <article class="service-card" data-service="polepy">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <path class="svc-line polepy-outline" d="M60 18 C84 18 100 34 100 58 C100 82 84 100 60 100 C36 100 20 82 20 58 C20 34 36 18 60 18 Z" />
+            </svg>
+            <h3>Polepy a reklamní grafika</h3>
+            <p>Polepy na míru pro vozidla, provozovny i propagační akce, včetně návrhu vizuální identity a tiskovin.</p>
+          </article>
+
+          <article class="service-card" data-service="samolepky">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <path class="svc-line sticker-outline" d="M24 40 Q24 24 40 24 L84 24 Q96 24 96 36 L96 80 Q96 96 80 96 L40 96 Q24 96 24 80 Z" />
+              <path class="svc-fill sticker-peel" d="M80 96 L96 96 L96 80 Z" />
+            </svg>
+            <h3>Samolepky</h3>
+            <p>Návrh i tisk samolepek od malých sérií po firemní objednávky, vlastní tvary na míru.</p>
+          </article>
+
+          <article class="service-card" data-service="dtf">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <path class="svc-mat" d="M40 22 L48 16 L60 24 L72 16 L80 22 L96 30 L88 44 L80 40 L80 100 L40 100 L40 40 L32 44 L24 30 Z" />
+              <rect class="svc-fill dtf-motif" x="50" y="52" width="20" height="20" rx="3" />
+              <rect class="dtf-press" x="28" y="18" width="64" height="6" rx="2" />
+            </svg>
+            <h3>DTF potisk textilu</h3>
+            <p>Plnobarevný potisk triček a textilu technologií DTF – odolný, ostrý i na malé série.</p>
+          </article>
+
+          <article class="service-card" data-service="weby">
+            <svg class="service-icon" viewBox="0 0 120 120" aria-hidden="true">
+              <rect class="svc-mat" x="16" y="20" width="88" height="80" rx="6" />
+              <rect class="svc-fill web-line" x="28" y="36" width="50" height="6" rx="2" />
+              <rect class="svc-fill web-line" x="28" y="50" width="64" height="6" rx="2" />
+              <rect class="svc-fill web-line" x="28" y="64" width="40" height="6" rx="2" />
+              <g class="web-browser">
+                <rect class="svc-mat" x="24" y="30" width="72" height="54" rx="4" />
+                <circle class="svc-fill" cx="32" cy="38" r="2.4" />
+                <circle class="svc-fill" cx="40" cy="38" r="2.4" />
+                <rect class="svc-fill-navy" x="30" y="48" width="56" height="28" rx="2" />
+              </g>
+            </svg>
+            <h3>Tvorba webu</h3>
+            <p>Weby na míru pro firmy a živnostníky včetně následné správy, domény a hostingu.</p>
+          </article>
+
+        </div>
       </div>
     </section>
 
