@@ -40,8 +40,11 @@ async function createPost() {
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${generatedArticle.title} | Blog MPMDESIGN</title>
   <link rel="stylesheet" href="../assets/css/styles.css">
+<script src="../assets/js/nav.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
   <style>
     .post-content { max-width: 800px; margin: 2rem auto; line-height: 1.6; }
     .post-content h2, .post-content h3 { margin-top: 2rem; color: var(--accent); }
@@ -52,22 +55,62 @@ async function createPost() {
   <header>
     <div class="container nav-wrap">
       <a class="brand" href="../index.html">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <img src="../logo2.svg" alt="Logo firmy">
         <span>MPMDESIGN</span>
       </a>
       <nav>
         <ul>
           <li><a href="../index.html">Domů</a></li>
           <li><a href="../sluzby.html">Služby</a></li>
-          <li><a href="../portfolio.html">Portfolio</a></li>
+          <li><a href="../portfolio.html">Realizace</a></li>
+          <li class="nav-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+              Konfigurátory
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="../klicenka.html">Klíčenky</a></li>
+              <li><a href="../samolepky.html">Samolepky</a></li>
+              <li><a href="../gravirovani.html">Laserové gravírování</a></li>
+            </ul>
+          </li>
+          <li><a href="../o-nas.html">O nás</a></li>
           <li><a href="../kontakt.html">Kontakt</a></li>
-          <li><a class="active" href="../blog.html">Blog</a></li>
-          <li><a href="../eshop.html">E-shop</a></li>
+          <li><a href="../kontakt.html#formular" class="cta nav-cta">Poptat výrobu</a></li>
         </ul>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+          <li><a href="../index.html">Domů</a></li>
+          <li><a href="../sluzby.html">Služby</a></li>
+          <li><a href="../portfolio.html">Realizace</a></li>
+          <li class="nav-dropdown">
+            <button type="button" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+              Konfigurátory
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="../klicenka.html">Klíčenky</a></li>
+              <li><a href="../samolepky.html">Samolepky</a></li>
+              <li><a href="../gravirovani.html">Laserové gravírování</a></li>
+            </ul>
+          </li>
+          <li><a href="../o-nas.html">O nás</a></li>
+          <li><a href="../kontakt.html">Kontakt</a></li>
+          <li><a href="../kontakt.html#formular" class="cta nav-cta">Poptat výrobu</a></li>
+      </ul>
+      <ul class="mobile-nav-secondary">
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../ebook.html">E-book</a></li>
+        <li><a href="../eshop.html">E-shop</a></li>
+        <li><a href="../tvorba-webu.html">Tvorba webu</a></li>
+      </ul>
     </div>
   </header>
-
   <main class="container post-content">
     <a href="../blog.html" style="text-decoration:none; display: inline-block; margin-bottom: 2rem;" class="cta">&larr; Zpět na články</a>
     <h1 style="color: var(--accent);">${generatedArticle.title}</h1>
@@ -77,7 +120,6 @@ async function createPost() {
       ${generatedArticle.content}
     </div>
   </main>
-
   <footer>
     <div class="container footer-content">
       <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy</div>
@@ -91,6 +133,9 @@ async function createPost() {
           Facebook
         </a>
       </div>
+    </div>
+    <div class="container footer-links">
+      <a href="../blog.html">Blog</a> &middot; <a href="../ebook.html">E-book</a> &middot; <a href="../eshop.html">E-shop</a> &middot; <a href="../tvorba-webu.html">Tvorba webu</a>
     </div>
     <div class="container legal-bar">
       <span>Miguel Pérez Morales · IČO 24859931 · Lidická 1018, 363 01 Ostrov · zapsán v živnostenském rejstříku vedeném Městským úřadem Ostrov</span>

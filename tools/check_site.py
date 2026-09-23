@@ -72,6 +72,32 @@ def check_nav_consistency() -> None:
             raise SystemExit(f'{page}: expected active {expected_active}, got {active}')
 
 
+def check_blog_articles() -> None:
+    # Statické články v blog/ mají stejnou navigaci jako zbytek webu, jen
+    # s prefixem ../ – a všechny jejich relativní odkazy musí existovat.
+    expected = [
+        'index.html', 'sluzby.html', 'portfolio.html', 'klicenka.html',
+        'samolepky.html', 'gravirovani.html', 'o-nas.html', 'kontakt.html',
+    ]
+    for article in sorted(Path('blog').glob('*.html')):
+        text = article.read_text(encoding='utf-8')
+        if 'name="viewport"' not in text:
+            raise SystemExit(f'{article}: missing viewport meta')
+        m = re.search(r'<nav>.*?</nav>', text, re.S)
+        if not m:
+            raise SystemExit(f'{article}: missing <nav>')
+        hrefs = [h.removeprefix('../') for h in re.findall(r'href="([^"]+)"', m.group(0))]
+        hrefs = [h for h in hrefs if h.endswith('.html')]
+        if hrefs != expected:
+            raise SystemExit(f'{article}: nav mismatch {hrefs} != {expected}')
+        for ref in re.findall(r'(?:href|src)="([^"]+)"', text):
+            if ref.startswith(('http', '#', 'mailto:', 'tel:')):
+                continue
+            target = (article.parent / ref.split('?')[0].split('#')[0]).resolve()
+            if not target.exists():
+                raise SystemExit(f'{article}: missing target {ref}')
+
+
 def check_home_nav() -> None:
     text = Path('index.html').read_text(encoding='utf-8')
     m = re.search(r'<nav class="home-nav".*?</nav>', text, re.S)
@@ -93,5 +119,6 @@ if __name__ == '__main__':
     check_files_exist()
     check_json()
     check_nav_consistency()
+    check_blog_articles()
     check_home_nav()
     print('Site checks passed.')
