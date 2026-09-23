@@ -421,22 +421,23 @@ html.no-gsap .hero-scroll-hint {
 .svc-fill-navy { fill: var(--navy); }
 .svc-ghost { fill: none; stroke: #6f93d6; stroke-width: 3; stroke-linecap: round; }
 
-/* CNC */
-.cnc-pocket { fill: rgba(245, 146, 30, 0.28); stroke: var(--accent); stroke-width: 2; transform-origin: 60px 30px; transform: scaleY(0); }
+/* Výchozí "schovaný" stav (scale 0 + transformOrigin) animovaných částí
+   nastavuje home-services.js přes gsap.set(). V CSS záměrně není žádný
+   transform ani transform-origin – GSAP by origin z CSS zapekl do matice
+   a prohlížeč by ho aplikoval podruhé, takže by díly ujely mimo ikonu. */
 
-/* 3D tisk */
-.print-layer { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+/* CNC */
+.cnc-pocket { fill: rgba(245, 146, 30, 0.28); stroke: var(--accent); stroke-width: 2; }
 
 /* Laser */
 .laser-dot { fill: var(--accent); filter: drop-shadow(0 0 6px rgba(245, 146, 30, 0.9)); opacity: 0; }
 .laser-smoke { fill: rgba(255, 255, 255, 0.35); opacity: 0; }
 
 /* DTF */
-.dtf-press { fill: rgba(255, 255, 255, 0.5); transform-box: fill-box; transform-origin: 50% 0%; }
-.dtf-motif { opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; transform: scale(0.6); }
+.dtf-press { fill: rgba(255, 255, 255, 0.5); }
+.dtf-motif { opacity: 0; }
 
 /* Weby */
-.web-line { transform-box: fill-box; transform-origin: 0% 50%; transform: scaleX(0); }
 .web-browser { opacity: 0; }
 
 .reveal-once { opacity: 1; }
@@ -455,16 +456,8 @@ html.no-gsap .hero-scroll-hint {
 
 /* Statická varianta (prefers-reduced-motion nebo bez GSAP): ikony rovnou
    v "hotovém" stavu, bez pinu a bez pohyblivých detailů. */
-html.motion-reduced .cnc-pocket, html.no-gsap .cnc-pocket,
-html.motion-reduced .print-layer, html.no-gsap .print-layer {
-  transform: scaleY(1);
-}
 html.motion-reduced .dtf-motif, html.no-gsap .dtf-motif {
   opacity: 1;
-  transform: scale(1);
-}
-html.motion-reduced .web-line, html.no-gsap .web-line {
-  transform: scaleX(1);
 }
 html.motion-reduced .laser-dot, html.no-gsap .laser-dot,
 html.motion-reduced .laser-smoke, html.no-gsap .laser-smoke,

@@ -597,12 +597,18 @@ footer {
 
 .mobile-nav a.active { color: var(--accent); }
 
-/* Uvnitř mobilního panelu chceme rozbalenou nabídku Produkty rovnou
-   vidět, ne skrytou pod hover menu určeným pro desktop. */
+/* Uvnitř mobilního panelu chceme rozbalenou nabídku rovnou vidět, ne
+   skrytou pod hover menu určeným pro desktop. Selektory musí přebít
+   .nav-dropdown.open/.nav-dropdown:hover .dropdown-menu, jinak po ťuknutí
+   na položku zůstane desktopový translate(-50%) a menu ujede doleva. */
 .mobile-nav .nav-dropdown::after { display: none; }
 
-.mobile-nav .dropdown-menu {
+.mobile-nav .dropdown-menu,
+.mobile-nav .nav-dropdown:hover .dropdown-menu,
+.mobile-nav .nav-dropdown.open .dropdown-menu {
   position: static;
+  left: auto;
+  min-width: 0;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -611,6 +617,7 @@ footer {
   background: rgba(0,0,0,0.22);
   margin-top: 0.6rem;
   padding: 0.4rem;
+  gap: 0.1rem;
 }
 
 .mobile-nav .dropdown-menu li { margin: 0; }
