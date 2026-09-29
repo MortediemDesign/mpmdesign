@@ -18,8 +18,15 @@
   var PRODUCT_NAMES = {
     klicenka: "Klíčenka",
     samolepky: "Samolepky",
-    gravirovani: "Laserové gravírování"
+    gravirovani: "Laserové gravírování",
+    dtf: "DTF potisk textilu",
+    polepy: "Polepy a reklamní grafika",
+    cnc: "CNC frézování"
   };
+
+  // Vercel odmítne požadavek nad ~4,5 MB (FUNCTION_PAYLOAD_TOO_LARGE) ještě
+  // před spuštěním funkce; necháváme rezervu na hlavičky.
+  var MAX_BODY_BYTES = 4300000;
 
   // Chyba nastaveni webu - opakovani pokusu zakaznikovi nepomuze.
   function setupError(msg) {
@@ -92,10 +99,17 @@
 
     // režim "vercel" - vlastní endpoint, JSON
     if (!c.orderEndpoint) throw setupError("Objednávkový formulář se právě dokončuje.");
+    var body = JSON.stringify(order);
+    if (new Blob([body]).size > MAX_BODY_BYTES) {
+      throw setupError(
+        "Přiložené soubory jsou dohromady moc velké na odeslání přes web (limit je zhruba 3 MB). " +
+        "Pošlete je prosím e-mailem na " + (c.orderEmail || "náš e-mail") + " nebo vložte odkaz na úložiště."
+      );
+    }
     var r2 = await fetch(c.orderEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order)
+      body: body
     });
     if (!r2.ok) {
       var j2 = await r2.json().catch(function () { return {}; });

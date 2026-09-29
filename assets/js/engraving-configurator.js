@@ -494,8 +494,10 @@
   $("photo-input").addEventListener("change", function (e) {
     var f = e.target.files && e.target.files[0];
     if (!f) return;
-    if (f.size > 4 * 1024 * 1024) {
-      setStatus("Fotka je větší než 4 MB, zkus prosím menší soubor.", "err");
+    // Fotka se vkládá do SVG a to se znovu kóduje do base64 (~1,8× víc),
+    // Vercel přijme požadavek jen do ~4,5 MB - víc než 2 MB se neodešle.
+    if (f.size > 2 * 1024 * 1024) {
+      setStatus("Fotka je větší než 2 MB. Zkus prosím menší soubor, nebo ji pošli e-mailem na mpmdesign@outlook.cz.", "err");
       return;
     }
     var fr = new FileReader();
