@@ -663,37 +663,6 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
   transform: translateX(4px);
 }
 
-.config-card-soon {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-style: dashed;
-  cursor: default;
-}
-
-.config-card-soon::before { display: none; }
-
-.config-card-soon .config-card-body { padding: 1.6rem; }
-
-.config-card-soon h3 { color: rgba(255, 255, 255, 0.85); }
-
-.config-card-soon p {
-  margin: 0 auto 0.9rem;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.config-badge {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(245, 146, 30, 0.4);
-  color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 /* ---------- Reference: masonry galerie ---------- */
 
 #reference {

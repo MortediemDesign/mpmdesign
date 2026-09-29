@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polepy aut, výloh a cedulí – orientační cena | MPMDESIGN</title>
+  <meta name="description" content="Orientační cena polepu vozidla, výlohy, cedule nebo stěny: vyberte rozsah, materiál a montáž, přiložte fotky a pošlete poptávku. Ostrov u Karlových Varů.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Polepy aut, výloh a cedulí – orientační cena | MPMDESIGN">
+  <meta property="og:description" content="Orientační cena polepu vozidla, výlohy, cedule nebo stěny: vyberte rozsah, materiál a montáž, přiložte fotky a pošlete poptávku. Ostrov u Karlových Varů.">
+  <meta property="og:image" content="https://www.mpmdesign.cz/logo2.svg">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:url" content="https://www.mpmdesign.cz/polepy.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/configurator.css">
+  <script src="assets/js/nav.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <img src="logo2.svg" alt="Logo firmy">
+        <span>MPMDESIGN</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li><a href="portfolio.html">Realizace</a></li>
+          <li class="nav-dropdown active">
+            <button type="button" class="dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
+              Konfigurátory
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a href="dtf.html">DTF potisk textilu</a></li>
+              <li><a class="active" href="polepy.html">Polepy</a></li>
+              <li><a href="cnc.html">CNC frézování</a></li>
+            </ul>
+          </li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="kontakt.html#formular" class="cta nav-cta">Poptat výrobu</a></li>
+        </ul>
+      </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="sluzby.html">Služby</a></li>
+          <li><a href="portfolio.html">Realizace</a></li>
+          <li class="nav-dropdown active">
+            <button type="button" class="dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
+              Konfigurátory
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="klicenka.html">Klíčenky</a></li>
+              <li><a href="samolepky.html">Samolepky</a></li>
+              <li><a href="gravirovani.html">Laserové gravírování</a></li>
+              <li><a href="dtf.html">DTF potisk textilu</a></li>
+              <li><a class="active" href="polepy.html">Polepy</a></li>
+              <li><a href="cnc.html">CNC frézování</a></li>
+            </ul>
+          </li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="kontakt.html#formular" class="cta nav-cta">Poptat výrobu</a></li>
+      </ul>
+      <ul class="mobile-nav-secondary">
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="ebook.html">E-book</a></li>
+        <li><a href="eshop.html">E-shop</a></li>
+        <li><a href="tvorba-webu.html">Tvorba webu</a></li>
+      </ul>
+    </div>
+  </header>
+  <main class="container">
+    <section class="cfg-intro">
+      <h1>Polepy a <span class="accent">reklamní grafika</span></h1>
+      <p>Zjistěte orientační cenu polepu vozidla, výlohy, cedule nebo stěny. Výsledkem je rozpětí
+        od–do – konečnou cenu ovlivní tvar a stav povrchu, proto závaznou nabídku pošlu po prohlídce
+        nebo z fotek.</p>
+    </section>
+
+    <div class="cfg-wrap">
+      <div class="cfg-viewer">
+        <div class="cfg-stage" id="preview"></div>
+        <p class="hint" id="preview-hint">Schéma – vyznačená plocha je orientační.</p>
+      </div>
+
+      <form class="cfg-panel" id="polepy-form" novalidate>
+        <h2>1. Co polepujeme</h2>
+        <label for="typ-select">Typ</label>
+        <select id="typ-select">
+          <option value="vozidlo">Vozidlo</option>
+          <option value="vyloha">Výloha a okna</option>
+          <option value="cedule">Cedule a deska</option>
+          <option value="stena">Stěna</option>
+        </select>
+
+        <div id="vozidlo-wrap">
+          <label for="vuz-select">Typ vozu</label>
+          <select id="vuz-select"></select>
+          <label for="rozsah-select">Rozsah polepu</label>
+          <select id="rozsah-select"></select>
+        </div>
+
+        <div id="plocha-wrap" hidden>
+          <div class="row2">
+            <div>
+              <label for="sirka">Šířka (cm)</label>
+              <input type="number" id="sirka" value="200" min="1" max="2000" step="1" inputmode="numeric">
+            </div>
+            <div>
+              <label for="vyska">Výška (cm)</label>
+              <input type="number" id="vyska" value="150" min="1" max="2000" step="1" inputmode="numeric">
+            </div>
+          </div>
+          <p class="note" id="plocha-note"></p>
+          <p class="note" id="cedule-note" hidden>Cena je za polep. Samotnou desku (PVC, dibond) nacením zvlášť.</p>
+        </div>
+
+        <h2>2. Materiál</h2>
+        <label for="material-select">Fólie</label>
+        <select id="material-select"></select>
+        <label class="check"><input type="checkbox" id="laminace" checked> Laminace – ochrana tisku proti oděru a UV</label>
+        <p class="note" id="material-note"></p>
+
+        <h2>3. Montáž</h2>
+        <label for="montaz-select">Kdo polep nalepí</label>
+        <select id="montaz-select">
+          <option value="u_nas">Montáž u nás v Ostrově</option>
+          <option value="u_zakaznika">Montáž u vás</option>
+          <option value="jen_folie">Jen dodání fólie, nalepím si sám</option>
+        </select>
+        <div id="misto-wrap" hidden>
+          <label for="misto">Místo montáže (obec)</label>
+          <input type="text" id="misto" autocomplete="address-level2">
+          <p class="note">Dojezd mimo Ostrov upřesním podle vzdálenosti, v rozpětí není.</p>
+        </div>
+
+        <h2>4. Grafika a fotky</h2>
+        <label for="grafika-select">Grafika</label>
+        <select id="grafika-select">
+          <option value="mam">Grafiku mám hotovou</option>
+          <option value="navrh">Chci grafiku navrhnout</option>
+        </select>
+        <label for="file-input">Fotky vozidla nebo provozovny, případně grafika (JPG, PNG, PDF, SVG)</label>
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/heic,.pdf,.svg,application/pdf,image/svg+xml" multiple>
+        <ul class="file-list" id="file-list"></ul>
+        <p class="note">Fotky zmenšíme pro odeslání. PDF a SVG pošlete dohromady do 3 MB, větší soubory odkazem.</p>
+        <label for="file-link">Nebo odkaz na soubory (Úschovna, Google Drive…)</label>
+        <input type="url" id="file-link" placeholder="https://" inputmode="url">
+
+        <h2>5. Kontakt</h2>
+        <label for="cust-name">Jméno a příjmení</label>
+        <input type="text" id="cust-name" autocomplete="name">
+        <label for="cust-email">E-mail</label>
+        <input type="email" id="cust-email" autocomplete="email">
+        <label for="cust-phone">Telefon (volitelné)</label>
+        <input type="tel" id="cust-phone" autocomplete="tel">
+        <label for="cust-note">Poznámka (volitelné)</label>
+        <textarea id="cust-note" placeholder="Např. model vozu, text na polep, stav povrchu…"></textarea>
+
+        <div class="price-box" aria-live="polite">
+          <div class="price-row">
+            <span>Orientační cena</span>
+            <span class="price-total" id="price-total">–</span>
+          </div>
+          <p class="price-sub" id="price-detail"></p>
+          <p class="warn bad" id="price-error" hidden></p>
+          <p class="price-why" id="price-why">Konečná cena závisí na tvaru a stavu povrchu. Závaznou nabídku
+            pošlu po prohlídce nebo z fotek.</p>
+          <p class="price-why">Nejsem plátce DPH, ceny jsou konečné.</p>
+        </div>
+
+        <button type="submit" id="send">Odeslat poptávku</button>
+        <div id="status" role="status"></div>
+        <div class="legal">
+          <p>Odesláním poptávky nevzniká žádný závazek. Údaje zpracovávám kvůli přípravě nabídky,
+            podrobnosti v <a href="ochrana-osobnich-udaju.html">ochraně osobních údajů</a>.</p>
+          <p><strong>Zhotovitel:</strong> Miguel Pérez Morales, Lidická 1018, 363 01 Ostrov,
+            mpmdesign@outlook.cz.</p>
+        </div>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">© 2026 MPMDESIGN | CNC výroba • 3D tisk • Gravírování • Polepy • Tvorba webu | <a href="kalkulacka.html" style="opacity: 0.6; font-size: 0.9em;">🔐 Interní sekce</a></div>
+      <div class="social-links">
+        <a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm3.98-10.169a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+      </div>
+    </div>
+    <div class="container footer-links">
+      <a href="blog.html">Blog</a> &middot; <a href="ebook.html">E-book</a> &middot; <a href="eshop.html">E-shop</a> &middot; <a href="tvorba-webu.html">Tvorba webu</a>
+    </div>
+    <div class="container legal-bar">
+      <span>Miguel Pérez Morales · IČO 24859931 · Lidická 1018, 363 01 Ostrov · zapsán v živnostenském rejstříku vedeném Městským úřadem Ostrov</span>
+      <span><a href="obchodni-podminky.html">Obchodní podmínky</a> · <a href="ochrana-osobnich-udaju.html">Ochrana osobních údajů</a></span>
+    </div>
+  </footer>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/order-client.js"></script>
+<script src="assets/js/upload-helpers.js"></script>
+<script src="assets/js/polepy-cenik.js"></script>
+<script src="assets/js/polepy-calc.js"></script>
+<script src="assets/js/polepy-configurator.js"></script>
+</body>
+</html>
