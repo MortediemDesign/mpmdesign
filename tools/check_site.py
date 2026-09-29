@@ -45,12 +45,13 @@ def check_nav_consistency() -> None:
     # index.html má od redesignu vlastní kotva-navigaci (Služby/Konfigurátory/
     # E-book/Reference/Kontakt), viz check_home_nav(). Ostatní stránky sdílí
     # jednotnou (zredukovanou) navigaci: Domů/Služby/Realizace/Konfigurátory
-    # (Klíčenky/Samolepky/Laser)/O nás/Kontakt + CTA "Poptat výrobu". Blog,
+    # (Klíčenky/Samolepky/Laser/DTF/Polepy/CNC)/O nás/Kontakt + CTA "Poptat výrobu". Blog,
     # E-book, E-shop a Tvorba webu jsou odsunuté mimo hlavní menu (jen
     # patička/mobile-nav-secondary) - viz implementation-checklist.md K1.
     expected = [
         'index.html', 'sluzby.html', 'portfolio.html', 'klicenka.html',
-        'samolepky.html', 'gravirovani.html', 'o-nas.html', 'kontakt.html',
+        'samolepky.html', 'gravirovani.html', 'dtf.html', 'polepy.html', 'cnc.html',
+        'o-nas.html', 'kontakt.html',
     ]
     for page in PAGES:
         if page == 'index.html':
@@ -77,7 +78,8 @@ def check_blog_articles() -> None:
     # s prefixem ../ – a všechny jejich relativní odkazy musí existovat.
     expected = [
         'index.html', 'sluzby.html', 'portfolio.html', 'klicenka.html',
-        'samolepky.html', 'gravirovani.html', 'o-nas.html', 'kontakt.html',
+        'samolepky.html', 'gravirovani.html', 'dtf.html', 'polepy.html', 'cnc.html',
+        'o-nas.html', 'kontakt.html',
     ]
     for article in sorted(Path('blog').glob('*.html')):
         text = article.read_text(encoding='utf-8')
