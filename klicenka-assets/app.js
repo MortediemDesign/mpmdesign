@@ -299,12 +299,12 @@ sendBtn.addEventListener("click", async () => {
 
   statusEl.className = "";
   if (!name || !email) {
-    statusEl.textContent = "Vyplň prosím jméno a e-mail.";
+    statusEl.textContent = "Vyplňte prosím jméno a e-mail.";
     statusEl.className = "err";
     return;
   }
   if (!state.text.trim()) {
-    statusEl.textContent = "Napiš prosím text na klíčenku.";
+    statusEl.textContent = "Napište prosím text na klíčenku.";
     statusEl.className = "err";
     return;
   }
@@ -316,7 +316,7 @@ sendBtn.addEventListener("click", async () => {
     const city = document.getElementById("addr-city").value.trim();
     const zip = document.getElementById("addr-zip").value.trim();
     if (!street || !city || !zip) {
-      statusEl.textContent = "Pro doručení vyplň prosím ulici, město i PSČ.";
+      statusEl.textContent = "Pro doručení vyplňte prosím ulici, město i PSČ.";
       statusEl.className = "err";
       return;
     }
@@ -357,12 +357,12 @@ sendBtn.addEventListener("click", async () => {
 
     await window.MPMOrder.sendOrder(payload);
 
-    statusEl.textContent = "Hotovo! Objednávka byla odeslána, ozveme se ti na e-mail.";
+    statusEl.textContent = "Hotovo! Objednávka byla odeslána, ozvu se vám na e-mail.";
     statusEl.className = "ok";
   } catch (err) {
     console.error(err);
     statusEl.textContent = err.setup ? err.message
-      : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkus to prosím znovu.";
+      : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkuste to prosím znovu.";
     statusEl.className = "err";
   } finally {
     sendBtn.disabled = false;

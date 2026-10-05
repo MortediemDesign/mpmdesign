@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kontakt a poptávka výroby | MPMDESIGN</title>
   <meta name="description" content="Poptejte CNC frézování, 3D tisk, laserové gravírování nebo tvorbu webu. Kontakt na MPMDESIGN v Ostrově u Karlových Varů.">
+  <link rel="canonical" href="https://www.mpmdesign.cz/kontakt.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Kontakt a poptávka výroby | MPMDESIGN">
+  <meta property="og:description" content="Poptejte CNC frézování, 3D tisk, laserové gravírování nebo tvorbu webu. Kontakt na MPMDESIGN v Ostrově u Karlových Varů.">
+  <meta property="og:image" content="https://www.mpmdesign.cz/assets/images/og-image.png">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:url" content="https://www.mpmdesign.cz/kontakt.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/nav.js" defer></script>
 <script src="assets/js/reveal.js" defer></script>
@@ -70,7 +80,6 @@
       <ul class="mobile-nav-secondary">
         <li><a href="blog.html">Blog</a></li>
         <li><a href="ebook.html">E-book</a></li>
-        <li><a href="eshop.html">E-shop</a></li>
         <li><a href="tvorba-webu.html">Tvorba webu</a></li>
       </ul>
     </div>
@@ -81,9 +90,9 @@
       <p>Pošlete poptávku a připravím vám cenovou nabídku i termín realizace.</p>
     </section>
     <section class="grid">
-      <article class="card"><h2>E-mail</h2><p>mpmdesign@outlook.cz</p></article>
-      <article class="card"><h2>Telefon</h2><p>+420 720 020 824</p></article>
-      <article class="card"><h2>Instagram/Facebook</h2><p>@mpmdesign.cz / @mpmdesign</p></article>
+      <article class="card"><h2>E-mail</h2><p><a href="mailto:mpmdesign@outlook.cz">mpmdesign@outlook.cz</a></p></article>
+      <article class="card"><h2>Telefon</h2><p><a href="tel:+420720020824">+420 720 020 824</a></p></article>
+      <article class="card"><h2>Instagram a Facebook</h2><p><a href="https://instagram.com/mpmdesign.cz" target="_blank" rel="noopener noreferrer">@mpmdesign.cz</a> · <a href="https://www.facebook.com/share/1AsAUKm6Nn/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></p></article>
       <article class="card"><h2>Rychlá poptávka</h2><p>Pošlete nákres, fotku nebo 3D model a napište požadovaný termín.</p></article>
     </section>
 
@@ -97,6 +106,7 @@
         <input type="hidden" name="_next" value="https://mpmdesign.cz/kontakt.html?success=true#formular">
         <input type="hidden" name="_subject" value="Nová poptávka z webu MPMDESIGN">
         <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="form-group">
           <label for="name">Jméno a příjmení *</label>
@@ -107,21 +117,28 @@
           <input type="email" id="email" name="email" required placeholder="vas@email.cz">
         </div>
         <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="tel" id="phone" name="phone" placeholder="+420 …" autocomplete="tel">
+        </div>
+        <div class="form-group">
           <label for="service">Typ služby *</label>
           <select id="service" name="service" required>
-            <option value="">Vyberte službu...</option>
-            <option value="cnc">CNC Obrábění</option>
-            <option value="3d-tisk">3D Tisk</option>
-            <option value="laser">Laserové Gravírování</option>
-            <option value="polepy">Výroba Polepů</option>
+            <option value="">Vyberte službu…</option>
+            <option value="cnc">CNC frézování</option>
+            <option value="3d-tisk">3D tisk</option>
+            <option value="laser">Laserové gravírování</option>
+            <option value="polepy">Polepy a reklamní grafika</option>
+            <option value="samolepky">Samolepky</option>
+            <option value="dtf">DTF potisk textilu</option>
             <option value="grafika">Grafické práce</option>
             <option value="web">Tvorba webu</option>
+            <option value="ebook">E-book Vectric</option>
             <option value="ostatni">Něco jiného</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="message">Popis projektu / Vaše představa *</label>
-          <textarea id="message" name="message" rows="5" required placeholder="Rád bych si nechal vyrobit... (Nezapomeňte uvést počty kusů nebo materiály)"></textarea>
+          <label for="message">Popis projektu / vaše představa *</label>
+          <textarea id="message" name="message" rows="5" required placeholder="Rád bych si nechal vyrobit… (nezapomeňte uvést počty kusů nebo materiály)"></textarea>
         </div>
         <div class="form-group">
           <label for="attachment">Příloha (3D model STL, PDF nákres nebo fotografie)</label>
@@ -142,6 +159,10 @@
           if (select) {
             const option = Array.from(select.options).find(opt => opt.value === sluzba);
             if (option) option.selected = true;
+          }
+          const message = document.getElementById('message');
+          if (sluzba === 'ebook' && message && !message.value) {
+            message.value = 'Dobrý den, mám zájem o e-book Vectric CNC Design Software (PDF, 199 Kč).';
           }
         }
         
@@ -166,7 +187,7 @@
       </div>
     </div>
     <div class="container footer-links">
-      <a href="blog.html">Blog</a> &middot; <a href="ebook.html">E-book</a> &middot; <a href="eshop.html">E-shop</a> &middot; <a href="tvorba-webu.html">Tvorba webu</a>
+      <a href="blog.html">Blog</a> &middot; <a href="ebook.html">E-book</a> &middot; <a href="tvorba-webu.html">Tvorba webu</a>
     </div>
     <div class="container legal-bar">
       <span>Miguel Pérez Morales · IČO 24859931 · Lidická 1018, 363 01 Ostrov · zapsán v živnostenském rejstříku vedeném Městským úřadem Ostrov</span>

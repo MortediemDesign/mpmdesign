@@ -225,6 +225,11 @@ nav a.active { color: var(--accent); font-weight: 700; }
   z-index: 1;
 }
 
+/* Karta, která je celá odkazem (sluzby.html) – výzva dole ukazuje, kam vede. */
+.card-link { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
+.card-link .card-cta { margin-top: auto; padding-top: 0.9rem; color: var(--accent); font-weight: 700; font-size: 0.92rem; }
+.card-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 .cta {
   display: inline-block;
   margin-top: 1rem;
@@ -370,6 +375,21 @@ footer {
   padding: 0.8rem;
 }
 
+/* Portfolio: stejně velké dlaždice, fotka vyplní čtverec, pod ní popisek. */
+#portfolioGrid figure { cursor: zoom-in; }
+#portfolioGrid img {
+  aspect-ratio: 1 / 1;
+  height: auto;
+  max-height: none;
+  object-fit: cover;
+  border-radius: 0;
+  transition: transform 0.4s ease;
+}
+#portfolioGrid figure:hover img { transform: scale(1.04); }
+#portfolioGrid figcaption { padding: 0.7rem 0.85rem 0.8rem; position: relative; background: var(--panel); }
+#portfolioGrid figcaption strong { display: block; font-size: 0.92rem; line-height: 1.3; }
+#portfolioGrid figcaption span { display: block; margin-top: 0.15rem; font-size: 0.78rem; color: rgba(255, 255, 255, 0.6); }
+
 .notice {
   border-left: 4px solid var(--accent);
   padding: 0.8rem 1rem;
@@ -422,6 +442,7 @@ footer {
 
 .form-group input[type="text"],
 .form-group input[type="email"],
+.form-group input[type="tel"],
 .form-group select,
 .form-group textarea {
   width: 100%;
@@ -436,6 +457,7 @@ footer {
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
@@ -508,8 +530,10 @@ footer {
 
 .doc-page ul { padding-left: 1.2rem; }
 
+.doc-page .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .doc-page table {
   width: 100%;
+  min-width: 520px;
   border-collapse: collapse;
   margin: 0.8rem 0;
   font-size: 0.92rem;
@@ -666,3 +690,6 @@ footer {
   opacity: 1;
   transform: none;
 }
+
+/* Past na spamboty (FormSubmit _honey) – člověk pole nevidí ani nevyplní. */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

@@ -92,7 +92,7 @@
     // Obrázek se vkládá do SVG a to se znovu kóduje do base64 (~1,8× víc),
     // Vercel přijme požadavek jen do ~4,5 MB - víc než 2 MB se neodešle.
     if (f.size > 2 * 1024 * 1024) {
-      setStatus("Obrázek je větší než 2 MB. Zkus prosím menší soubor, nebo ho pošli e-mailem na mpmdesign@outlook.cz.", "err");
+      setStatus("Obrázek je větší než 2 MB. Zkuste prosím menší soubor, nebo ho pošlete e-mailem na mpmdesign@outlook.cz.", "err");
       return;
     }
     var fr = new FileReader();
@@ -175,7 +175,7 @@
           '" preserveAspectRatio="xMidYMid meet"/>'
         : '<text x="' + wMm / 2 + '" y="' + hMm / 2 + '" text-anchor="middle" ' +
           'dominant-baseline="central" font-family="Arial, sans-serif" font-size="' +
-          (Math.min(wMm, hMm) * 0.09) + '" fill="#9aa5b1">Nahraj obrázek</text>';
+          (Math.min(wMm, hMm) * 0.09) + '" fill="#9aa5b1">Nahrajte obrázek</text>';
       bgEl = shapeEl(wMm, hMm, shape, 'fill="#ffffff"');
       cutEl = shapeEl(wMm, hMm, shape, cutStroke);
 
@@ -262,9 +262,9 @@
   $("send").addEventListener("click", async function () {
     var name = $("cust-name").value.trim();
     var email = $("cust-email").value.trim();
-    if (!name || !email) { setStatus("Vyplň prosím jméno a e-mail.", "err"); return; }
+    if (!name || !email) { setStatus("Vyplňte prosím jméno a e-mail.", "err"); return; }
     if (state.mode === "image" && !state.imageDataUrl) {
-      setStatus("Nahraj prosím obrázek, nebo přepni na jiný režim.", "err"); return;
+      setStatus("Nahrajte prosím obrázek, nebo přepněte na jiný režim.", "err"); return;
     }
 
     var address = null;
@@ -273,7 +273,7 @@
       var city = $("addr-city").value.trim();
       var zip = $("addr-zip").value.trim();
       if (!street || !city || !zip) {
-        setStatus("Pro doručení vyplň prosím ulici, město i PSČ.", "err"); return;
+        setStatus("Pro doručení vyplňte prosím ulici, město i PSČ.", "err"); return;
       }
       address = { street: street, city: city, zip: zip };
     }
@@ -337,11 +337,11 @@
         fileType: "image/svg+xml",
         createdAt: new Date().toISOString()
       });
-      setStatus("Hotovo! Objednávka odešla, ozveme se ti na e-mail.", "ok");
+      setStatus("Hotovo! Objednávka odešla, ozvu se vám na e-mail.", "ok");
     } catch (err) {
       console.error(err);
       setStatus(err.setup ? err.message
-        : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkus to prosím znovu.", "err");
+        : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkuste to prosím znovu.", "err");
     } finally {
       btn.disabled = false;
     }

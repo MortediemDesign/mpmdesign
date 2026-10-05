@@ -263,7 +263,7 @@
         : '<rect x="' + L.fx + '" y="' + L.fy + '" width="' + L.fw + '" height="' + L.fh +
           '" fill="none" stroke="' + burn + '" stroke-width="' + (Math.min(w, h) * 0.006) +
           '" stroke-dasharray="' + (Math.min(w, h) * 0.03) + '"/>' +
-          textEl("Nahraj fotku", w / 2, L.fy + L.fh / 2, L.fw * 0.55, h * 0.08, burn, font, null);
+          textEl("Nahrajte fotku", w / 2, L.fy + L.fh / 2, L.fw * 0.55, h * 0.08, burn, font, null);
       if (L.capH) {
         out += textEl(l1, w / 2, h - L.pm - L.capH * 0.45, w * 0.8, L.capH * 0.62,
           burn, font, "bold");
@@ -497,7 +497,7 @@
     // Fotka se vkládá do SVG a to se znovu kóduje do base64 (~1,8× víc),
     // Vercel přijme požadavek jen do ~4,5 MB - víc než 2 MB se neodešle.
     if (f.size > 2 * 1024 * 1024) {
-      setStatus("Fotka je větší než 2 MB. Zkus prosím menší soubor, nebo ji pošli e-mailem na mpmdesign@outlook.cz.", "err");
+      setStatus("Fotka je větší než 2 MB. Zkuste prosím menší soubor, nebo ji pošlete e-mailem na mpmdesign@outlook.cz.", "err");
       return;
     }
     var fr = new FileReader();
@@ -657,15 +657,15 @@
     var p = product();
     var name = $("cust-name").value.trim();
     var email = $("cust-email").value.trim();
-    if (!name || !email) { setStatus("Vyplň prosím jméno a e-mail.", "err"); return; }
+    if (!name || !email) { setStatus("Vyplňte prosím jméno a e-mail.", "err"); return; }
     if (p.needsPhoto && !state.photoDataUrl) {
-      setStatus("Nahraj prosím fotku, kterou máme vygravírovat.", "err"); return;
+      setStatus("Nahrajte prosím fotku, kterou mám vygravírovat.", "err"); return;
     }
     if (!p.needsPhoto && !$("line1").value.trim()) {
-      setStatus("Vyplň prosím text, který se má gravírovat.", "err"); return;
+      setStatus("Vyplňte prosím text, který se má gravírovat.", "err"); return;
     }
     if (p.id === "nfc" && $("nfc-url").value.trim() && !QR.matrix($("nfc-url").value.trim())) {
-      setStatus("Odkaz je moc dlouhý na QR kód, zkus prosím kratší.", "err"); return;
+      setStatus("Odkaz je moc dlouhý na QR kód, zkuste prosím kratší.", "err"); return;
     }
 
     var address = null;
@@ -674,7 +674,7 @@
       var city = $("addr-city").value.trim();
       var zip = $("addr-zip").value.trim();
       if (!street || !city || !zip) {
-        setStatus("Pro doručení vyplň prosím ulici, město i PSČ.", "err"); return;
+        setStatus("Pro doručení vyplňte prosím ulici, město i PSČ.", "err"); return;
       }
       address = { street: street, city: city, zip: zip };
     }
@@ -731,11 +731,11 @@
         fileType: "image/svg+xml",
         createdAt: new Date().toISOString()
       });
-      setStatus("Hotovo! Objednávka odešla, ozveme se ti na e-mail.", "ok");
+      setStatus("Hotovo! Objednávka odešla, ozvu se vám na e-mail.", "ok");
     } catch (err) {
       console.error(err);
       setStatus(err.setup ? err.message
-        : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkus to prosím znovu.", "err");
+        : "Objednávku se nepodařilo odeslat (" + err.message + "). Zkuste to prosím znovu.", "err");
     } finally {
       btn.disabled = false;
     }

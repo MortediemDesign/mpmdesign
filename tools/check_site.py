@@ -112,7 +112,7 @@ def check_home_nav() -> None:
 
     # Odkazy na zbytek webu nesmí z hlavní stránky úplně zmizet – čekáme je
     # v mobilním menu (mobile-nav-secondary) i v patičce.
-    for required in ('sluzby.html', 'portfolio.html', 'blog.html', 'eshop.html', 'o-nas.html', 'kalkulacka.html'):
+    for required in ('sluzby.html', 'portfolio.html', 'blog.html', 'o-nas.html', 'kalkulacka.html'):
         if f'href="{required}"' not in text:
             raise SystemExit(f'index.html: chybí odkaz na {required} (mobile-nav / patička)')
 
