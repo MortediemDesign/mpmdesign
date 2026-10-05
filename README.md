@@ -42,6 +42,13 @@ na mobilu.
   (`assets/images/portfolio/manifest.json`): výběr 9 fotek, střídavě
   z jednotlivých kategorií. Počet se mění v `REFERENCE_COUNT`
   v `assets/js/home-reference.js`.
+- **E-book – ukázka zdarma** – nahrajte PDF jako
+  `assets/ebook/ukazka-zdarma.pdf`; blok „Ukázková kapitola zdarma“ se na
+  `ebook.html` pak zobrazí sám.
+- **E-book – platba** – dokud je `CHECKOUT_URL` v `assets/js/ebook.js`
+  prázdná, tlačítka „Objednat e-book“ vedou na poptávkový formulář. Po
+  vložení odkazu na pokladnu (např. Lemon Squeezy) se z nich stane
+  „Koupit e-book“. Pak upravte i odpovědi v sekci Časté dotazy.
 - **Hero animace ze snímků z Blenderu** (volitelné) – viz
   `assets/hero-frames/README.md`. Dokud tam snímky nejsou, běží
   výchozí SVG verze (fréza kreslí skutečné logo).

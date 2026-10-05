@@ -486,3 +486,6 @@ body.ebook-page .dropdown-menu {
 
   .sample-box { flex-direction: column; align-items: flex-start; }
 }
+
+/* Blok s ukázkou zdarma je skrytý, dokud neexistuje PDF (viz ebook.js). */
+.ebook-section[hidden] { display: none; }

@@ -1,18 +1,35 @@
 (function () {
   'use strict';
 
-  // ==== Lemon Squeezy – uprav pouze tyto dvě konstanty ====
-  // Vlož sem skutečné odkazy na checkout z Lemon Squeezy (Produkty -> Checkout link).
-  var LEMONSQUEEZY_PAID_URL = '[ODKAZ NA PLACENÝ PRODUKT]';
-  var LEMONSQUEEZY_FREE_URL = '[ODKAZ NA UKÁZKU ZDARMA]';
+  // ==== Nákup a ukázka zdarma ====
+  // CHECKOUT_URL: odkaz na pokladnu (např. Lemon Squeezy -> Products -> Share -> Checkout link).
+  // Dokud je prázdný, tlačítka „Objednat e-book“ vedou na poptávkový formulář (kontakt.html).
+  var CHECKOUT_URL = '';
+  // Ukázková kapitola: stačí nahrát PDF na tuto cestu, blok s tlačítkem se pak zobrazí sám.
+  var SAMPLE_URL = 'assets/ebook/ukazka-zdarma.pdf';
 
-  var links = {
-    paid: document.querySelectorAll('[data-ls="paid"]'),
-    free: document.querySelectorAll('[data-ls="free"]')
-  };
+  if (CHECKOUT_URL) {
+    document.querySelectorAll('[data-ls="paid"]').forEach(function (el) {
+      el.setAttribute('href', CHECKOUT_URL);
+      el.textContent = 'Koupit e-book';
+      if (/lemonsqueezy\.com/.test(CHECKOUT_URL)) el.classList.add('lemonsqueezy-button');
+    });
+    if (/lemonsqueezy\.com/.test(CHECKOUT_URL)) {
+      var ls = document.createElement('script');
+      ls.src = 'https://assets.lemonsqueezy.com/lemon.js';
+      ls.defer = true;
+      document.head.appendChild(ls);
+    }
+  }
 
-  links.paid.forEach(function (el) { el.setAttribute('href', LEMONSQUEEZY_PAID_URL); });
-  links.free.forEach(function (el) { el.setAttribute('href', LEMONSQUEEZY_FREE_URL); });
+  var sample = document.getElementById('ukazka');
+  if (sample && window.fetch) {
+    fetch(SAMPLE_URL, { method: 'HEAD' }).then(function (r) {
+      if (!r.ok) return;
+      sample.querySelectorAll('[data-ls="free"]').forEach(function (el) { el.setAttribute('href', SAMPLE_URL); });
+      sample.hidden = false;
+    }).catch(function () { /* bez ukázky blok zůstane skrytý */ });
+  }
 
   // ==== Scroll animace knihy (GSAP + ScrollTrigger) ====
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

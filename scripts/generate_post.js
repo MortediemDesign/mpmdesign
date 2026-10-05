@@ -30,7 +30,7 @@ async function createPost() {
       <h2>Vliv technologií na dnešní výrobu</h2>
       <p>Ať už potřebujete náhradní díl k roletě, nebo přesný mechanismus z hliníku, technologie 3D tisku a CNC obrábění udělaly v posledních letech ohromný skok kupředu.</p>
       <h3>Rychlost a personalizace</h3>
-      <p>Hlavní výhoda spočívá v extrémní rychlosti. Co se dříve muselo dovážet s dodací lhůtou týdnů, jsme dnes schopni navrhnout, vysoustružit či vytisknout během několika dnů a to přesně na míru vaší potřebě.</p>
+      <p>Hlavní výhoda spočívá v extrémní rychlosti. Co se dříve muselo dovážet s dodací lhůtou týdnů, jsme dnes schopni navrhnout, vyfrézovat či vytisknout během několika dnů a to přesně na míru vaší potřebě.</p>
     `
   };
 
@@ -42,6 +42,17 @@ async function createPost() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${generatedArticle.title} | Blog MPMDESIGN</title>
+  <meta name="description" content="${generatedArticle.summary}">
+  <link rel="canonical" href="https://www.mpmdesign.cz/blog/${slug}.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${generatedArticle.title} | Blog MPMDESIGN">
+  <meta property="og:description" content="${generatedArticle.summary}">
+  <meta property="og:image" content="https://www.mpmdesign.cz/assets/images/og-image.png">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:url" content="https://www.mpmdesign.cz/blog/${slug}.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
   <link rel="stylesheet" href="../assets/css/styles.css">
 <script src="../assets/js/nav.js" defer></script>
 <script src="../assets/js/reveal.js" defer></script>
@@ -112,7 +123,6 @@ async function createPost() {
       <ul class="mobile-nav-secondary">
         <li><a href="../blog.html">Blog</a></li>
         <li><a href="../ebook.html">E-book</a></li>
-        <li><a href="../eshop.html">E-shop</a></li>
         <li><a href="../tvorba-webu.html">Tvorba webu</a></li>
       </ul>
     </div>
@@ -141,7 +151,7 @@ async function createPost() {
       </div>
     </div>
     <div class="container footer-links">
-      <a href="../blog.html">Blog</a> &middot; <a href="../ebook.html">E-book</a> &middot; <a href="../eshop.html">E-shop</a> &middot; <a href="../tvorba-webu.html">Tvorba webu</a>
+      <a href="../blog.html">Blog</a> &middot; <a href="../ebook.html">E-book</a> &middot; <a href="../tvorba-webu.html">Tvorba webu</a>
     </div>
     <div class="container legal-bar">
       <span>Miguel Pérez Morales · IČO 24859931 · Lidická 1018, 363 01 Ostrov · zapsán v živnostenském rejstříku vedeném Městským úřadem Ostrov</span>

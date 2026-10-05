@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /kalkulacka.html
+Disallow: /api/
+
+Sitemap: https://www.mpmdesign.cz/sitemap.xml
