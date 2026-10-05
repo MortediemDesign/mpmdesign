@@ -720,36 +720,6 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
 }
 
 .reference-caption strong { display: block; font-size: 0.92rem; }
-.reference-caption span { display: block; font-size: 0.78rem; color: rgba(255, 255, 255, 0.7); }
-
-/* Dokud reálná fotka v assets/reference/ chybí, ukážeme čitelný placeholder
-   místo rozbité ikony prohlížeče. */
-.reference-grid figure.ref-missing {
-  min-height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-style: dashed;
-}
-
-.reference-grid figure.ref-missing img { display: none; }
-
-.reference-grid figure.ref-missing .reference-caption {
-  position: static;
-  opacity: 1;
-  transform: none;
-  background: none;
-  text-align: center;
-  padding: 1.4rem 1rem;
-}
-
-.reference-grid figure.ref-missing .reference-caption::before {
-  content: "🖼";
-  display: block;
-  font-size: 1.4rem;
-  margin-bottom: 0.4rem;
-  opacity: 0.6;
-}
 
 .reference-more { margin-top: 2rem; text-align: center; }
 

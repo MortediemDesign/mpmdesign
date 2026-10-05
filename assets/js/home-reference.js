@@ -1,44 +1,85 @@
 /* ============================================================
    MPMDESIGN – sekce Reference: masonry galerie + lightbox.
 
-   Sem doplňte skutečné fotky: nahrajte je do assets/reference/ a
-   přepište položky v REFERENCE_ITEMS (file = cesta k souboru,
-   title/desc = popisek zobrazený při najetí myší). Dokud soubor
-   chybí, karta se sama zobrazí jako čitelný placeholder místo
-   rozbitého obrázku.
+   Fotky se berou z portfolia (assets/images/portfolio/manifest.json,
+   generuje scripts/update_portfolio.js), takže stačí nahrát fotku do
+   portfolia a objeví se i tady. Na úvodní stránce je výběr REFERENCE_COUNT
+   fotek, střídavě z jednotlivých kategorií, ať je vidět víc druhů práce.
+   Popisek je název kategorie – názvy souborů (a z nich generované titulky
+   v manifestu) zatím u části fotek neodpovídají obsahu.
    ============================================================ */
 (function () {
   'use strict';
 
-  var REFERENCE_ITEMS = [
-    { file: 'assets/reference/cnc-1.jpg', title: 'CNC díl na míru', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/3d-tisk-1.jpg', title: '3D tisk prototypu', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/laser-1.jpg', title: 'Laserové gravírování', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/polep-1.jpg', title: 'Polep vozidla', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/samolepky-1.jpg', title: 'Samolepky na míru', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/dtf-1.jpg', title: 'DTF potisk trička', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/cnc-2.jpg', title: 'CNC výroba – detail', desc: 'Doplňte popis realizace' },
-    { file: 'assets/reference/web-1.jpg', title: 'Web na míru', desc: 'Doplňte popis realizace' }
-  ];
+  var MANIFEST = 'assets/images/portfolio/manifest.json';
+  var BASE = 'assets/images/portfolio/';
+  var REFERENCE_COUNT = 9;
+  var CATEGORY_NAMES = {
+    'cnc': 'CNC obrábění',
+    '3d-tisk': '3D tisk',
+    'laser': 'Laserové gravírování',
+    'polepy': 'Polepy',
+    'grafika': 'Grafické práce'
+  };
 
   var grid = document.getElementById('referenceGrid');
   if (!grid) return;
 
-  grid.innerHTML = REFERENCE_ITEMS.map(function (item, i) {
-    return (
-      '<figure data-index="' + i + '">' +
-        '<img src="' + item.file + '" alt="' + item.title + '" loading="lazy" decoding="async">' +
-        '<figcaption class="reference-caption"><strong>' + item.title + '</strong><span>' + item.desc + '</span></figcaption>' +
-      '</figure>'
-    );
-  }).join('');
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
 
-  // Chybějící soubor -> čitelný placeholder místo rozbité ikony.
-  grid.querySelectorAll('img').forEach(function (img) {
-    img.addEventListener('error', function () {
-      img.closest('figure').classList.add('ref-missing');
-    }, { once: true });
-  });
+  // Kategorie se střídají (1. z každé, pak 2. z každé…), pořadí uvnitř
+  // kategorie zůstává podle manifestu.
+  function pick(items, count) {
+    var groups = {}, order = [];
+    items.forEach(function (item) {
+      var cat = item.category || 'ostatni';
+      if (!groups[cat]) { groups[cat] = []; order.push(cat); }
+      groups[cat].push(item);
+    });
+    var out = [];
+    for (var round = 0; out.length < count; round++) {
+      var added = false;
+      order.forEach(function (cat) {
+        if (out.length < count && groups[cat][round]) { out.push(groups[cat][round]); added = true; }
+      });
+      if (!added) break;
+    }
+    return out;
+  }
+
+  function render(items) {
+    grid.innerHTML = items.map(function (item) {
+      var label = CATEGORY_NAMES[item.category] || 'Realizace';
+      return (
+        '<figure>' +
+          '<img src="' + esc(encodeURI(BASE + item.file)) + '" alt="Ukázka práce: ' + esc(label) + '" loading="lazy" decoding="async">' +
+          '<figcaption class="reference-caption"><strong>' + esc(label) + '</strong></figcaption>' +
+        '</figure>'
+      );
+    }).join('');
+
+    // Fotka, která v portfoliu chybí, se z výběru tiše vynechá.
+    grid.querySelectorAll('img').forEach(function (img) {
+      img.addEventListener('error', function () { img.closest('figure').remove(); }, { once: true });
+    });
+  }
+
+  fetch(MANIFEST)
+    .then(function (r) {
+      if (!r.ok) throw new Error('manifest ' + r.status);
+      return r.json();
+    })
+    .then(function (items) {
+      if (Array.isArray(items) && items.length) render(pick(items, REFERENCE_COUNT));
+    })
+    .catch(function (err) {
+      // Bez manifestu zůstane jen tlačítko na celé portfolio.
+      console.warn('Reference: ' + err.message);
+    });
 
   // Lightbox (stejné styly .lightbox jako na portfolio.html, jiná instance).
   var lightbox = document.getElementById('lightbox');
@@ -47,11 +88,11 @@
 
   grid.addEventListener('click', function (e) {
     var figure = e.target.closest('figure');
-    if (!figure || figure.classList.contains('ref-missing')) return;
-    var img = figure.querySelector('img');
+    var img = figure && figure.querySelector('img');
     if (!img) return;
     lightbox.style.display = 'flex';
     lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
   });
 
   lightbox.addEventListener('click', function (e) {
