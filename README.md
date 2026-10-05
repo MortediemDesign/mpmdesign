@@ -38,10 +38,10 @@ ScrollTrigger + MotionPathPlugin (cdnjs) a plynulý scroll přes Lenis
 na mobilu.
 
 **Co je potřeba doplnit ručně:**
-- **Reference** – nahrajte fotky do `assets/reference/` a upravte
-  pole `REFERENCE_ITEMS` v `assets/js/home-reference.js` (viz
-  `assets/reference/README.md`). Dokud tam fotky nejsou, karty se
-  zobrazí jako čitelný placeholder.
+- **Reference** – berou se automaticky z portfolia
+  (`assets/images/portfolio/manifest.json`): výběr 9 fotek, střídavě
+  z jednotlivých kategorií. Počet se mění v `REFERENCE_COUNT`
+  v `assets/js/home-reference.js`.
 - **Hero animace ze snímků z Blenderu** (volitelné) – viz
   `assets/hero-frames/README.md`. Dokud tam snímky nejsou, běží
   výchozí SVG verze (fréza kreslí skutečné logo).
