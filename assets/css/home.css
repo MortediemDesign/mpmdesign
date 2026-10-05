@@ -720,6 +720,7 @@ html.motion-reduced .service-card, html.no-gsap .service-card {
 }
 
 .reference-caption strong { display: block; font-size: 0.92rem; }
+.reference-caption span { display: block; font-size: 0.78rem; color: rgba(255, 255, 255, 0.7); }
 
 .reference-more { margin-top: 2rem; text-align: center; }
 

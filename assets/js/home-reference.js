@@ -5,8 +5,8 @@
    generuje scripts/update_portfolio.js), takže stačí nahrát fotku do
    portfolia a objeví se i tady. Na úvodní stránce je výběr REFERENCE_COUNT
    fotek, střídavě z jednotlivých kategorií, ať je vidět víc druhů práce.
-   Popisek je název kategorie – názvy souborů (a z nich generované titulky
-   v manifestu) zatím u části fotek neodpovídají obsahu.
+   Popisek = titulek z manifestu + název kategorie. Titulky u nových fotek
+   generuje skript z názvu souboru, upravit je jde přímo v manifest.json.
    ============================================================ */
 (function () {
   'use strict';
@@ -54,10 +54,11 @@
   function render(items) {
     grid.innerHTML = items.map(function (item) {
       var label = CATEGORY_NAMES[item.category] || 'Realizace';
+      var title = item.title || label;
       return (
         '<figure>' +
-          '<img src="' + esc(encodeURI(BASE + item.file)) + '" alt="Ukázka práce: ' + esc(label) + '" loading="lazy" decoding="async">' +
-          '<figcaption class="reference-caption"><strong>' + esc(label) + '</strong></figcaption>' +
+          '<img src="' + esc(encodeURI(BASE + item.file)) + '" alt="' + esc(item.alt || title) + '" loading="lazy" decoding="async">' +
+          '<figcaption class="reference-caption"><strong>' + esc(title) + '</strong><span>' + esc(label) + '</span></figcaption>' +
         '</figure>'
       );
     }).join('');
